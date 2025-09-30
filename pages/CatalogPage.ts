@@ -551,19 +551,23 @@ export class CatalogPage extends LearnerHomePage {
         let content = this.page.locator(this.selectors.contentLabel)
         await this.page.locator(playButton).isVisible()
         const completed = this.page.locator(this.selectors.completedVideo).last();
+        const replayButton = this.page.locator("//span[text()='Replay']");  
         try {
             await this.validateElementVisibility(this.selectors.contentLabel, "Content")
             if (await content.isVisible({ timeout: 20000 })) {
                 await content.scrollIntoViewIfNeeded();
-            }
+            // Play the video once
+            await this.clickLaunchButton();
+            await this.wait('mediumWait');
 
-            if (await completed.isVisible()) {
-                await completed.scrollIntoViewIfNeeded();
-                console.log("The Video Has Completed");
-            } else {
-                await this.clickLaunchButton();
-                await this.saveLearningStatus();
+            // Check for 100% completion in a loop
+            while (!(await replayButton.isVisible())) {
+                await this.wait('mediumWait');
             }
+            await replayButton.scrollIntoViewIfNeeded();
+            console.log("The Video Has Completed");
+           await this.click(this.selectors.saveLearningStatus, "save", "button")
+        }
         } catch (error) {
             console.log("Try to launch the button");
         }

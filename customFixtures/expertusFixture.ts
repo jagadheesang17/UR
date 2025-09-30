@@ -158,8 +158,8 @@ export const test = baseTest.extend<expertusFixture & { pageWithLogging: Page }>
         );
 
         // 🔹 Save Excel
-        saveRequestsToExcel('network_timings_all.xlsx', timings, testInfo.title);
-        saveRequestsToExcel('network_timings_slow.xlsx', slowOnes, testInfo.title);
+        // saveRequestsToExcel('network_timings_all.xlsx', timings, testInfo.title);
+        // saveRequestsToExcel('network_timings_slow.xlsx', slowOnes, testInfo.title);
     },
 
 
@@ -325,46 +325,46 @@ test.afterAll(async ({}) => {
         await updateJiraIssue(jiraIssueKey,resultFile[0]); // Replace with the actual folder path
     }
 }); */
-function saveRequestsToExcel(
-    filename: string,
-    requests: any[],
-    testName: string
-) {
-    if (requests.length === 0) return;
+// function saveRequestsToExcel(
+//     filename: string,
+//     requests: any[],
+//     testName: string
+// ) {
+//     if (requests.length === 0) return;
 
-    let workbook: XLSX.WorkBook;
-    if (fs.existsSync(filename)) {
-        workbook = XLSX.readFile(filename);
-    } else {
-        workbook = XLSX.utils.book_new();
-    }
+//     let workbook: XLSX.WorkBook;
+//     if (fs.existsSync(filename)) {
+//         workbook = XLSX.readFile(filename);
+//     } else {
+//         workbook = XLSX.utils.book_new();
+//     }
 
-    const sheetName = 'Requests';
-    let worksheet = workbook.Sheets[sheetName];
+//     const sheetName = 'Requests';
+//     let worksheet = workbook.Sheets[sheetName];
 
-    let existingData: any[] = [];
-    if (worksheet) {
-        existingData = XLSX.utils.sheet_to_json(worksheet);
-    }
+//     let existingData: any[] = [];
+//     if (worksheet) {
+//         existingData = XLSX.utils.sheet_to_json(worksheet);
+//     }
 
-    const newRows = requests.map((t) => ({
-        test: testName,
-        method: t.method,
-        type: t.type,
-        status: t.status,
-        duration: t.duration,
-        url: t.url,
-        body: t.postData,
-    }));
+//     const newRows = requests.map((t) => ({
+//         test: testName,
+//         method: t.method,
+//         type: t.type,
+//         status: t.status,
+//         duration: t.duration,
+//         url: t.url,
+//         body: t.postData,
+//     }));
 
-    const updatedData = [...existingData, ...newRows];
-    worksheet = XLSX.utils.json_to_sheet(updatedData);
+//     const updatedData = [...existingData, ...newRows];
+//     worksheet = XLSX.utils.json_to_sheet(updatedData);
 
-    if (!workbook.SheetNames.includes(sheetName)) {
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    } else {
-        workbook.Sheets[sheetName] = worksheet;
-    }
+//     if (!workbook.SheetNames.includes(sheetName)) {
+//         XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+//     } else {
+//         workbook.Sheets[sheetName] = worksheet;
+//     }
 
-    XLSX.writeFile(workbook, filename);
-}
+//     XLSX.writeFile(workbook, filename);
+// }

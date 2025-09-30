@@ -30,7 +30,7 @@ test.describe(`Confirm that Admin enrollments functions correctly and as expecte
          await createCourse.entercode("CRS-" + generateCode());
         await createCourse.typeDescription("This is a new course by name :" + courseName);
         await createCourse.selectdeliveryType("Virtual Class");
-        await createCourse.handleCategoryADropdown();
+       // await createCourse.handleCategoryADropdown();
         await createCourse.providerDropdown()
         await createCourse.selectTotalDuration();
         await createCourse.typeAdditionalInfo();

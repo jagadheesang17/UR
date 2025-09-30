@@ -12,7 +12,7 @@ const surveyTitle = ("Survey " + FakerData.AssessmentTitle());
 
 test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creatation of Pre-Assessment`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creatation of Pre-Assessment`, async ({ createCourse,adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creatation of Pre-Assessment` },
@@ -52,7 +52,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await SurveyAssessment.clickPublish();
         await SurveyAssessment.verifySuccessMessage();
     })
-    test(`Creation of Post-Assessment`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Post-Assessment`, async ({ createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Post-Assessment` },
@@ -68,6 +68,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await SurveyAssessment.fillAssessmentTitle(postAssessmentTitle);
         await SurveyAssessment.selectLanguage();
         await SurveyAssessment.fillDescription();
+        await createCourse.enterCode("ASMT-" + generateCode());
         await SurveyAssessment.enterPasspercentage("50")
         await SurveyAssessment.selectRandomizeOption("No")
         await SurveyAssessment.enterNofAttempts("2")
@@ -95,7 +96,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
 
     })
 
-    test(`Creation of Survey Questions`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Survey Questions`, async ({createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: 'Author', description: 'Ajay Michael' },
             { type: 'TestCase', description: 'Creation of Survey QUestions' },
@@ -109,6 +110,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await SurveyAssessment.clickCreateSurvey();
         await SurveyAssessment.fillSurveyTitle(surveyTitle);
         await SurveyAssessment.selectLanguage();
+                await createCourse.enterCode("SUR-" + generateCode());
         await SurveyAssessment.fillDescription();
         await SurveyAssessment.clickSaveDraft();
         await SurveyAssessment.clickProceed();

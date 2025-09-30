@@ -28,7 +28,7 @@ test.describe(`Ensure_that_a_delivered_ILT_Class_is_available_in_the_Completed_t
           await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.typeDescription("This is a new course by name :" + courseName);
         await createCourse.selectdeliveryType("Classroom")
-        await createCourse.handleCategoryADropdown();
+      //  await createCourse.handleCategoryADropdown();
         await createCourse.providerDropdown()
         await createCourse.selectTotalDuration();
         await createCourse.typeAdditionalInfo();
@@ -71,14 +71,14 @@ test.describe(`Ensure_that_a_delivered_ILT_Class_is_available_in_the_Completed_t
 
 
         );
-        await adminHome.loadAndLogin("ENROLLADMIN");
+        await adminHome.loadAndLogin("CUSTOMERADMIN");
         await adminHome.menuButton()
         await adminHome.clickEnrollmentMenu();
         await adminHome.clickEnroll();
         await enrollHome.selectEnroll();
         await enrollHome.selectBycourse(courseName)
         await enrollHome.clickSelectedLearner();
-        await enrollHome.enterSearchUser("User")
+        await enrollHome.enterSearchUser("user")
         await enrollHome.clickEnrollBtn();
         await enrollHome.verifytoastMessage()
     })

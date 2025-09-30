@@ -25,10 +25,10 @@ test.describe(`Certification_enroll_and_completion_with_single_instance.spec`, a
         await createCourse.enter("course-title", courseName);
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
-              await createCourse.entercode("CRS-" + generateCode());
+        await createCourse.entercode("CRS-" + generateCode());
         await createCourse.typeDescription(description);
-        domain = await createCourse.selectPortal();
-        console.log(`${domain}`);
+        // domain = await createCourse.selectPortal();
+        // console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
         await createCourse.clickHere();
         await createCourse.selectImage();
@@ -54,6 +54,7 @@ test.describe(`Certification_enroll_and_completion_with_single_instance.spec`, a
         await learningPath.clickCreateLearningPath();
         await learningPath.title(title);
         await learningPath.description(description);
+          await createCourse.entercode("LP-" + generateCode());
         await learningPath.language();
         await learningPath.clickSave();
         await learningPath.clickProceedBtn();
@@ -68,7 +69,7 @@ test.describe(`Certification_enroll_and_completion_with_single_instance.spec`, a
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-                    await learningPath.description(description);
+         await learningPath.description(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();

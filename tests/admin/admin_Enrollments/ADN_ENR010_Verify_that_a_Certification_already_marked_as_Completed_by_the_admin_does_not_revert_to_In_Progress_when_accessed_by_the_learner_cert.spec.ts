@@ -30,8 +30,8 @@ test.describe(`Verify that a Certification already marked as Completed by the ad
         await createCourse.selectLanguage("English");
               await createCourse.entercode("CRS-" + generateCode());
         await createCourse.typeDescription(description);
-        domain = await createCourse.selectPortal();
-        console.log(`${domain}`);
+        // domain = await createCourse.selectPortal();
+        // console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
         contentName = await createCourse.getAttachedContentName()
 
@@ -61,6 +61,7 @@ test.describe(`Verify that a Certification already marked as Completed by the ad
         await learningPath.clickCreateCertification();
         await learningPath.title(title);
         await learningPath.description(description);
+          await createCourse.entercode("CER-" + generateCode());
         await learningPath.language();
         await learningPath.clickSave();
         await learningPath.clickProceedBtn();

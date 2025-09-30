@@ -1,4 +1,4 @@
-import { BrowserContext, Page } from "@playwright/test";
+import { BrowserContext, expect, Page } from "@playwright/test";
 import { AdminHomePage } from "./AdminHomePage";
 import { URLConstants } from "../constants/urlConstants";
 import { FakerData, getCurrentDateFormatted } from "../utils/fakerUtils";
@@ -11,6 +11,7 @@ export class EnrollmentPage extends AdminHomePage {
         manageEnrollement: `(//div[@id='wrapper-enrollment-action']//div)[1]`,
         enrollType: `//span[text()='Enroll']`,
         searchcourseOrUser: `//input[contains(@id,'exp-search')]`,
+        noResultFound:`//h3[text()='No matching result found.']`,
         courseList: `//div[contains(@id,'exp-search-lms')]//li`,
         courseListOpt: (index: number) => `(//div[contains(@id,'exp-search-lms')]//li)[${index}]`,
         userList: `(//div[contains(@id,'lms-scroll-results')]//li)`,
@@ -22,6 +23,7 @@ export class EnrollmentPage extends AdminHomePage {
         toastMeassage: `//section[contains(@class,'lms-success-msg-wrapper')]//h3`,
         enrollStatus: `(//div[contains(@id,'wrapper-enrollment-action')])[2]`,
         enrollORCancel: (data: string) => `//span[text()='${data}']`,
+        verifyManageEnrollmentDropdown:`//button[@data-id='enrollment-action']`,
         reaonDesc: `//textarea[@id='check_box_msgsenrollmentviewstatususer']`,
         submitReason: `//button[text()='Submit']`,
         saveStatus: `//button[text()='Save']`,
@@ -64,6 +66,23 @@ export class EnrollmentPage extends AdminHomePage {
         paymentMethodDropdown: `//label[text()='Payment Method']//following::div[@id='wrapper-state']`,
         paymentMethod: (option: string) => `//span[text()='${option}']`,
         orderSuccessMsg: `//section[contains(@class,'lms-success')]//h3`,
+
+        // Load More button
+        loadMoreBtn: `//button[text()='Load More']`,
+
+        // TP Enrollment selectors
+        enrollToTpBtn: `//span[text()='View Status/Enroll Learner to TP Courses']`,
+        searchUserInput: `//input[@placeholder='Search']`,
+            searchUserCheckbox:(user:string)=>`(//td[text()='${user}']/following::i)[1]`,
+        userSearchCheckbox: (username: string) => `//td[contains(text(),'${username}')]//following::td//label)[1]`,
+        selectLearnerBtn: `//button[text()='Select Learner']`,
+        tpSearchInput: `(//input[@placeholder='Search'])[2]`,
+        tpSearchResult: (tpName: string) => `//td[contains(text(),'${tpName}')]`,
+        selectTPRadio: `//input[@type='radio']`,
+        tpCourseSearchInput: `//input[@placeholder='Search Course']`,
+        tpCourseResult: (courseName: string) => `//td[contains(text(),'${courseName}')]`,
+        tpInstanceResult:(data:string)=>`//li[text()='${data}']`,
+        enrollmentsTab: `//a[text()='Enrollments']`,
 
 
 
@@ -112,6 +131,7 @@ export class EnrollmentPage extends AdminHomePage {
 
     }
     async enterSearchUser(data: string) {
+        await this.waitSelector(this.selectors.searchcourseOrUser, "User Name")
         await this.type(this.selectors.searchcourseOrUser, "Course Name", data)
         const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
         const randomIndex = Math.floor(Math.random() * index) + 1;
@@ -215,6 +235,20 @@ export class EnrollmentPage extends AdminHomePage {
         await this.click(this.selectors.manageEnrollement, "Manage Enrollment ", "Dropdown")
         await this.click(this.selectors.enrollORCancel(data), "Manage Enrollment ", " EnrollLink")
     }
+
+     async clickOnManageEnrollment() {
+        await this.wait("mediumWait")
+        await this.click(this.selectors.manageEnrollement, "Manage Enrollment ", "Dropdown")
+    }
+
+      async verifyEnrollmentDropDown(data: string) {
+        await this.wait("mediumWait")
+       const dropdown= await this.getInnerText(this.selectors.verifyManageEnrollmentDropdown);
+       await expect(dropdown).toContain(data); 
+    }
+
+
+
     async enterSearchUserForSingleOrder(data: string) {
         await this.type(this.selectors.searchcourseOrUser, "Course Name", data)
         const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
@@ -275,6 +309,131 @@ export class EnrollmentPage extends AdminHomePage {
         await this.validateElementVisibility(this.selectors.clickEnrollButton, "Enroll Button");
         await this.click(this.selectors.clickEnrollButton, "Enroll Button", "Button")
     }
+
+       async verifyNoResultFound(data:string) {
+        await this.typeAndEnter(this.selectors.searchcourseOrUser,"name",data)
+        await this.validateElementVisibility(this.selectors.noResultFound,"noResultFound")
+    }
+
+    // TP Enrollment methods
+    async clickEnrollToTp() {
+        await this.wait("minWait");
+        await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
+        await this.click(this.selectors.enrollDropdown, "Enroll Dropdown", "Button")
+        await this.click(this.selectors.enrollToTpBtn, "Enroll To TP", "Button");
+    }
+
+    public async searchUser(user:string) {
+        await this.wait("maxWait");
+       await this.typeAndEnter("(//input[@placeholder='Search'])[1]", "User", user);
+    }
+
+     public async clickSearchUserCheckbox(user:string) {
+        await this.waitSelector(this.selectors.searchUserCheckbox(user), "searchUserCheckbox" )
+        await this.click(this.selectors.searchUserCheckbox(user), "searchUser", "chkbox")
+    }
+
+       public async clickSelectLearner() {
+  await this.wait("maxWait");
+
+  const selectUserLocator = this.page.getByRole('button', { name: 'Select' });
+  await selectUserLocator.scrollIntoViewIfNeeded();
+  await selectUserLocator.waitFor({ state: "visible" });
+  await expect(selectUserLocator).toBeEnabled();
+  await selectUserLocator.click();
+}
+
+    
+      public async searchandSelectTP(TP:string) {
+        await this.wait("maxWait");
+     
+        await this.click("//div[@id='learning-path-selection-filter-icon']", "searchbar", "Button")
+        await this.type(this.selectors.searchCourse, "SearchTp", TP)
+        await this.click(`//span[text()='${TP}']`, "SelectTp", "Link"
+        )
+    }
+
+    public async selectCls() {
+        await this.wait("maxWait");
+  const selectLocator =  this.page.locator("(//div[contains(@class,'field_title')]//preceding::i[contains(@class,'lms-chevron-up-down')][1])");
+  await selectLocator.scrollIntoViewIfNeeded();
+  await selectLocator.waitFor({ state: "visible" });
+  await expect(selectLocator).toBeEnabled();
+  await selectLocator.click();
+ 
+       
+
+    }
+
+         public async searchTPCourse(user:string) {
+        await this.wait("maxWait");
+        await this.page.locator("(//input[@placeholder='Search'])[2]").scrollIntoViewIfNeeded();
+       await this.type("(//input[@placeholder='Search'])[2]", "User", user);
+       await this.click(this.selectors.tpInstanceResult(user), "select course", "Link")
+       //await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
+    }
+
+   
+
+    async clickEnrollments() {
+        await this.click(this.selectors.enrollmentsTab, "Enrollments", "Tab");
+    }
+
+    // Load More button functionality
+    async isLoadMoreButtonVisible(): Promise<boolean> {
+        try {
+            await this.page.waitForSelector(this.selectors.loadMoreBtn, { timeout: 5000 });
+            return await this.page.isVisible(this.selectors.loadMoreBtn);
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async isLoadMoreButtonEnabled(): Promise<boolean> {
+        const isVisible = await this.isLoadMoreButtonVisible();
+        if (!isVisible) return false;
+        
+        return await this.page.isEnabled(this.selectors.loadMoreBtn);
+    }
+
+    async clickLoadMoreButton() {
+        const isEnabled = await this.isLoadMoreButtonEnabled();
+        if (isEnabled) {
+            await this.click(this.selectors.loadMoreBtn, "Load More", "Button");
+            await this.wait("mediumWait");
+        } else {
+            throw new Error("Load More button is not visible or enabled");
+        }
+    }
+
+    async verifyLoadMoreButtonAndClick() {
+        console.log("Checking Load More button visibility and functionality...");
+        
+        const isVisible = await this.isLoadMoreButtonVisible();
+        console.log(`Load More button visible: ${isVisible}`);
+        
+        if (isVisible) {
+            await this.page.locator(this.selectors.loadMoreBtn).scrollIntoViewIfNeeded();
+            const isEnabled = await this.isLoadMoreButtonEnabled();
+            console.log(`Load More button enabled: ${isEnabled}`);
+            
+            // Assert that the button is visible and enabled
+            await expect(this.page.locator(this.selectors.loadMoreBtn)).toBeVisible();
+            await expect(this.page.locator(this.selectors.loadMoreBtn)).toBeEnabled();
+            
+            console.log("Load More button assertions passed - visible and enabled");
+            
+             
+            await this.clickLoadMoreButton();
+            console.log("Load More button clicked successfully");
+            
+            return true;
+        } else {
+            console.log("Load More button is not visible - no action taken");
+            return false;
+        }
+    }
+
 
 
 

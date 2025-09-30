@@ -18,7 +18,7 @@ test.describe(`Verify_that_an_announcement_can_be_successfully_created_and_is_vi
         await createCourse.enter("announcement-title", title)
         await announcementHome.enterDesc("Announcement !!!  " + title)
         await announcementHome.clickPriority();
-        await createCourse.selectPortal();
+       // await createCourse.selectPortal();
         await announcementHome.dateFromTo()
         await announcementHome.clickPublish();
         await createCourse.clickProceed();

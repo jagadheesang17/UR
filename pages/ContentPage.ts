@@ -31,7 +31,8 @@ export class ContentHomePage extends AdminHomePage {
     }
 
     public async clickCreateContent() {
-        await this.click(this.selectors.contentButton, "CreateContent", "Button")
+
+        await this.page.getByRole('button', { name: 'CREATE CONTENT' }).click();
     }
 
     public async enterTitle(title: string) {

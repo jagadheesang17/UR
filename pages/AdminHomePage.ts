@@ -43,7 +43,9 @@ export class AdminHomePage extends AdminLogin {
         assessmentMenu: `//span[text()='Assessment']`,
         assessmentQuestionLink: `//span[text()='Assessment']//parent::div/following-sibling::ul//a[text()='Questions']`,
         assessmentLink: "//a[text()='Assessment']",
-        enrollMenu: `//span[text()='Enrollments']`,
+        resultEnrollmentButton:`(//div[@aria-label='Enrollments'])`,
+        enrollMenu: `(//span[text()='Enrollments'])[1]`,
+        enrollments:   `(//span[text()='Enrollments'])[2]`,
         enrollLink: `//a[text()='Enroll']`,
         quickAccessIcon: `#dd-icon-wrapper i`,
         quickAccessDD: `button div:text-is('Select Quick Access Buttons To Add Below')`,
@@ -57,9 +59,17 @@ export class AdminHomePage extends AdminLogin {
         learnerConfigLink:`//a[text()='Learner Configuration']`,
         siteSettingsLink:`//a[text()='Site Settings']`,
         adminConfigLink:`//a[text()='Admin Configuration']`,
+        adminSiteConfigLink: `//div[text()='Admin site configuration']`,
        // To navigate from Enroll option to view/update status course tp:-
         viewUpdateStatusCourseTpLink: `//a[text()='View/update Status - Course/TP']`,
-
+       enrollLearnertoTPCourses: `//span[text()='View Status/Enroll Learner to TP Courses']`,
+       enroll:`//span[text()='Enroll']`,
+    enrollDropdown:`(//div[@class='filter-option-inner-inner'])[1]`,
+    searchUserCheckbox:(user:string)=>`(//td[text()='${user}']/following::i)[1]`,
+        searchInput:`//input[@placeholder='Search']`,
+        selectUser:`//button[contains(@class,'btn button_positive')]`,
+        selectCourse:`//input[@placeholder='Select']`,
+        searchCourse:`//input[@placeholder='Search for Title/Code']`,
         //for Direct Content Launch
         directContent:`//a[text()='Direct Content Launch']`,
     };
@@ -73,6 +83,75 @@ export class AdminHomePage extends AdminLogin {
     public async clickviewUpdateStatusCourseTp() {
         await this.click(this.selectors.viewUpdateStatusCourseTpLink, "Update Enrollment", "Link")
     }
+
+     public async searchandSelectTP(TP:string) {
+        await this.wait("maxWait");
+     
+        await this.click("//div[@id='learning-path-selection-filter-icon']", "searchbar", "Button")
+        await this.type(this.selectors.searchCourse, "SearchTp", TP)
+        await this.click(`//span[text()='${TP}']`, "SelectTp", "Link"
+        )
+    }
+     public async selectCls() {
+        await this.wait("maxWait");
+  const selectLocator =  this.page.locator("(//div[contains(@class,'field_title')]//preceding::i[contains(@class,'lms-chevron-up-down')][1])");
+  await selectLocator.scrollIntoViewIfNeeded();
+  await selectLocator.waitFor({ state: "visible" });
+  await expect(selectLocator).toBeEnabled();
+  await selectLocator.click();
+ 
+       
+
+    }
+
+      public async clickSelectLearner() {
+  await this.wait("maxWait");
+
+  const selectUserLocator = this.page.getByRole('button', { name: 'Select' });
+  await selectUserLocator.scrollIntoViewIfNeeded();
+  await selectUserLocator.waitFor({ state: "visible" });
+  await expect(selectUserLocator).toBeEnabled();
+  await selectUserLocator.click();
+}
+
+
+     public async clickSearchUserCheckbox(user:string) {
+        await this.waitSelector(this.selectors.searchUserCheckbox(user), "searchUserCheckbox" )
+        await this.click(this.selectors.searchUserCheckbox(user), "searchUser", "chkbox")
+    }
+
+    public async clickEnrollToTp()
+    
+    {  
+        await this.wait("maxWait");
+         await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
+        await this.click(this.selectors.enrollDropdown, "Enroll Dropdown", "Button")
+        await this.click(this.selectors.enrollLearnertoTPCourses, "Enroll Learner to TP Courses", "Link")
+    }
+
+     public async selectEnroll()
+    
+    {  
+        await this.wait("maxWait");
+         await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
+        await this.click(this.selectors.enrollDropdown, "Enroll Dropdown", "Button")
+        await this.click(this.selectors.enroll, "Enroll", "Link")
+         await this.wait("maxWait");
+    }
+     public async searchUser(user:string) {
+        await this.wait("maxWait");
+       await this.typeAndEnter("(//input[@placeholder='Search'])[1]", "User", user);
+    }
+     public async searchTPCourse(user:string) {
+        await this.wait("maxWait");
+       await this.typeAndEnter("(//input[@placeholder='Search'])[2]", "User", user);
+       await this.page.locator("(//input[@placeholder='Search'])[2]").scrollIntoViewIfNeeded()
+       await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
+    }
+
+    
+
+
 
     public async loadAndLogin(role: string) {
         console.log("Loading admin home page...")
@@ -284,7 +363,7 @@ export class AdminHomePage extends AdminLogin {
         await this.click(this.selectors.metaGeneralLink, "Learning", "Button");
         await this.spinnerDisappear();
     }
-    async enter(name: string, data: string) {
+   public async enter(name: string, data: string) {
         await this.wait("mediumWait")
         await this.type(`//input[@id="${name}"]`, name, data);
     }
@@ -354,6 +433,15 @@ export class AdminHomePage extends AdminLogin {
         await this.click(this.selectors.enrollMenu, "Enrollment", "Link")
     }
 
+     public async clickEnrollments() {
+        await this.wait("minWait");
+        await this.click(this.selectors.enrollments, "Enrollment", "Link")
+    }
+     public async clickResultEnrollmentButton() {
+        await this.wait("minWait");
+        await this.click(this.selectors.resultEnrollmentButton, "Result Enrollment", "Link")
+    }
+
     public async clickEnroll() {
 
         await this.click(this.selectors.enrollLink, "Enrollment", "Link")
@@ -386,6 +474,12 @@ export class AdminHomePage extends AdminLogin {
             await this.validateElementVisibility(this.selectors.adminConfigLink, "Admin Configuration");
             await this.mouseHover(this.selectors.adminConfigLink, "Admin Configuration");
             await this.click(this.selectors.adminConfigLink, "Admin Configuration", "Button");
+            await this.spinnerDisappear();
+        }
+           public async admin_SiteConfigLink() {
+            await this.validateElementVisibility(this.selectors.adminSiteConfigLink, "Admin Configuration");
+            await this.mouseHover(this.selectors.adminSiteConfigLink, "Admin Configuration");
+            await this.click(this.selectors.adminSiteConfigLink, "Admin Configuration", "Button");
             await this.spinnerDisappear();
         }
 

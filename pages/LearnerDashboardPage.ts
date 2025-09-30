@@ -8,7 +8,7 @@ export class LearnerDashboardPage extends LearnerHomePage {
 
     public selectors = {
         ...this.selectors,
-        learningPathAndCertification: "//div[@id='mydashboard']//div[text()='Learningpath / Certification']",
+        learningPathAndCertification: "//div[text()='Learning path / Certification']",
         certification: "a:text-is('Certification')",
         certificationInput: "#exp-searchundefined input",
         verifyText: (titleName: string) => `//div[text()='${titleName}']`,

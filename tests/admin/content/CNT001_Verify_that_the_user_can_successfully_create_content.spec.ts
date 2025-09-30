@@ -15,7 +15,7 @@ test(`Upload Mp4 Content`, async ({ adminHome ,contentHome,bannerHome,createCour
     await adminHome.clickContentmenu();
     await contentHome.clickCreateContent();
     await contentHome.enter("content-title",title)
-      await createCourse.enterCode("CNT-" + generateCode());
+    await createCourse.enterCode("CNT-" + generateCode());
     await contentHome.enterDescription("Sample video content for " +title);
     await contentHome.uploadContent("samplevideo.mp4");
     await bannerHome.clickPublish();
@@ -37,6 +37,7 @@ test(`Upload PDF Content`, async ({ adminHome ,contentHome,bannerHome,createCour
     await contentHome.clickCreateContent();
     await contentHome.enter("content-title",title)
     await contentHome.enterDescription("PDF Content for " +title);
+     await createCourse.enterCode("CNT-" + generateCode());
     await contentHome.uploadContent("AutoPDF.pdf");
     await bannerHome.clickPublish();
     await createCourse.clickProceed();

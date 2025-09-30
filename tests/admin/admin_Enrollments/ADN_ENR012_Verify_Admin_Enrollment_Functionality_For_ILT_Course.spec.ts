@@ -28,7 +28,8 @@ test.describe(`Confirm that Admin enrollments functions correctly and as expecte
         await createCourse.typeDescription(description);
          await createCourse.entercode("CRS-" + generateCode());
         await createCourse.selectdeliveryType("Classroom")
-        await createCourse.handleCategoryADropdown();
+       // await createCourse.handleCategoryADropdown();
+        
         await createCourse.providerDropdown()
         await createCourse.selectTotalDuration();
         await createCourse.typeAdditionalInfo();

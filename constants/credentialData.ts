@@ -294,11 +294,11 @@ switch (environmentSetup) {
                 password: "Welcome1@"
             },
             MANAGERNAME: {
-                username: "TestuserJ17",
+                username: "AlexA17",
                 password: "Welcome1@"
             },
             LEARNERUSERNAME: {
-                username: "Jagadishg17",
+                username: "Jagadish1712",
                 password: "Welcome1@"
             },
             COMMERCEADMIN: {

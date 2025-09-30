@@ -10,7 +10,7 @@ const surveyTitle = ("Survey " + FakerData.AssessmentTitle());
 
 test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel`, async () => {
     test.describe.configure({ mode: "serial", timeout: 700000 });
-    test(`Creation of Pre-Assessment`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Pre-Assessment`, async ({ createCourse,adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Pre-Assessment` },
@@ -25,6 +25,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await SurveyAssessment.clickCreateAssessment();
         await SurveyAssessment.fillAssessmentTitle(preAssessmentTitle);
         await SurveyAssessment.selectLanguage();
+        await createCourse.enterCode("ASMT-" + generateCode());
         await SurveyAssessment.fillDescription();
         await SurveyAssessment.enterPasspercentage("50")
         await SurveyAssessment.selectRandomizeOption("No")
@@ -50,7 +51,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await SurveyAssessment.clickPublish();
         await SurveyAssessment.verifySuccessMessage();
     })
-    test(`Creation of Post-Assessment`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Post-Assessment`, async ({ createCourse,adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Pre-Assessment` },
@@ -66,6 +67,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await SurveyAssessment.fillAssessmentTitle(postAssessmentTitle);
         await SurveyAssessment.selectLanguage();
         await SurveyAssessment.fillDescription();
+        await createCourse.enterCode("ASMT-" + generateCode());
         await SurveyAssessment.enterPasspercentage("50")
         await SurveyAssessment.selectRandomizeOption("No")
         await SurveyAssessment.enterNofAttempts("2")
@@ -93,7 +95,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
 
     })
 
-    test(`Creation of Survey Questions`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Survey Questions`, async ({ createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: 'Author', description: 'Ajay Michael' },
             { type: 'TestCase', description: 'Creation of Survey Questions' },
@@ -107,6 +109,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await SurveyAssessment.clickCreateSurvey();
         await SurveyAssessment.fillSurveyTitle(surveyTitle);
         await SurveyAssessment.selectLanguage();
+        await createCourse.enterCode("SUR-" + generateCode());
         await SurveyAssessment.fillDescription();
         await SurveyAssessment.clickSaveDraft();
         await SurveyAssessment.clickProceed();
@@ -212,8 +215,8 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
         await learnerHome.clickCatalog();
         await catalog.mostRecent();
-       await catalog.searchCatalog("LPT-00291");
-       // await catalog.searchCatalog(title);
+       //await catalog.searchCatalog("LPT-00291");
+       await catalog.searchCatalog(title);
         await catalog.clickEnrollButton();
         await catalog.clickViewLearningPathDetails();
         await catalog.tpPreAssessmentLaunch(); //To click the play icon

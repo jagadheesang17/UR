@@ -22,7 +22,7 @@ test.describe(`Verify_the_user_can_successfully_unpublish_a_banner_making_it_ina
         await bannerHome.enterFromDate();
         await bannerHome.enterToDate();
         await bannerHome.selectSequence(1);
-        await createCourse.selectPortalOption();
+       // await createCourse.selectPortalOption();
         await bannerHome.uploadImage("Profilepic");
         await bannerHome.enterbannerUrl();
         await bannerHome.clickPublish();

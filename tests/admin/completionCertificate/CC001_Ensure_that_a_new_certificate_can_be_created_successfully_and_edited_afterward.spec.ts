@@ -23,6 +23,7 @@ test(`Ensure that a new certificate can be created successfully and edited after
     await CompletionCertification.clickProceed();
     await CompletionCertification.clickEditCertificate();
     await CompletionCertification.title(title+" "+"test");
+     await CompletionCertification.designCertificate(FakerData.getDescription());
     await CompletionCertification.clickUpdate();
     await CompletionCertification.verifyCeritificateSuccessMessage();
 })

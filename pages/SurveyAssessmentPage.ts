@@ -65,7 +65,7 @@ export class SurveyAssessmentPage extends AdminHomePage {
   }
   async clickCreateSurvey() {
     await this.validateElementVisibility(this.selectors.createSurveyBtn, "Survey");
-    await this.click(this.selectors.createSurveyBtn, "Survey", "Button");
+    await this.page.getByRole('button', { name: 'CREATE SURVEY' }).click();
   }
 
   async clickCreateAssessment() {
@@ -74,7 +74,7 @@ export class SurveyAssessmentPage extends AdminHomePage {
   }
   async clickCreateQuestions() {
     await this.validateElementVisibility(this.selectors.createQuestionBtn, "Questions");
-    await this.click(this.selectors.createQuestionBtn, "Questions", "Button");
+    await this.page.getByRole('button', { name: 'Create Question' }).click();
   }
 
   async enterQuestions() {
@@ -332,8 +332,9 @@ export class SurveyAssessmentPage extends AdminHomePage {
   }
 
   async clickAddSelectedQuestion() {
-    await this.mouseHover(this.selectors.addSelectedQuestionBtn, "Add Selected Question");
-    await this.click(this.selectors.addSelectedQuestionBtn, "Add Selected Question", "Button");
+   // await this.mouseHover(this.selectors.addSelectedQuestionBtn, "Add Selected Question");
+   await this.wait('minWait');
+    await this.page.getByRole('button', { name: 'Add Selected Questions' }).click();
   }
 
   async clickImportQuestion() {

@@ -108,7 +108,7 @@ export class MetaLibraryPage extends AdminHomePage {
     
 
     async verify_MetaDataLibrary_Label() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.validateElementVisibility(this.selectors.metadataLibraryLabel, "Metadata Library");
     }
 
@@ -121,7 +121,7 @@ export class MetaLibraryPage extends AdminHomePage {
         await this.retrieveData(this.selectors.newOfLearningCategory(data), filePath.catagory    )
         await this.type(this.selectors.categorySearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.categorySearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 
     public async clickDeleteRecentlyCreated(option: "Classroom" | "Virtual Class") {
@@ -138,10 +138,11 @@ export class MetaLibraryPage extends AdminHomePage {
     }
 
     async addDepartment() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
+        const addDepartmentBtn = this.page.getByRole('button', { name: 'Add Department' });
         await this.validateElementVisibility(this.selectors.addDepartmentBtn, "Add Department");
-        await this.mouseHover(this.selectors.addDepartmentBtn, "Add Department");
-        await this.click(this.selectors.addDepartmentBtn, "Add Department", "Button");
+        await addDepartmentBtn.hover();
+        await addDepartmentBtn.click();
     }
 
     async name(data: string) {
@@ -158,7 +159,7 @@ export class MetaLibraryPage extends AdminHomePage {
         await this.wait('minWait');
         await this.page.locator(this.selectors.saveBtn).scrollIntoViewIfNeeded();
         await this.click(this.selectors.saveBtn, "Save", "Button");
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 
     async verifyCategory(data: string) {
@@ -166,7 +167,7 @@ export class MetaLibraryPage extends AdminHomePage {
     }
 
     async providerExpandButton() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.mouseHover(this.selectors.providerExpandBtn, "Provider");
         await this.click(this.selectors.providerExpandBtn, "Provider", "Expand Button");
     }
@@ -186,7 +187,7 @@ export class MetaLibraryPage extends AdminHomePage {
     }
 
     async CEU_ProviderExpandButton() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.mouseHover(this.selectors.ceuProviderExpandBtn, "CEU Provider");
         await this.click(this.selectors.ceuProviderExpandBtn, "CEU Provider", "Expand Button");
     }
@@ -207,7 +208,7 @@ export class MetaLibraryPage extends AdminHomePage {
     }
 
     async CEU_TypeExpandButton() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.mouseHover(this.selectors.ceuTypeExpandBtn, "CEU Type");
         await this.click(this.selectors.ceuTypeExpandBtn, "Provider", "Expand Button");
     }
@@ -228,7 +229,9 @@ export class MetaLibraryPage extends AdminHomePage {
     }
 
     async tagsExpandButton() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
+        await this.wait('minWait');
+        await this.page.locator(this.selectors.tagsExpandBtn).scrollIntoViewIfNeeded();
         await this.mouseHover(this.selectors.tagsExpandBtn, "Tags");
         await this.click(this.selectors.tagsExpandBtn, "Tags", "Expand Button");
     }
@@ -258,7 +261,7 @@ export class MetaLibraryPage extends AdminHomePage {
     // }
 
     async verify_Department(data: string) {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.verification(this.selectors.departmentVerification(data), data);
     }
 
@@ -301,12 +304,12 @@ export class MetaLibraryPage extends AdminHomePage {
     // }
 
     async verify_UserType(data: string) {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.validateElementVisibility(this.selectors.userTypeVerification(data), data);
     }
 
     async jobRolesExpandButton() {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.mouseHover(this.selectors.jobRolesExpandBtn, "Job Roles");
         await this.click(this.selectors.jobRolesExpandBtn, "Job Roles", "Button");
     }
@@ -324,7 +327,7 @@ export class MetaLibraryPage extends AdminHomePage {
     // }
 
     async verify_JobRole(data: string) {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.validateElementVisibility(this.selectors.jobRoleVerification(data), data);
     }
 
@@ -362,7 +365,7 @@ export class MetaLibraryPage extends AdminHomePage {
 
 
     async verify_JobTitile(data: string) {
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
         await this.validateElementVisibility(this.selectors.jobTitleVerification(data), data);
     }
 
@@ -412,7 +415,7 @@ export class MetaLibraryPage extends AdminHomePage {
             if (!isDisabled) {
                 await randomCheckbox.hover();
                 await randomCheckbox.click();
-                await this.spinnerDisappear();
+                // await this.spinnerDisappear();
                 console.log('Clicked a checkbox.');
                 break;
             } else {
@@ -446,46 +449,46 @@ export class MetaLibraryPage extends AdminHomePage {
 
     public async verifyEquipment(data: string) {
         await this.typeAndEnter(this.selectors.equipmentSearchInput, "Search Input", data)
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
     async tagsSearchField(data: string) {
         await this.retrieveData(this.selectors.newOfTag(data), filePath.tags)
         await this.type(this.selectors.tagsSearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.tagsSearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 	
        async department_SearchField(data: string) {
         await this.retrieveData(this.selectors.newOfPeopleDepartment(data), filePath.department)
         await this.type(this.selectors.departmentSearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.departmentSearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 	   async addEmploymentType_SearchButton(data: string) {
         await this.retrieveData(this.selectors.newOfPeopleEmployment(data), filePath.empType)
         await this.type(this.selectors.employmentTypeSearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.employmentTypeSearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 	  async userType_SearchButton(data: string) {
         await this.retrieveData(this.selectors.newOfPeopleUsertypes(data), filePath.userType);
         await this.type(this.selectors.userTypeSearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.userTypeSearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 		
 	 async addJobRole_SearchField(data: string) {
         await this.retrieveData(this.selectors.newOfPeopleJobroles(data), filePath.jobRole);
         await this.type(this.selectors.jobRoleSearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.jobRoleSearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 		
 	   async jobtitle_SearchField(data: string) {
         await this.retrieveData(this.selectors.newOfPeopleJobtitle(data), filePath.jobTitle);
         await this.type(this.selectors.jobTitleSearchField, "Search Field", data);
         await this.keyboardAction(this.selectors.jobTitleSearchField, "Enter", "Search Field", data);
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
 	   async ceuTypeSearchField(data: string) {
         await this.retrieveData(this.selectors.newofCEUType(data), filePath.ceuData)
@@ -502,7 +505,7 @@ export class MetaLibraryPage extends AdminHomePage {
     public async verifyLanguageRadioBtn() {
         const radioButtons = await this.page.locator(this.selectors.languageDotRadioBtn);
         const count = await radioButtons.count();
-        expect(count).toBe(2);
+        expect(count).toBe(3);
         for (let i = 0; i < count; i++) {
             const radioButton = radioButtons.nth(i);
             const isDisabled = await radioButton.isDisabled();
