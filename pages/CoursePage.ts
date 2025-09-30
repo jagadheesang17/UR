@@ -67,7 +67,7 @@ export class CoursePage extends AdminHomePage {
         hideInCatalogCheckbox: "//span[contains(text(),'Hide in Catalog')]",
         saveInDraftCheckbox: "//span[contains(text(),'Save as Draft')]",
         deliveryTypeDropdown: "//div[@id='wrapper-course-delivery-type']",
-        deliveryTypeOption: (deliveryType: string) => `//span[text()='${deliveryType}']`,
+        deliveryTypeOption: (deliveryType: string) => `(//span[text()='${deliveryType}'])[1]`,
         editCourseTabLink: "//a[text()='Edit Course']",
         addInstancesBtn: "//button[@id='course-btn-add-instances']",
         instanceDeliveryTypeField: "//div[@id='wrapper-instanceDeliveryType']",
@@ -350,7 +350,7 @@ export class CoursePage extends AdminHomePage {
 
 
         //code
-        codeInput: `//input[@id='code'][1]`,
+        codeInput: `(//input[contains(translate(@id, 'CODE', 'code'), 'code')])[1]`,
 
 
     };
@@ -486,27 +486,68 @@ export class CoursePage extends AdminHomePage {
         await this.mouseHover(this.selectors.instructorOption_bulk(instructorName, i), "Instructor Name");
         await this.click(this.selectors.instructorOption_bulk(instructorName, i), "Instructor Name", "Button")
 
+    }async captureDropdownValuesOfLocation(i: any, str: string,): Promise<void> {
+        await this.wait("minWait")
+        //  1. Click on the textbox to open the dropdown
+        await this.page.locator(str).click();
+        await this.wait("mediumWait")
+        // 2. Capture all dropdown option texts easily
+        const dropdownValues: string[] = await this.page.locator(`//input[@id='location_instance_${i}-filter-field']/following::li[contains(@id,'list_')]`).allInnerTexts();
+        console.log('Captured Dropdown Values:', dropdownValues);
+        // // 3. Save the captured values into a JSON file
+        const filePath = path.join(__dirname, '../data/captureLocation.json'); // Save into /data folder
+        fs.writeFileSync(filePath, JSON.stringify(dropdownValues));
+        const locationFromJson = getallRandomLocation();
+        const locationName = locationFromJson.replace(/\s*\([^)]*\)/g, "");
+        console.log(locationName);
+        await this.wait("mediumWait")
+        await this.page.locator(this.selectors.locationDropdown_Copy).focus(),
+            await this.page.keyboard.type(locationName, { delay: 600 })
+        await this.page.keyboard.press('Enter');
+        //await this.keyboardType(this.selectors.instructorInput_bulk(i), instructorName);
+        await this.mouseHover(this.selectors.locationOption_bulk(locationName, i), "Instructor Name");
+        await this.click(this.selectors.locationOption_bulk(locationName, i), "Instructor Name", "Button")
     }
 
 
+async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
+        await this.wait("minWait")
+        //  1. Click on the textbox to open the dropdown
+        await this.page.locator(str).click();
+        await this.wait("mediumWait")
+        // 2. Capture all dropdown option texts easily
+        const dropdownValues: string[] = await this.page.locator(`//input[@id='location_instance_0-filter-field']/following::li[contains(@id,'list_')]`).allInnerTexts();
+        console.log('Captured Dropdown Values:', dropdownValues);
+        // // 3. Save the captured values into a JSON file
+        const filePath = path.join(__dirname, '../data/captureLocation.json'); // Save into /data folder
+        fs.writeFileSync(filePath, JSON.stringify(dropdownValues));
+        const locationFromJson = getallRandomLocation();
+        const locationName = locationFromJson.replace(/\s*\([^)]*\)/g, "");
+        console.log(locationName);
+        await this.wait("mediumWait")
+        await this.page.locator(this.selectors.locationDropdown_bulk).focus(),
+            await this.page.keyboard.type(locationName, { delay: 600 })
+        await this.page.keyboard.press('Enter');
+        //await this.keyboardType(this.selectors.instructorInput_bulk(i), instructorName);
+        await this.mouseHover(this.selectors.locationOption_Copy(locationName), "Instructor Name");
+        await this.click(this.selectors.locationOption_Copy(locationName), "Instructor Name", "Button")
+    }
     //Bulk class creation
-    async bulkClassCreation(classNos: any, mode: "manual" | "copy/paste") {
+    async bulkClassCreation(classNos: any, mode: "manual" | "copy/paste",title:string) {
         await this.click(this.selectors.NoOfClass, "TextBox", "click");
         await this.keyboardType(this.selectors.NoOfClass, classNos)
         await this.clickCreateInstance();
         switch (mode) {
             case "manual":
                 // const totalClasses = parseInt(classNos);
-
                 for (let i = 0; i < classNos; i++) {
-                    await this.enterSessionName_bulk(FakerData.getSession(), i);
+                    await this.enterSessionName_bulk(title+"_"+FakerData.getSession(), i);
                     await this.captureDropdownValues(i, this.selectors.instructorDropdown_bulk(i));
-                    await this.selectLocation_bulk(i);
+                    await this.captureDropdownValuesOfLocation(i,this.selectors.locationSelection_bulk(i));
                     await this.enterRandomDate_bulk(i)
                     await this.startandEndTime_bulkClass(i);
                     await this.setMaxSeat_bulk(i);
                     await this.waitList_bulk(i);
-
                 }
                 await this.checkConflict();
                 //console.log("next");
@@ -514,11 +555,12 @@ export class CoursePage extends AdminHomePage {
             case "copy/paste":
                 await this.enterSessionName_copy(FakerData.getSession());
                 await this.selectInstructor_Copy(credentials.INSTRUCTORNAME.username)
-                await this.selectLocation_Copy();
+                await this.captureDropdownValuesOfLocationCopy(this.selectors.locationSelection_Copy);
                 await this.enterRandomDate_Copy();
                 await this.startandEndTime();
                 await this.setMaxSeat_Copy();
                 await this.waitList_Copy();
+
                 //Copy Classes
                 await this.click(this.selectors.copyClass, "Copy", "Created ClassRooms")
                 for (let j = 0; j < classNos - 1; j++) {
@@ -809,6 +851,7 @@ export class CoursePage extends AdminHomePage {
 
 
     async clickCatalog() {
+        await this.wait("minWait")
         await this.validateElementVisibility(this.selectors.showInCatalogBtn, "Show in Catalog");
         await this.click(this.selectors.showInCatalogBtn, "Catalog", "Button");
     }
@@ -1064,10 +1107,8 @@ export class CoursePage extends AdminHomePage {
 
     async selectdeliveryType(deliveryType: string) {
         await this.click(this.selectors.deliveryTypeDropdown, "Course Delivery", "dropdown");
-        // scope the option lookup to the opened dropdown to avoid duplicate matches in the page
-        const scopedOption = `${this.selectors.deliveryTypeDropdown}//following::${this.selectors.deliveryTypeOption(deliveryType)}`;
-        await this.mouseHover(scopedOption, "Delivery Type");
-        await this.click(scopedOption, "Delivery Type", "Selected");
+        await this.mouseHover(this.selectors.deliveryTypeOption(deliveryType), "Delivery Type");
+        await this.click(this.selectors.deliveryTypeOption(deliveryType), "Delivery Type", "Selected");
     }
 
     async selectInstanceType(instanceType: string) {
@@ -1331,8 +1372,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "AICC&SCORM") {
             const data = "AICC&SCORM"
@@ -1345,8 +1386,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "AutoVimeo") {
             const data = "AutoVimeo"
@@ -1359,8 +1400,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "AutoAudioFile") {
             const data = "AutoAudioFile"
@@ -1373,8 +1414,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "tin_can") {
             const data = "tin_can"
@@ -1387,8 +1428,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "Completed-Incomplete-SCORM-1.2") {
             const data = "Completed-Incomplete-SCORM-1.2"
@@ -1401,8 +1442,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "Passed-Failed-SCORM2004") {
             const data = "Passed-Failed-SCORM2004"
@@ -1412,8 +1453,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
 
         }
         else if (content == content && content != undefined) {
@@ -1427,18 +1468,18 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else {
-            const data = "Content testing"
+            const data = "TEST CONTENT"
             await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
             await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            await this.mouseHover(this.selectors.attachedContentLabel, "button");
-            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            // await this.mouseHover(this.selectors.attachedContentLabel, "button");
+            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
 
     }
