@@ -151,6 +151,11 @@ export class ProfilePage extends LearnerHomePage {
         addressInput: (label: string) => `(//label[contains(text(),'${label}')]/following::input[contains(@id,'addres')])[1]`,
         inputField: (name: string) => `//input[@id="${name}"]`,
 
+        errorMessage:`//h6[text()='Please complete atleast one course to request for a wallet card']`,
+        proceed:`//button[text()='Proceed']`,
+       verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
+       oneProfile: "//a[text()='ONE-Profile']",
+
 
     }
     constructor(page: Page, context: BrowserContext) {
@@ -644,6 +649,38 @@ export class ProfilePage extends LearnerHomePage {
     async enter(name: string, data: string) {
         const selector = this.selectors.inputField(name);
         await this.type(selector, name, data);
+    }
+    async verifyTheErrorMessageWhenTheAdminNotCompleteSingleCourse() {
+        await this.wait('minWait');
+        const errorMsgVerification = await this.page.locator(this.selectors.errorMessage).isVisible();
+        if (errorMsgVerification) {
+            console.log("Error message is displayed when the admin has not completed a single course to request for a wallet card");
+        } else {
+            throw new Error("Error message is not displayed when the admin has not completed a single course to request for a wallet card");
+        }
+            //    await this.verification(this.selectors.errorMessage, "Please complete atleast one course to request for a wallet card")
+    //    console.log("Verification message is displayed when the admin has not completed a single course to request for a wallet card");
+    }
+
+async proceedandVerifyTheCheckboxAfterCompletingTheCourse() {
+    await this.validateElementVisibility(this.selectors.proceed, "proceed");
+    await this.click(this.selectors.proceed, "proceed", "button");
+    await this.wait('minWait');
+    await this.click(this.selectors.oneProfile, "one-profile", "button");
+    }
+
+async verifyRequestPhysicalWalletCardDeliveryCheckbox() {
+        const walletCardFromOneprofile=await this.page.locator(this.selectors.verifyCheckedWalletCardCheckbox).isVisible();
+        if (walletCardFromOneprofile) {
+            console.log("Request for physical wallet card delivery is checked and disabled in one profile page");
+        }
+        else {
+            throw new Error("Request for physical wallet card delivery is left unchecked in one profile page");
+        }
+    }
+    async clickOneProfile() {
+          await this.wait('minWait');
+          await this.click(this.selectors.oneProfile, "one-profile", "button");
     }
 
 }
