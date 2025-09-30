@@ -46,7 +46,7 @@ test.describe(`TC035 Verify that the admin can create multiple classes in bulk u
         
         }
         await addinstance("Classroom");
-        await createCourse.bulkClassCreation("3","copy/paste");
+        await createCourse.bulkClassCreation("3","copy/paste",courseName);
       
     })
 
