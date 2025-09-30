@@ -75,8 +75,11 @@ export class AdminHomePage extends AdminLogin {
 
 customerConfig:  `//a[text()='Customer Config']`,
 walletCard: `//input[contains(@id,'physicalwalletcard')]`,
-submit: `//input[@id='edit_submit']`
-        checkRequestWalletCardDelivery:`//i[contains(@class,'fad fa-square icon_16_1')]`
+submit: `//input[@id='edit_submit']`,
+ checkRequestWalletCardDelivery:`//i[contains(@class,'fad fa-square icon_16_1')]`,
+verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
+
+  
     };
 
     constructor(page: Page, context: BrowserContext) {
@@ -522,6 +525,16 @@ submit: `//input[@id='edit_submit']`
 async checkRequestWalletCardDelivery(){
         await this.validateElementVisibility(this.selectors.checkRequestWalletCardDelivery, "Request Wallet Card Delivery Checkbox");
         await this.click(this.selectors.checkRequestWalletCardDelivery,"Request Wallet Card Delivery", "Checkbox");
+    }
+
+          async verifyRequestPhysicalWalletCardDeliveryCheckbox() {
+        const walletCardFromOneprofile=await this.page.locator(this.selectors.verifyCheckedWalletCardCheckbox).isVisible();
+        if (walletCardFromOneprofile) {
+            console.log("Request for physical wallet card delivery is checked and disabled in one profile page");
+        }
+        else {
+            throw new Error("Request for physical wallet card delivery is left unchecked in one profile page");
+        }
     }
     
 
