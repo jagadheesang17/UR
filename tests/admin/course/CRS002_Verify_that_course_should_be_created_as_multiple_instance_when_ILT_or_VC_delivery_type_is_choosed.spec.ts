@@ -6,6 +6,7 @@ import { FakerData, getRandomSeat } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
 
 
+let createdCode: any
 const code = "CRS"+"-"+generateCode();
 const courseName = FakerData.getCourseName();
 const sessionName = FakerData.getSession();
@@ -16,7 +17,7 @@ let tag: any
 const instructorName = credentials.INSTRUCTORNAME.username
 test.describe(`Verify that course should be created as multiple instance when ILT or VC delivery type is choosed`, () => {
     test.describe.configure({ mode: "serial" });
-    test(`Multiple Course Creation for Classroom`, async ({ adminHome, createCourse, editCourse }) => {
+    test(`Multiple Course Creation for Classroom`, async ({ adminHome, createCourse, editCourse,enrollHome,contentHome  }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Create the course as multiple instance` },
@@ -77,6 +78,20 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await createCourse.verifySuccessMessage();
         console.log(courseName);
         console.log(elCourseName);
+
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()         
     })
 
 
@@ -90,16 +105,9 @@ test.describe(`Verify that course should be created as multiple instance when IL
 
         
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.clickFilter();
-        await catalog.selectresultantTags(tag);
-        await catalog.clickApply();
-        await learnerHome.clickCatalog();
-        await catalog.clickMoreonCourse(courseName);
-        await catalog.clickSelectcourse(elCourseName);
-        console.log(courseName);
-        console.log(elCourseName);
-        await catalog.clickEnroll();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         // await catalog.verifyCompletedCourse(elCourseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();

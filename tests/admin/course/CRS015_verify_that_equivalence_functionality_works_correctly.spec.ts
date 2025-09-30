@@ -32,6 +32,7 @@ test(`Verify equivalence functionality works correctly for enrolled courses`, as
     await createCourse.clickSave();
     await createCourse.clickProceed();
     await createCourse.verifySuccessMessage();
+    
 })
 
 test(`Verifying learner side that able to complete equivalence course`, async ({ learnerHome, catalog }) => {

@@ -1,13 +1,15 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { generateCode } from "../../../data/apiData/formData";
 import { FakerData } from '../../../utils/fakerUtils';
+import { credentials } from "../../../constants/credentialData";
 
+let createdCode: any
 const code = "CRS"+"-"+generateCode()
 let courseName = FakerData.getCourseName();
 const description = FakerData.getDescription()
 test.describe(`Confirm that Scorm1.2 content functions correctly and as expected`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of Single Instance Elearning with Scorm1.2 content`, async ({ adminHome, createCourse }) => {
+    test(`Creation of Single Instance Elearning with Scorm1.2 content`, async ({ adminHome, createCourse,enrollHome,contentHome  }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Vidya` },
             { type: `TestCase`, description: `Creation of Single Instance Elearning with Scorm1.2 content` },
@@ -19,8 +21,8 @@ test.describe(`Confirm that Scorm1.2 content functions correctly and as expected
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary("Completed-Incomplete-SCORM-1.2")
@@ -28,6 +30,19 @@ test.describe(`Confirm that Scorm1.2 content functions correctly and as expected
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+    await enrollHome.verifytoastMessage()
     })
 
 
@@ -38,11 +53,9 @@ test.describe(`Confirm that Scorm1.2 content functions correctly and as expected
             { type: `Test Description`, description: `Confirm that Scorm1.2 content functions correctly and as expected` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickEnrollButton();
-        await catalog.viewCoursedetails();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         await readContentHome.Completed_Incomplete_SCORM12();
         await catalog.saveLearningStatus();
         await catalog.clickMyLearning();

@@ -158,8 +158,8 @@ export const test = baseTest.extend<expertusFixture & { pageWithLogging: Page }>
         );
 
         // 🔹 Save Excel
-        // saveRequestsToExcel('network_timings_all.xlsx', timings, testInfo.title);
-        // saveRequestsToExcel('network_timings_slow.xlsx', slowOnes, testInfo.title);
+        saveRequestsToExcel('network_timings_all.xlsx', timings, testInfo.title);
+        saveRequestsToExcel('network_timings_slow.xlsx', slowOnes, testInfo.title);
     },
 
 
@@ -325,46 +325,175 @@ test.afterAll(async ({}) => {
         await updateJiraIssue(jiraIssueKey,resultFile[0]); // Replace with the actual folder path
     }
 }); */
-// function saveRequestsToExcel(
-//     filename: string,
-//     requests: any[],
-//     testName: string
-// ) {
-//     if (requests.length === 0) return;
+// Perform logout after each test to ensure clean session state between tests.
+// Uses the pageWithLogging fixture so we can interact with the current page.
+test.afterEach(async ({ pageWithLogging }, testInfo) => {
+    try {
+        const page = pageWithLogging;
+        // Strategy 1: look for a common logout link/button
+        const logoutSelectors = [
+            "//div[@class='logout']/a",
+            "a[href*='/logout']",
+            "button[aria-label='Logout']",
+            "text=Logout"
+        ];
 
-//     let workbook: XLSX.WorkBook;
-//     if (fs.existsSync(filename)) {
-//         workbook = XLSX.readFile(filename);
-//     } else {
-//         workbook = XLSX.utils.book_new();
-//     }
+        let clicked = false;
+        for (const sel of logoutSelectors) {
+            try {
+                const locator = page.locator(sel);
+                const isVisible = await locator.first().isVisible().catch(() => false);
+                if (isVisible) {
+                    await locator.first().click({ timeout: 5000 }).catch(() => {});
+                    clicked = true;
+                    console.log('User logged out Successfully');
+                    break;
+                }
+            } catch {
+                // ignore and try next selector
+            }
+        }
 
-//     const sheetName = 'Requests';
-//     let worksheet = workbook.Sheets[sheetName];
+        // Strategy 2: if click did not happen, try opening a known logout URL directly
+        if (!clicked) {
+            const possibleLogoutPaths = ['/logout', '/learner/unitedrentals/logout', '/learner/unitedrentalspreprod/logout'];
+            for (const p of possibleLogoutPaths) {
+                try {
+                    const url = new URL(page.url());
+                    url.pathname = p;
+                    // navigate only if on same origin or if URL looks valid
+                    await page.goto(url.toString(), { waitUntil: 'load', timeout: 5000 }).catch(() => {});
+                } catch {
+                    // ignore
+                }
+            }
+        }
 
-//     let existingData: any[] = [];
-//     if (worksheet) {
-//         existingData = XLSX.utils.sheet_to_json(worksheet);
-//     }
+        // Small wait to allow logout to complete and avoid flakiness
+        await page.waitForTimeout(500);
+    } catch (err) {
+        // Do not fail the test teardown if logout fails
+        console.warn('afterEach logout failed or was skipped:', err);
+    }
+});
 
-//     const newRows = requests.map((t) => ({
-//         test: testName,
-//         method: t.method,
-//         type: t.type,
-//         status: t.status,
-//         duration: t.duration,
-//         url: t.url,
-//         body: t.postData,
-//     }));
+function saveRequestsToExcel(
+    filename: string,
+    requests: any[],
+    testName: string
+) {
+    if (requests.length === 0) return;
 
-//     const updatedData = [...existingData, ...newRows];
-//     worksheet = XLSX.utils.json_to_sheet(updatedData);
+    let workbook: XLSX.WorkBook;
+    // Try to read existing workbook. If the file is corrupted or cannot be parsed,
+    // back it up with a .corrupt timestamped suffix and continue with a new workbook
+    if (fs.existsSync(filename)) {
+        try {
+            workbook = XLSX.readFile(filename);
+        } catch (err) {
+            // Backup the corrupted file so it can be inspected later
+            try {
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const backupName = `${filename}.corrupt.${timestamp}`;
+                fs.copyFileSync(filename, backupName);
+                console.warn(`Failed to read Excel file '${filename}'. Backed up corrupted file as '${backupName}' and continuing with a new workbook.`);
+            } catch (copyErr) {
+                console.warn(`Failed to backup corrupted Excel file '${filename}':`, copyErr);
+            }
+            workbook = XLSX.utils.book_new();
+        }
+    } else {
+        workbook = XLSX.utils.book_new();
+    }
 
-//     if (!workbook.SheetNames.includes(sheetName)) {
-//         XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-//     } else {
-//         workbook.Sheets[sheetName] = worksheet;
-//     }
+    const sheetName = 'Requests';
+    let worksheet = workbook.Sheets[sheetName];
 
-//     XLSX.writeFile(workbook, filename);
-// }
+    let existingData: any[] = [];
+    if (worksheet) {
+        existingData = XLSX.utils.sheet_to_json(worksheet);
+    }
+
+    // Excel cell text limit is 32767 characters. Truncate cell text to avoid write errors
+    // and store full bodies in separate files under ./excel_payloads for later inspection.
+    //
+    // Behaviour:
+    // - If a request.postData body exceeds 32767 chars, we save the full payload to
+    //   ./excel_payloads/<test>_<timestamp>_<idx>.txt and place a truncated preview in
+    //   the Excel cell with a reference to the backup filename in `fullBodyFile` column.
+    // - This prevents XLSX.writeFile from failing with "Text length must not exceed 32767"
+    //   while preserving full request bodies for debugging.
+    const payloadsDir = path.resolve(process.cwd(), 'excel_payloads');
+    if (!fs.existsSync(payloadsDir)) {
+        try { fs.mkdirSync(payloadsDir); } catch (e) { /* ignore */ }
+    }
+
+const MAX_EXCEL_TEXT = 32767;
+
+const truncateText = (text: any, maxLength = MAX_EXCEL_TEXT): string => {
+  if (!text) return '';
+  const str = typeof text === 'string' ? text : String(text);
+  return str.length > maxLength 
+    ? str.slice(0, maxLength - 20) + '...[TRUNCATED]'
+    : str;
+};
+
+// Truncate existing data from the Excel file
+const sanitizedExistingData = existingData.map(row => ({
+  test: truncateText(row.test),
+  method: truncateText(row.method),
+  type: truncateText(row.type),
+  status: row.status,
+  duration: row.duration,
+  url: truncateText(row.url),
+  body: truncateText(row.body),
+  fullBodyFile: truncateText(row.fullBodyFile),
+}));
+
+const newRows = requests.map((t, idx) => {
+  let body = typeof t.postData === 'string'
+    ? t.postData
+    : t.postData
+      ? JSON.stringify(t.postData)
+      : '';
+
+  let fullBodyFile: string | undefined;
+
+  if (body.length > MAX_EXCEL_TEXT) {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const safeTestName = testName.replace(/[^a-z0-9-_]/gi, '_').slice(0, 60);
+      fullBodyFile = path.join('excel_payloads', `${safeTestName}_${timestamp}_${idx}.txt`);
+
+      fs.writeFileSync(path.resolve(process.cwd(), fullBodyFile), body, 'utf8');
+
+      body =
+        body.slice(0, MAX_EXCEL_TEXT - 100) +
+        `\n...TRUNCATED... full payload saved to ${fullBodyFile}`;
+    } catch {
+      body = body.slice(0, MAX_EXCEL_TEXT - 50) + '\n...TRUNCATED... (save failed)';
+    }
+  }
+
+  return {
+    test: truncateText(testName),
+    method: truncateText(t.method),
+    type: truncateText(t.type),
+    status: t.status,
+    duration: t.duration,
+    url: truncateText(t.url),
+    body: truncateText(body),
+    fullBodyFile: truncateText(fullBodyFile),
+  };
+});
+
+const updatedData = [...sanitizedExistingData, ...newRows];
+worksheet = XLSX.utils.json_to_sheet(updatedData);
+    if (!workbook.SheetNames.includes(sheetName)) {
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    } else {
+        workbook.Sheets[sheetName] = worksheet;
+    }
+
+    XLSX.writeFile(workbook, filename);
+}

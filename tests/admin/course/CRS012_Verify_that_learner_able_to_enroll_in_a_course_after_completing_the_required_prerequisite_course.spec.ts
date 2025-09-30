@@ -1,9 +1,9 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
-
-
+let createdCode: any
 const code = "CRS"+"-"+generateCode();
 const prerequisiteCourse1 = FakerData.getCourseName();
 const mainCourseName = FakerData.getCourseName();
@@ -11,7 +11,7 @@ const description = FakerData.getDescription()
 let tag: any
 test.describe(`Verify that the learner able to enroll in a course after completing single prerequisite course`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome,editCourse, createCourse }) => {
+    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome,editCourse, createCourse,enrollHome,contentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Creation of Single Instance Elearning with Youtube content` },
@@ -57,6 +57,21 @@ test.describe(`Verify that the learner able to enroll in a course after completi
         await createCourse.clickCourseOption("Prerequisite")
         await createCourse.addSinglePrerequisiteCourse(prerequisiteCourse1);
 
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(mainCourseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(mainCourseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
+        
+
     })
 
     test(`Verify that the learner able to enroll in a course after completing all the required prerequisite courses`, async ({ learnerHome, catalog }) => {
@@ -67,22 +82,9 @@ test.describe(`Verify that the learner able to enroll in a course after completi
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
         await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(mainCourseName);
-        await catalog.clickMoreonCourse(mainCourseName);
-        await catalog.clickSelectcourse(mainCourseName);
-        await catalog.clickEnroll();
-        await catalog.verifyPrerequisiteMandatoryMessage()
-        await catalog.clickCourseOnDetailsPage(prerequisiteCourse1);
-        await catalog.clickSelectcourse(prerequisiteCourse1);
-        await catalog.clickEnroll();
-        await catalog.clickLaunchButton();
-        await catalog.saveLearningStatus();
-        await learnerHome.clickCatalog();
-        await catalog.searchCatalog(mainCourseName);
-        await catalog.clickMoreonCourse(mainCourseName);
-        await catalog.clickSelectcourse(mainCourseName);
-        await catalog.clickEnroll();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(mainCourseName);
+        await catalog.clickCourseInMyLearning(mainCourseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await catalog.clickMyLearning();

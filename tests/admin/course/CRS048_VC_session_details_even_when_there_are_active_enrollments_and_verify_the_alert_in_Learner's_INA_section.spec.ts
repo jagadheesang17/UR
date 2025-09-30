@@ -67,6 +67,7 @@ test.describe(`Verify_that_admin_edit_the_session_details_of_multi_instance_ILT_
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+        
         await contentHome.gotoListing();
         await adminHome.menuButton()
         await adminHome.clickEnrollmentMenu();

@@ -1,15 +1,16 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
-
+let createdCode: any
 const code = "CRS"+"-"+generateCode();
 const equivalenceCoursename = FakerData.getCourseName();
 const mainCourseName = FakerData.getCourseName();
 const description = FakerData.getDescription()
 let tag: any
 test.describe.configure({ mode: "serial" });
-test(`Verify equivalence functionality works correctly for enrolled courses`, async ({ adminHome, editCourse, createCourse }) => {
+test(`Verify equivalence functionality works correctly for enrolled courses`, async ({ adminHome, editCourse, createCourse,enrollHome,contentHome }) => {
     test.info().annotations.push(
         { type: `Author`, description: `Tamilvanan` },
         { type: `TestCase`, description: `Creation of Single Instance Elearning with Youtube content for equivalence` },
@@ -52,6 +53,19 @@ test(`Verify equivalence functionality works correctly for enrolled courses`, as
     //Adding equivalence course
     await createCourse.clickCourseOption("Equivalence")
     await createCourse.addEquivalenceCourse(equivalenceCoursename);
+
+    await contentHome.gotoListing();
+    await createCourse.catalogSearch(mainCourseName)
+    createdCode = await createCourse.retriveCode()
+    console.log("Extracted Code is : " + createdCode);
+    await adminHome.menuButton()
+    await adminHome.clickEnrollmentMenu();
+    await adminHome.clickEnroll();
+    await enrollHome.selectBycourse(mainCourseName)
+    await enrollHome.clickSelectedLearner();
+    await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+    await enrollHome.clickEnrollBtn();
+    await enrollHome.verifytoastMessage()
 
 })
 

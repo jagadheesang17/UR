@@ -6,6 +6,7 @@ import { FakerData, getRandomSeat } from '../../../utils/fakerUtils';
 import { generateCode } from '../../../data/apiData/formData';
 
 
+let createdCode: any
 const courseName = FakerData.getCourseName();
 const sessionName = FakerData.getSession();
 const elCourseName = ("Elearning" + " " + FakerData.getCourseName());
@@ -16,7 +17,7 @@ const instructorName = credentials.INSTRUCTORNAME.username
 const code = "CRS" + "-" + generateCode();
 test.describe(`Verify past ILT Class is not available to the learner`, () => {
     test.describe.configure({ mode: "serial" });
-    test(`Past ILT Course Creation`, async ({ adminHome, createCourse, editCourse }) => {
+    test(`Past ILT Course Creation`, async ({ adminHome, createCourse, editCourse ,enrollHome,contentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Selvakumar` },
             { type: `TestCase`, description: `Past ILT Course Creation` },
@@ -51,6 +52,19 @@ test.describe(`Verify past ILT Class is not available to the learner`, () => {
         await createCourse.clickHideinCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()        
     
     })
     
@@ -61,6 +75,9 @@ test.describe(`Verify past ILT Class is not available to the learner`, () => {
             { type: `Test Description`, description: `Verifying Past ILT class is not getting displayed in Catalog` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        
+         await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
         await learnerHome.clickCatalog();
         await catalog.mostRecent();
         await catalog.searchCatalog(courseName);

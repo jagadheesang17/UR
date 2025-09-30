@@ -1,15 +1,17 @@
 import path from "path";
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from "../../../utils/fakerUtils"
-import { generateCode } from "../../../data/apiData/formData";
+import { generateCode } from "../../../data/apiData/formData"
+import { credentials } from "../../../constants/credentialData";
 
+let createdCode: any
 const code = "CRS"+"-"+generateCode();
 
 //test.use({ storageState: "logins/expertusAdminLog.json" })
 let courseName = FakerData.getCourseName();
 test.describe(`Verify learning admin able to create a Singleinstance E-learning course with Multiple content Survey and Assesment`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(` Course Creation for Single_Instance E-Learning with multiple contents`, async ({ adminHome, createCourse }) => {
+    test(` Course Creation for Single_Instance E-Learning with multiple contents`, async ({ adminHome, createCourse ,enrollHome,contentHome  }) => {
         test.info().annotations.push(
             { type: 'Author', description: 'Ajay Michael' },
             { type: 'TestCase', description: 'Course Creation for Single_Instance E-Learning with multiple contents' },
@@ -39,6 +41,21 @@ test.describe(`Verify learning admin able to create a Singleinstance E-learning 
         await createCourse.save_editedcoursedetails()
         await createCourse.verifySuccessMessage()
 
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()    
+        
+        
+
     })
     test(`Learner Verification For Video Sequencing`, async ({ learnerHome, catalog, learnerCourse }) => {
         test.info().annotations.push(
@@ -47,9 +64,10 @@ test.describe(`Verify learning admin able to create a Singleinstance E-learning 
             { type: `Test Description`, description: `Verify that content sequence flow` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "Default");
-        await learnerHome.clickCatalog();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickEnrollButton();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+       // await catalog.verifyEnrolledCourseByCODE(createdCode);
+        await catalog.clickCourseInMyLearning(courseName);
         await catalog.viewCoursedetails();
         await learnerCourse.clickRandomcontent();
         await learnerCourse.verifyWarningMessage();

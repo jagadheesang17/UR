@@ -1,14 +1,14 @@
 import { test } from "../../customFixtures/expertusFixture";
 import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from "../../utils/fakerUtils";
+import { credentials } from "../../constants/credentialData";
 
-
-
+let createdCode: any
 const courseName = FakerData.getCourseName();
 const description = FakerData.getDescription()
 test.describe(`Verify_that_when_the_business_rule_is_unchecked_a_completed_course_allows_the_user_to_request_the_class.spec.ts`, async () => {
     test.describe.configure({ mode: 'serial' })
-    test(`Verify_that_when_the_business_rule_is_unchecked_a_completed_course_allows_the_user_to_request_the_class.spec.ts`, async ({ adminHome, createCourse, editCourse }) => {
+    test(`Verify_that_when_the_business_rule_is_unchecked_a_completed_course_allows_the_user_to_request_the_class.spec.ts`, async ({ adminHome, createCourse, editCourse,enrollHome,contentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Vidya` },
             { type: `TestCase`, description: `Verify_that_when_the_business_rule_is_unchecked_a_completed_course_allows_the_user_to_request_the_class.spec.ts` },
@@ -38,6 +38,19 @@ test.describe(`Verify_that_when_the_business_rule_is_unchecked_a_completed_cours
         await createCourse.typeDescription("Added Business Rule " + courseName)
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
 
     })
 
@@ -48,13 +61,10 @@ test.describe(`Verify_that_when_the_business_rule_is_unchecked_a_completed_cours
             { type: `TestCase`, description: `Learner Side Re-Enrollment` },
             { type: `Test Description`, description: `Verify that learner can reenroll the course` }
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "Portal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickMoreonCourse(courseName);
-        await catalog.clickSelectcourse(courseName);
-        await catalog.clickEnroll();
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await learnerCourse.clickReEnroll();

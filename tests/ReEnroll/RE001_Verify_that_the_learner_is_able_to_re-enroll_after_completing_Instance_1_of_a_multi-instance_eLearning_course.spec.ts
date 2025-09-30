@@ -4,14 +4,14 @@ import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from "../../utils/fakerUtils";
 
 
-
+let createdCode: any
 const courseName = FakerData.getCourseName();
 const description = FakerData.getDescription()
 const elCourseName = ("Elearning" + " " + FakerData.getCourseName());
 const elCourseName2 = ("Elearning" + " " + FakerData.getCourseName());
 
     test.describe.configure({ mode: 'serial' })
-    test(`Verify_that_the_learner_is_able_to_re-enroll_after_completing_Instance_1_of_a_multi-instance_eLearning_course`, async ({ adminHome, createCourse, editCourse }) => {
+    test(`Verify_that_the_learner_is_able_to_re-enroll_after_completing_Instance_1_of_a_multi-instance_eLearning_course`, async ({ adminHome, createCourse, editCourse ,enrollHome,contentHome}) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Verify_that_the_learner_is_able_to_re-enroll_after_completing_Instance_1_of_a_multi-instance_eLearning_course` },
@@ -67,6 +67,22 @@ const elCourseName2 = ("Elearning" + " " + FakerData.getCourseName());
         console.log(courseName);
         console.log(elCourseName);
         console.log(elCourseName2);
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(elCourseName);
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username);
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage();
+
+
+
     })
 
 
@@ -76,12 +92,11 @@ const elCourseName2 = ("Elearning" + " " + FakerData.getCourseName());
             { type: `TestCase`, description: `Verify that learner can able to reenroll the by clicking reenroll button after completing instance 1` },
             { type: `Test Description`, description: `Verify that learner can able to reenroll the by clicking reenroll button after completing instance 1` }
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "Portal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickMoreonCourse(courseName);
-        await catalog.clickSelectcourse(elCourseName);
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(elCourseName);
+        await catalog.clickCourseInMyLearning(elCourseName);
+        await catalog.clickSelectcourse(courseName);
         await catalog.clickEnroll();
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();

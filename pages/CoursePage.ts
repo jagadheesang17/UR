@@ -67,7 +67,7 @@ export class CoursePage extends AdminHomePage {
         hideInCatalogCheckbox: "//span[contains(text(),'Hide in Catalog')]",
         saveInDraftCheckbox: "//span[contains(text(),'Save as Draft')]",
         deliveryTypeDropdown: "//div[@id='wrapper-course-delivery-type']",
-        deliveryTypeOption: (deliveryType: string) => `(//span[text()='${deliveryType}'])[1]`,
+        deliveryTypeOption: (deliveryType: string) => `//span[text()='${deliveryType}']`,
         editCourseTabLink: "//a[text()='Edit Course']",
         addInstancesBtn: "//button[@id='course-btn-add-instances']",
         instanceDeliveryTypeField: "//div[@id='wrapper-instanceDeliveryType']",
@@ -350,7 +350,7 @@ export class CoursePage extends AdminHomePage {
 
 
         //code
-        codeInput: `(//input[contains(translate(@id, 'CODE', 'code'), 'code')])[1]`,
+        codeInput: `//input[@id='code'][1]`,
 
 
     };
@@ -809,7 +809,6 @@ export class CoursePage extends AdminHomePage {
 
 
     async clickCatalog() {
-        await this.wait("minWait")
         await this.validateElementVisibility(this.selectors.showInCatalogBtn, "Show in Catalog");
         await this.click(this.selectors.showInCatalogBtn, "Catalog", "Button");
     }
@@ -1065,8 +1064,10 @@ export class CoursePage extends AdminHomePage {
 
     async selectdeliveryType(deliveryType: string) {
         await this.click(this.selectors.deliveryTypeDropdown, "Course Delivery", "dropdown");
-        await this.mouseHover(this.selectors.deliveryTypeOption(deliveryType), "Delivery Type");
-        await this.click(this.selectors.deliveryTypeOption(deliveryType), "Delivery Type", "Selected");
+        // scope the option lookup to the opened dropdown to avoid duplicate matches in the page
+        const scopedOption = `${this.selectors.deliveryTypeDropdown}//following::${this.selectors.deliveryTypeOption(deliveryType)}`;
+        await this.mouseHover(scopedOption, "Delivery Type");
+        await this.click(scopedOption, "Delivery Type", "Selected");
     }
 
     async selectInstanceType(instanceType: string) {
@@ -1330,8 +1331,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "AICC&SCORM") {
             const data = "AICC&SCORM"
@@ -1344,8 +1345,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "AutoVimeo") {
             const data = "AutoVimeo"
@@ -1358,8 +1359,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "AutoAudioFile") {
             const data = "AutoAudioFile"
@@ -1372,8 +1373,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "tin_can") {
             const data = "tin_can"
@@ -1386,8 +1387,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "Completed-Incomplete-SCORM-1.2") {
             const data = "Completed-Incomplete-SCORM-1.2"
@@ -1400,8 +1401,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else if (content == "Passed-Failed-SCORM2004") {
             const data = "Passed-Failed-SCORM2004"
@@ -1411,8 +1412,8 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
 
         }
         else if (content == content && content != undefined) {
@@ -1426,18 +1427,18 @@ export class CoursePage extends AdminHomePage {
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
         else {
-            const data = "TEST CONTENT"
+            const data = "Content testing"
             await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
             await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.mouseHover(this.selectors.attachedContentLabel, "button");
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await this.mouseHover(this.selectors.attachedContentLabel, "button");
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
         }
 
     }

@@ -298,8 +298,13 @@ switch (environmentSetup) {
                 password: "Welcome1@"
             },
             LEARNERUSERNAME: {
+<<<<<<< Updated upstream
                 username: "Jagadish1712",
                 password: "Welcome1@"
+=======
+                username: "kathir.11.00000002",
+                password: "Welcome"
+>>>>>>> Stashed changes
             },
             COMMERCEADMIN: {
                 username: "davidmiller100",

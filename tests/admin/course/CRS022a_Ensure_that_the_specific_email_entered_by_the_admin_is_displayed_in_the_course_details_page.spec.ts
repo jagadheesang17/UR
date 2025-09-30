@@ -16,7 +16,7 @@ test(`Enable the Contact_Admin from site settings`, async ({ siteAdmin,adminHome
         { type: `Test Description`, description: `Verify native login is enabled in the site settings for SSO direct Login` }
 
     );
-    await adminHome.loadAndLogin("PEOPLEADMIN");
+    await adminHome.loadAndLogin("CUSTOMERADMIN");
     await adminHome.isSignOut();
     await adminHome.menuButton();
     await adminHome.siteAdmin();
@@ -33,7 +33,7 @@ test(`Verify the expected specific email is displayed in the course`, async ({ a
             { type: `Test Description`, description: `Creation of Single Instance Elearning with AICC content` }
         );
 
-        await adminHome.loadAndLogin("PEOPLEADMIN")
+        await adminHome.loadAndLogin("CUSTOMERADMIN")
         await adminHome.menuButton();
         await adminHome.clickLearningMenu();
         await adminHome.clickCourseLink();

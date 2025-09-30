@@ -6,6 +6,7 @@ import { LearnerCoursePage } from "../../../pages/LearnerCoursePage";
 import { FakerData, getRandomSeat } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
 
+let createdCode: any
 const code = "CRS"+"-"+generateCode();
 const courseName = FakerData.getCourseName();
 const sessionName = FakerData.getSession();
@@ -17,7 +18,7 @@ let tag: any
 const instructorName = credentials.INSTRUCTORNAME.username
 test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, () => {
     test.describe.configure({ mode: "serial" });
-    test(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, async ({ adminHome, createCourse, editCourse, contentHome }) => {
+    test(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, async ({ adminHome, createCourse, editCourse, contentHome ,enrollHome}) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `CRS003_Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts` },
@@ -80,6 +81,19 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         await createCourse.verifySuccessMessage();
         console.log(courseName);
         console.log(elCourseName);
+
+        await contentHome.gotoListing();
+await createCourse.catalogSearch(courseName)
+createdCode = await createCourse.retriveCode()
+console.log("Extracted Code is : " + createdCode);
+await adminHome.menuButton()
+await adminHome.clickEnrollmentMenu();
+await adminHome.clickEnroll();
+await enrollHome.selectBycourse(courseName)
+await enrollHome.clickSelectedLearner();
+await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+await enrollHome.clickEnrollBtn();
+await enrollHome.verifytoastMessage()
     })
 
 

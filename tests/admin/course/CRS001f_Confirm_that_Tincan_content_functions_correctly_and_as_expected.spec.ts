@@ -1,13 +1,15 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { generateCode } from "../../../data/apiData/formData";
 import { FakerData } from '../../../utils/fakerUtils';
+import { credentials } from "../../../constants/credentialData";
 
+let createdCode: any
 const code = "CRS"+"-"+generateCode()
 let courseName = FakerData.getCourseName();
 const description = FakerData.getDescription()
 test.describe(`Confirm_that_Tincan_content_functions_correctly_and_as_expected`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`CreateCourseFor Single Instance`, async ({ adminHome, createCourse }) => {
+    test(`CreateCourseFor Single Instance`, async ({ adminHome, createCourse ,enrollHome,contentHome  }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Vidya` },
             { type: `TestCase`, description: `Create the course as Single instance` },
@@ -28,6 +30,21 @@ test.describe(`Confirm_that_Tincan_content_functions_correctly_and_as_expected`,
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
+
     })
 
 
@@ -38,11 +55,10 @@ test.describe(`Confirm_that_Tincan_content_functions_correctly_and_as_expected`,
             { type: `Test Description`, description: `Verify that course should be created for Single instance` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickEnrollButton();
-        await catalog.viewCoursedetails();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+       // await catalog.verifyEnrolledCourseByCODE(createdCode);
+        await catalog.clickCourseInMyLearning(courseName);
         await readContentHome.readTinCan();
         await catalog.saveLearningStatus();
         await catalog.clickMyLearning();

@@ -1,9 +1,9 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from '../../../utils/fakerUtils';
-
-
-
+import { credentials } from "../../../constants/credentialData";
 import { generateCode } from "../../../data/apiData/formData";
+
+let createdCode: any
 const code = "CRS"+"-"+generateCode();
 const prerequisiteCourse1 = FakerData.getCourseName();
 const prerequisiteCourse2 = FakerData.getCourseName();
@@ -12,7 +12,7 @@ const description = FakerData.getDescription()
 let tag: any
 test.describe(`Verify that the learner able to enroll in a course after completing multi prerequisite courses`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome,editCourse, createCourse }) => {
+    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome,editCourse, createCourse,enrollHome,contentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Creation of Single Instance Elearning with Youtube content` },
@@ -69,6 +69,21 @@ test.describe(`Verify that the learner able to enroll in a course after completi
         await editCourse.clickClose();
         await createCourse.clickCourseOption("Prerequisite")
         await createCourse.addMultiPrerequisiteCourse(prerequisiteCourse1,prerequisiteCourse2)
+        
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(mainCourseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(mainCourseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
+
 
     })
 

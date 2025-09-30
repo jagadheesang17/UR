@@ -337,7 +337,19 @@ export abstract class PlaywrightWrapper {
 
     async mouseHover(hoverLocator: string, Menu: string) {
         await test.step(`The pointer hovers over the ${Menu} element.  `, async () => {
-            await this.page.hover(hoverLocator, { force: true, strict: true });
+            try {
+                const loc = this.page.locator(hoverLocator);
+                const count = await loc.count();
+                if (count > 1) {
+                    // When multiple elements match, hover the first one to avoid strict-mode violations
+                    await loc.nth(0).hover({ force: true });
+                } else {
+                    await loc.hover({ force: true });
+                }
+            } catch (error) {
+                console.error(`mouseHover failed for ${Menu} using locator ${hoverLocator}:`, error);
+                throw error;
+            }
         })
     }
 

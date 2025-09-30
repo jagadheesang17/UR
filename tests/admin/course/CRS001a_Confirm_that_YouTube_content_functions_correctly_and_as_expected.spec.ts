@@ -1,14 +1,17 @@
+import { create } from "node:domain";
 import { test } from "../../../customFixtures/expertusFixture"
 import { generateCode } from "../../../data/apiData/formData";
 import { FakerData } from '../../../utils/fakerUtils';
+import { ContentHomePage } from "../../../pages/ContentPage";
+import { credentials } from "../../../constants/credentialData";
 
-
+let createdCode: any
 const code = "CRS"+"-"+generateCode()
 const courseName = FakerData.getCourseName();
 const description = FakerData.getDescription()
 test.describe(`Confirm that YouTube content functions correctly and as expected.`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome, createCourse }) => {
+    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome, createCourse,enrollHome,contentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Single Instance Elearning with Youtube content` },
@@ -30,8 +33,23 @@ test.describe(`Confirm that YouTube content functions correctly and as expected.
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
     })
 
+    
 
 
     test(`Confirm that YouTube content functions correctly and as expected.`, async ({ learnerHome, catalog }) => {
@@ -41,12 +59,10 @@ test.describe(`Confirm that YouTube content functions correctly and as expected.
             { type: `Test Description`, description: `Confirm that YouTube content functions correctly and as expected` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickMoreonCourse(courseName);
-        await catalog.clickSelectcourse(courseName);
-        await catalog.clickEnroll();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+       // await catalog.verifyEnrolledCourseByCODE(createdCode);
+        await catalog.clickCourseInMyLearning(courseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await catalog.clickMyLearning();
