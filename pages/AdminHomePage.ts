@@ -72,6 +72,11 @@ export class AdminHomePage extends AdminLogin {
         searchCourse:`//input[@placeholder='Search for Title/Code']`,
         //for Direct Content Launch
         directContent:`//a[text()='Direct Content Launch']`,
+
+customerConfig:  `//a[text()='Customer Config']`,
+walletCard: `//input[contains(@id,'physicalwalletcard')]`,
+submit: `//input[@id='edit_submit']`
+        checkRequestWalletCardDelivery:`//i[contains(@class,'fad fa-square icon_16_1')]`
     };
 
     constructor(page: Page, context: BrowserContext) {
@@ -498,6 +503,26 @@ export class AdminHomePage extends AdminLogin {
             await this.click(this.selectors.directContent, "DirectContentLaunch", "Button");
             await this.page.waitForLoadState('load');
         }
+
+    async walletCardConfiguration(){
+        await this.click(this.selectors.maintenance, "maintenance", "Button");
+        await this.validateElementVisibility(this.selectors.customerConfig, "config");
+        await this.click(this.selectors.customerConfig, "config", "Button");
+         await this.validateElementVisibility(this.selectors.walletCard, "walletcard");
+         const walletCardValue = await this.page.locator(this.selectors.walletCard).inputValue();
+         if (walletCardValue === "true") {
+            console.log("Wallet card configuration is enabled");
+         }
+         else {
+            await this.wait("minWait");
+            await this.type(this.selectors.walletCard, "config", "true");
+            await this.click(this.selectors.submit, "submit", "button");
+         }
+    }
+async checkRequestWalletCardDelivery(){
+        await this.validateElementVisibility(this.selectors.checkRequestWalletCardDelivery, "Request Wallet Card Delivery Checkbox");
+        await this.click(this.selectors.checkRequestWalletCardDelivery,"Request Wallet Card Delivery", "Checkbox");
+    }
     
 
 }
