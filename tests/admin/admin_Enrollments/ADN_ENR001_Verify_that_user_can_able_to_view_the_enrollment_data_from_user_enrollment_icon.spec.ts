@@ -1,7 +1,4 @@
-import { expect } from "@playwright/test";
 import { test } from "../../../customFixtures/expertusFixture"
-import { readDataFromCSV } from "../../../utils/csvUtil";
-import { FakerData } from "../../../utils/fakerUtils";
 import { credentials } from "../../../constants/credentialData";
 
 

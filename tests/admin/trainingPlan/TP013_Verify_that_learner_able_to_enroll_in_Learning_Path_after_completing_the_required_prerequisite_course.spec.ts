@@ -83,6 +83,7 @@ const description = FakerData.getDescription();
        await learningPath.clickEditLearningPath()
        await createCourse.clickCourseOption("Prerequisite")
        await createCourse.addSinglePrerequisiteCourse(prerequisiteCourse);
+       
 
     })
 
