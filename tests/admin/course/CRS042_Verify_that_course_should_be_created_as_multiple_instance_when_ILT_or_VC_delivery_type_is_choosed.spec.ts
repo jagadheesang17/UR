@@ -46,7 +46,7 @@ test.describe(`TC053 Confirm that the admin can manually create multiple classes
         
         }
         await addinstance("Classroom");
-        await createCourse.bulkClassCreation("3","manual");
+        await createCourse.bulkClassCreation("3","manual",courseName);
       
     })
 
