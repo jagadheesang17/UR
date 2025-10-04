@@ -105,7 +105,7 @@ test.describe.serial('Admin and Learner Groups Serial Tests', () => {
         await contentHome.gotoListing();
 
         await adminGroup.clickCreateGroup();
-        await adminGroup.selectroleAdmin(g.courseAdmin);
+        await adminGroup.selectroleAdmin("Kaia Admin");
     await adminGroup.enterGroupTitle(g.groupTitle2)
     await adminGroup.searchUser(g.courseAdmin)
         await createCourse.entercode("GRP-" + generateCode());
@@ -204,8 +204,8 @@ test.describe.serial('Admin and Learner Groups Serial Tests', () => {
             await createUser.enter("user-zipcode", zipcode);
             await createUser.enter("user-mobile", FakerData.getMobileNumber());
             await createUser.clickSave();
-            await createCourse.modifyTheAccess();
-            await createCourse.clickAccessButton();
+            // await createCourse.modifyTheAccess();
+            // await createCourse.clickAccessButton();
             adminGroupsInAccess=await adminGroup.getAdminGroupsInUserPage();
             await learnerGroup.verifyGroups(adminGroups,adminGroupsInAccess)
         }
