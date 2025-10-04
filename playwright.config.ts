@@ -31,7 +31,11 @@ export default defineConfig({
     video: 'on',
     ignoreHTTPSErrors: true,
     bypassCSP: true,
-
+    // Use maximized browser - let browser determine optimal viewport
+    viewport: null,
+    launchOptions: {
+      args: ["--start-maximized", "--disable-web-security", "--force-device-scale-factor=1"]
+    }
   },
   
   // testMatch removed to rely on Playwright default: **/?(*.)+(spec|test).[jt]s
@@ -91,11 +95,16 @@ export default defineConfig({
     {
       name: 'chrome',
       use: {
-        browserName: 'chromium', ...devices['Desktop Chromium'], channel: 'chrome', headless: false,
+        browserName: 'chromium', 
+        ...devices['Desktop Chromium'], 
+        channel: 'chrome', 
+        headless: false,
+        // Use maximized browser - let browser determine optimal viewport
         viewport: null,
         launchOptions: {
-          slowMo: 200,
-          args: ["--start-maximized", "--disable-web-security", "--incognito"]
+          slowMo: 50,
+          // Maximize browser window for both headed and headless modes
+          args: ["--start-maximized", "--disable-web-security", "--incognito", "--force-device-scale-factor=1"]
         }
       }
     },
@@ -124,12 +133,12 @@ export default defineConfig({
         testDir: './zCronVerification',
         use: {
 
-          headless: false,
+          headless: true,
           ...devices['Desktop Chromium'],
           viewport: null,
           launchOptions: {
             slowMo: 300,
-            args: ["--start-maximized"]
+            args: ["--start-maximized", "--disable-web-security", "--force-device-scale-factor=1"]
           }
         }
       },] : []
@@ -139,12 +148,12 @@ export default defineConfig({
         testDir: './api',
 
         use: {
-          headless: false,
+          headless: true,
           ...devices['Desktop Chromium'],
           viewport: null,
           launchOptions: {
             slowMo: 300,
-            args: ["--start-maximized"]
+            args: ["--start-maximized", "--disable-web-security", "--force-device-scale-factor=1"]
           }
 
         }

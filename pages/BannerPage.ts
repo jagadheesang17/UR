@@ -78,10 +78,10 @@ export class BannerPage extends AdminHomePage {
         await this.uploadFile(this.selectors.uploadFile, path);
     }
     public async clickPublish() {       
-       
-        await this.validateElementVisibility(this.selectors.publishButton, "Publish");
-        await this.page.locator(this.selectors.publishButton).scrollIntoViewIfNeeded();
-        await this.click(this.selectors.publishButton, "Publish", "Button")
+  const publishButton = this.page.getByRole('button', { name: 'Publish' });
+    await this.validateElementVisibility(publishButton, "Publish");
+    await publishButton.scrollIntoViewIfNeeded();
+    await publishButton.click();  
         
     }
     public async enterbannerUrl() {         

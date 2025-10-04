@@ -318,7 +318,7 @@ export class CoursePage extends AdminHomePage {
         clickEditBulkClass: (k: any) => `(//i[@class="fa-duotone icon_14_1 fa-pen"])[${k}]`,
 
         //To add content validity
-        selectContentValidity: `//label[text()="Content Validity"]/following::div[text()="Select"]`,
+        selectContentValidity: `//button[@data-id='content_validity_type']`,
         validityType: (validity: string) => `//label[text()="Content Validity"]/following::div[text()="Select"]/following::span[text()='${validity}']`,
         DateInput: `//input[@id="content_validity_date-input"]`,
         DaysInput: `//input[@id="content_validity_days"]`,
@@ -851,9 +851,24 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
 
 
     async clickCatalog() {
-        await this.wait("minWait")
-        await this.validateElementVisibility(this.selectors.showInCatalogBtn, "Show in Catalog");
-        await this.click(this.selectors.showInCatalogBtn, "Catalog", "Button");
+        await this.page.locator(this.selectors.showInCatalogBtn).scrollIntoViewIfNeeded();
+        await this.wait("maxWait");
+        await this.page.waitForFunction(() => {
+  const el = document.querySelector('#publishedcatalog');
+  return el && !el.hasAttribute('disabled');
+}, { timeout: 15000 });
+
+// Once enabled, click via label (safer than clicking input)
+await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show in Catalog' }).click();
+        
+        // await this.validateElementVisibility(this.selectors.showInCatalogBtn, "Show in Catalog");
+        // const catalogBtn = this.page.locator(this.selectors.showInCatalogBtn);
+        // await catalogBtn.waitFor({ state: "attached", timeout: 10000 });
+        // if (await catalogBtn.isEnabled()) {
+        //     await this.click(this.selectors.showInCatalogBtn, "Catalog", "Button");
+        // }else{
+        //     console.log("Catalog button is not enabled");
+        // }
     }
 
     async clickSaveasDraft() {
@@ -1354,134 +1369,71 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
     }
 
     //To upload the content through course details page:-
-    async contentLibrary(content?: "AICC" | "AICC&SCORM" | "Passed-Failed-SCORM2004" | "Completed-Incomplete-SCORM-1.2" | "AutoVimeo" | "tin_can" | "AutoAudioFile" | any) {
+    async contentLibrary(content?: "AICC" | "AICC&SCORM" | "Passed-Failed-SCORM2004" | "Completed-Incomplete-SCORM-1.2" | "AutoVimeo" | "tin_can" | "AutoAudioFile" | "AutoPDF"| any) {
         await this.spinnerDisappear();
         await this.validateElementVisibility(this.selectors.clickContentLibrary, "Content");
         await this.mouseHover(this.selectors.clickContentLibrary, "Content");
         await this.click(this.selectors.clickContentLibrary, "Content", "button");
         await this.waitForElementHidden("//span[text()='Counting backwards from Infinity']", "string");
         await this.spinnerDisappear();
-        if (content == "AICC") {
-            const data = "AICC"
-            /*  this.page.on('console', msg => {
-                 console.log(`Console Log: ${msg.text()}`);
-             }); */
+
+        const tryAttachValidate = async () => {
+            await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded({ timeout: 3000 });
+            await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+        };
+
+        const doContentAdd = async (data: string) => {
             await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
             await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
             await this.wait('minWait');
             await this.mouseHover(this.selectors.addContentButton, "addcontent");
             await this.click(this.selectors.addContentButton, "addcontent", "button");
             await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            try {
+                await tryAttachValidate();
+            } catch (error) {
+                // If not found, try clicking Add Content again
+                await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
+                await this.wait('minWait');
+                await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
+                await this.mouseHover(this.selectors.addContentButton, "addcontent");
+                await this.wait('minWait');
+                await this.click(this.selectors.addContentButton, "addcontent", "button");
+                await this.wait('maxWait');
+                await tryAttachValidate();
+            }
+        };
+
+        if (content == "AICC") {
+            await doContentAdd("AICC");
         }
         else if (content == "AICC&SCORM") {
-            const data = "AICC&SCORM"
-            /* this.page.on('console', msg => {
-                console.log(`Console Log: ${msg.text()}`);
-            }); */
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd("AICC&SCORM");
         }
         else if (content == "AutoVimeo") {
-            const data = "AutoVimeo"
-            /* this.page.on('console', msg => {
-                console.log(`Console Log: ${msg.text()}`);
-            }); */
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd("AutoVimeo");
         }
         else if (content == "AutoAudioFile") {
-            const data = "AutoAudioFile"
-            /* this.page.on('console', msg => {
-                console.log(`Console Log: ${msg.text()}`);
-            }); */
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd("AutoAudioFile");
         }
         else if (content == "tin_can") {
-            const data = "tin_can"
-            /* this.page.on('console', msg => {
-                console.log(`Console Log: ${msg.text()}`);
-            }); */
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd("tin_can");
         }
         else if (content == "Completed-Incomplete-SCORM-1.2") {
-            const data = "Completed-Incomplete-SCORM-1.2"
-            /* this.page.on('console', msg => {
-                console.log(`Console Log: ${msg.text()}`);
-            }); */
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd("Completed-Incomplete-SCORM-1.2");
         }
         else if (content == "Passed-Failed-SCORM2004") {
-            const data = "Passed-Failed-SCORM2004"
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
-
+            await doContentAdd("Passed-Failed-SCORM2004");
         }
         else if (content == content && content != undefined) {
-            const data = content
-            /* this.page.on('console', msg => {
-                console.log(`Console Log: ${msg.text()}`);
-            }); */
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.wait('minWait');
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.page.locator(this.selectors.attachedContentLabel).scrollIntoViewIfNeeded();
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd(content);
+        }
+         else if (content == "AutoPDF") {
+            await doContentAdd("AutoPDF");
         }
         else {
-            const data = "TEST CONTENT"
-            await this.typeAndEnter('#exp-content-search-field', "Content Search Field", data);
-            await this.click(this.selectors.contentIndex(2), "Contents", "checkbox");
-            await this.mouseHover(this.selectors.addContentButton, "addcontent");
-            await this.click(this.selectors.addContentButton, "addcontent", "button");
-            await this.wait('maxWait');
-            // await this.mouseHover(this.selectors.attachedContentLabel, "button");
-            // await this.validateElementVisibility(this.selectors.attachedContentLabel, "button");
+            await doContentAdd("TEST CONTENT");
         }
-
     }
 
     async multipleContent() {

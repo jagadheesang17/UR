@@ -30,8 +30,8 @@ test.describe(`Certification_enroll_and_completion_with_single_instance.spec`, a
         // domain = await createCourse.selectPortal();
         // console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+      //  await createCourse.clickHere();
+      //  await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();
@@ -100,7 +100,7 @@ test.describe(`Certification_enroll_and_completion_with_single_instance.spec`, a
         await catalog.clickMoreonCourse(title);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickViewCertificate();
+        await catalog.clickViewCertificate()
     })
 
 })

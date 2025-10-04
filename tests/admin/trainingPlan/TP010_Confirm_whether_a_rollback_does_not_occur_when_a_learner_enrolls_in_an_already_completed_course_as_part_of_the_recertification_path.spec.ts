@@ -83,7 +83,7 @@ test.describe(`Confirm_whether_a_rollback_does_not_occur_when_a_learner_enrolls_
             { type: `TestCase`, description: `Learner registration and completion of a single eLearning course` },
             { type: `Test Description`, description: `Learner registration and completion of a single eLearning course` }
         );
-      await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+      await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await catalog.clickMyLearning();
         await catalog.searchMyLearning(courseName2);
         await catalog.clickCourseInMyLearning(courseName2);

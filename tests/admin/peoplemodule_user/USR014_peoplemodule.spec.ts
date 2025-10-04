@@ -63,9 +63,9 @@ test.describe(`People Module Suites`, async () => {
         await createUser.userSearchField(username);
         await createUser.editIcon();
         await createUser.selectEmploymentType("emp_type");
-        await createUser.clickRolesButton("Manager");
-        await createUser.clickRolesButton("Instructor");
-        await createUser.organizationType("Internal");
+        // await createUser.clickRolesButton("Manager");
+        // await createUser.clickRolesButton("Instructor");
+        // await createUser.organizationType("Internal");
         await createUser.updateUser();
         await createUser.verifyUserCreationSuccessMessage();
 
@@ -131,7 +131,7 @@ test.describe(`People Module Suites`, async () => {
         await createUser.clickActivateIcon();
         await createUser.clickImpersonationIcon();
         await createUser.fillImpersonateForm();
-       // await learnerHome.termsAndConditionScroll();
+        await learnerHome.termsAndConditionScroll();
         await createUser.clickendImpersonation();
 
     })

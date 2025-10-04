@@ -35,8 +35,8 @@ test.describe(`Verify that a Certification already marked as Completed by the ad
         await createCourse.contentLibrary(); //By default Youtube content will be attached
         contentName = await createCourse.getAttachedContentName()
 
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        // await createCourse.clickHere();
+        // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();
@@ -77,7 +77,7 @@ test.describe(`Verify that a Certification already marked as Completed by the ad
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-             await learningPath.description(description);
+        await learningPath.description(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();

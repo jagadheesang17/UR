@@ -362,14 +362,14 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         await this.validateElementVisibility(this.selectors.metaLearningLink, "Learning");
         await this.mouseHover(this.selectors.metaLearningLink, "Learning");
         await this.click(this.selectors.metaLearningLink, "Learning", "Button");
-        await this.spinnerDisappear();
+      //  await this.spinnerDisappear();
     }
 
     public async metaGeneralLink() {
         await this.validateElementVisibility(this.selectors.metaGeneralLink, "Learning");
         await this.mouseHover(this.selectors.metaGeneralLink, "Learning");
         await this.click(this.selectors.metaGeneralLink, "Learning", "Button");
-        await this.spinnerDisappear();
+       // await this.spinnerDisappear();
     }
    public async enter(name: string, data: string) {
         await this.wait("mediumWait")
@@ -508,7 +508,7 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         }
 
     async walletCardConfiguration(){
-        await this.click(this.selectors.maintenance, "maintenance", "Button");
+       // await this.click(this.selectors.maintenance, "maintenance", "Button");
         await this.validateElementVisibility(this.selectors.customerConfig, "config");
         await this.click(this.selectors.customerConfig, "config", "Button");
          await this.validateElementVisibility(this.selectors.walletCard, "walletcard");

@@ -104,7 +104,7 @@ test.describe(`Verify that certification enrollment and completion occurred at t
             { type: `Test Description`, description: `Confirm that a learner can successfully register for and complete a certification through a module` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await learnerHome.clickCatalog();
         await catalog.mostRecent();
         await catalog.searchCatalog(title);

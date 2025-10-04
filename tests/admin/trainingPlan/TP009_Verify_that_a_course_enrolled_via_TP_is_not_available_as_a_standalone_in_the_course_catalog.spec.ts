@@ -52,7 +52,7 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
             { type: `TestCase`, description: `Learner registration and completion of a single eLearning course` },
             { type: `Test Description`, description: `Learner registration and completion of a single eLearning course` }
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await catalog.clickMyLearning();
         await catalog.searchMyLearning(courseName);
         await catalog.clickCourseInMyLearning(courseName);

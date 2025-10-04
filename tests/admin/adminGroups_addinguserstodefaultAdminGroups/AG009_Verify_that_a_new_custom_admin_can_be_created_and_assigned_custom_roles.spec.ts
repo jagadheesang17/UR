@@ -1,4 +1,5 @@
 import { test } from "../../../customFixtures/expertusFixture";
+import { generateCode } from "../../../data/apiData/formData";
 import { ExcelReader } from "../../../utils/excelUtils";
 import { FakerData } from "../../../utils/fakerUtils";
 
@@ -42,6 +43,7 @@ test.describe(`Verify to create a new Custom Admin with Custom role`, async () =
         await adminGroup.clickCreateGroup();
         await adminGroup.selectroleAdmin(roleName)
         await adminGroup.enterGroupTitle(groupTitle)
+         await createCourse.entercode("GRP-" + generateCode());
         await adminGroup.clickSave()
         await adminGroup.clickProceed();
         await createCourse.verifySuccessMessage()

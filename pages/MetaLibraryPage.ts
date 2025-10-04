@@ -133,16 +133,15 @@ export class MetaLibraryPage extends AdminHomePage {
     }
 
     async addCategory() {
-        await this.validateElementVisibility(this.selectors.addCategoryBtn, "Add Category");
-        await this.click(this.selectors.addCategoryBtn, "Add Category", "Button");
+       await this.wait('minWait');
+       await this.page.getByRole('button', { name: 'Add Category' }).click();
     }
 
     async addDepartment() {
         // await this.spinnerDisappear();
-        const addDepartmentBtn = this.page.getByRole('button', { name: 'Add Department' });
-        await this.validateElementVisibility(this.selectors.addDepartmentBtn, "Add Department");
-        await addDepartmentBtn.hover();
-        await addDepartmentBtn.click();
+        await this.wait('minWait');
+        await this.page.getByRole('button', { name: 'Add Department' }).click();
+        
     }
 
     async name(data: string) {

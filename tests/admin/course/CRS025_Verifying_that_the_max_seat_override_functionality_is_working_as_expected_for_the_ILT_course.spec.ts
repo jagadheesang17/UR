@@ -39,7 +39,7 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await adminHome.clickMenu("Course");
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+     await createCourse.entercode("CRS"+"-"+generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("Classroom")

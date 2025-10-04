@@ -30,8 +30,8 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
         // domain = await createCourse.selectPortal();
         // console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        // await createCourse.clickHere();
+        // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

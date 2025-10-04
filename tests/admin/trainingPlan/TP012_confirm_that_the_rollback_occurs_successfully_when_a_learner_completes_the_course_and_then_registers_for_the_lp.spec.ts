@@ -99,7 +99,7 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
             { type: `Test Description`, description: `confirm_that_the_rollback_occurs_successfully_when_a_learner_completes_the_course_and_then_registers_for_the_certification.` }
 
         );
-          await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+          await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await learnerHome.clickDashboardLink();
         await dashboard.clickLearningPath_And_Certification();
        // await dashboard.clickCertificationLink();

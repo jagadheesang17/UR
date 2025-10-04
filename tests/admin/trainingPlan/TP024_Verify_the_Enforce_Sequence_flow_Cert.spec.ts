@@ -123,7 +123,7 @@ test.describe(`Verify_the_Enforce_Sequence_flow_1`, async () => {
             { type: `Test Description`, description: `Verify Enforce Sequence Flow Functionality for Learner` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await learnerHome.clickCatalog();
         await catalog.mostRecent();
         await catalog.searchCatalog(title);

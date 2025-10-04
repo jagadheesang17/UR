@@ -28,7 +28,7 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         await adminHome.clickMenu("Course");
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+    await createCourse.entercode("CRS"+"-"+generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("E-Learning")
@@ -62,7 +62,7 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         }
         await addinstance("E-Learning");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+   // await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here
@@ -74,7 +74,7 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         await createCourse.addInstances();
         await addinstance("E-Learning");
     await createCourse.enter("course-title", elCourseName);
-    await createCourse.entercode(code);
+    await createCourse.entercode("CRS"+"-"+generateCode());
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();

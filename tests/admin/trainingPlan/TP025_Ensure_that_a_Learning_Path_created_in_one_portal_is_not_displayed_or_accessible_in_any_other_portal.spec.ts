@@ -122,7 +122,7 @@ test.describe(`Verify_the_Enforce_Sequence_flow`, async () => {
             { type: `Test Description`, description: `Ensure that a Learning Path created in one portal is not displayed or accessible in any other portal.` }
 
         );
-        await learnerHome.learnerLogin("LEARNERPORTAL_User", "Portal1"); //Login into portal-1 
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL"); //Login into portal-1 
         await learnerHome.clickCatalog();
         await catalog.mostRecent();
         await catalog.searchCatalog(title);

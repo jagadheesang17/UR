@@ -104,7 +104,7 @@ test.describe(`Verify_rollback_does_not_occur_when_the_same_course_is_attached_i
             { type: `Test Description`, description: `CER011_Confirm_whether_a_rollback_does_not_occur_when_a_learner_enrolls_in_an_already_completed_course_as_part_of_the_certification` }
 
         );
-         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+         await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await learnerHome.clickDashboardLink();
         await dashboard.clickLearningPath_And_Certification();
         await dashboard.clickCertificationLink();

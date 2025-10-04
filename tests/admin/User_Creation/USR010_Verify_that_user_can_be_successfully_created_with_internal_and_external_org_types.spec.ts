@@ -81,7 +81,7 @@ test.describe(`Verify_that_user_can_be_successfully_created_with_internal_and_ex
         await createUser.organizationType("External")
         await createUser.selectUserType("usertype")
         await createUser.selectjobTitle("jobtitle");
-        await createUser.selectManager("manager")
+       await createUser.selectManager(credentials.MANAGERNAME.username)
         await createUser.clickSave();
       //  await createUser.clickProceed("Proceed");
      //   await createUser.verifyUserCreationSuccessMessage();

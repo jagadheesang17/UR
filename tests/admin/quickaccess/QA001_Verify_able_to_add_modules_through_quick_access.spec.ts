@@ -2,7 +2,7 @@ import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from "../../../utils/fakerUtils";
 
 const customAdmin: any = FakerData.getUserId();
-let adminGroupName: string = "AG Mesh Content"
+let adminGroupName: string = "People admin"
 test(`Create User and assigning Group to the User`, async ({ adminHome, createCourse, createUser, adminGroup }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },

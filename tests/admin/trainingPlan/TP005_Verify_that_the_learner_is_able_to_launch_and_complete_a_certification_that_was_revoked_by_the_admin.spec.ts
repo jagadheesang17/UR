@@ -28,11 +28,11 @@ test.describe(`Verify_that_the_learner_is_able_to_launch_and_complete_a_certific
         await createCourse.selectLanguage("English");
          await createCourse.entercode("CRS-" + generateCode());
         await createCourse.typeDescription(description);
-        domain = await createCourse.selectPortal();
-        console.log(`${domain}`);
+        // domain = await createCourse.selectPortal();
+        // console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        // await createCourse.clickHere();
+        // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

@@ -66,8 +66,8 @@ switch (environmentSetup) {
             URLConstants = {
                 adminURL: "https://urpreprod.expertusone.cloud/backdoor",
                 leanerURL: "https://urpreprod.expertusone.cloud/learner/unitedrentals/",
-                learnerportal: "https://lms.expertusonedev.com/learner/portal1",
-                learnerportal2: "https://lms.expertusonedev.com/learner/portal2",
+                learnerportal: "https://urpreprod.expertusone.cloud/learner/unitedrentals/",
+                learnerportal2: "https://urpreprod.expertusone.cloud/learner/unitedrentals/",
                 portal1: "UnitedRentals",
                 portal2: "portal1",
                 portal3: "portal2",

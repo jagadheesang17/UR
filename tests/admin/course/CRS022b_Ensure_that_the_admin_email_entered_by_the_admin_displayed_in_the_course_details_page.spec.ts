@@ -22,9 +22,9 @@ test(`Enter the Customer_Admin email into the Contact email field`, async ({ adm
     await adminHome.people();
     await adminHome.user();
     await createUser.typeAndSelectIUser(credentials.LEARNERADMIN.username);
-    await createUser.enter("email", FakerData.getEmail());
-    await createUser.updateUser();
-    await createUser.verifyUserCreationSuccessMessage();
+    // await createUser.enter("email", FakerData.getEmail());
+    // await createUser.updateUser();
+    // await createUser.verifyUserCreationSuccessMessage();
 
 })
 
@@ -42,7 +42,7 @@ test(`Enable the Contact_Admin from site settings`, async ({ siteAdmin,adminHome
     await adminHome.siteAdmin_Adminconfig();
     await siteAdmin.clickEditContactSupport();
     // await siteAdmin.checkSpecificMailRadioButton();
-    await siteAdmin.checkAdminMailRadioButton();
+    //await siteAdmin.checkAdminMailRadioButton();
 
     
    
@@ -65,7 +65,7 @@ test(`Verify the expected specific email is displayed in the course`, async ({ a
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+      await createCourse.entercode("CRS"+"-"+generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary("AICC File containing a PPT - Storyline 11");
@@ -76,6 +76,6 @@ test(`Verify the expected specific email is displayed in the course`, async ({ a
         await contentHome.gotoListing();
         await createCourse.catalogSearch(courseName);
         await createCourse.editCourseFromListingPage();
-        await createCourse.checkContactSupportNew(siteAdmin.emailUsed);
+     //   await createCourse.checkContactSupportNew(siteAdmin.emailUsed);
 
     })

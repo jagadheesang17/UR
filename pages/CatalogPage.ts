@@ -614,11 +614,10 @@ export class CatalogPage extends LearnerHomePage {
 
     }
     async clickCompletedButton() {
-        await this.wait('mediumWait');
-        const name = "Completed Button";
         const completedButtonSelector = this.selectors.completedButton;
-        await this.mouseHover(completedButtonSelector, name);
+        const name = "Completed Button";
         await this.validateElementVisibility(completedButtonSelector, name);
+        await this.mouseHover(completedButtonSelector, name);
         await this.click(completedButtonSelector, name, "Button");
         await this.wait('mediumWait');
     }

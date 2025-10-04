@@ -33,11 +33,8 @@ import { ExcelReader } from '../utils/excelUtils'
 import { logADefectInJira } from '../jira/log-a-defect'
 import { updateJiraIssue } from '../jira/jira-integration'
 import { UniversalSearchPage } from '../pages/UniversalSearchPage'
-import path from 'path'
 import { glob } from 'glob'
 import { SiteAdminPage } from '../pages/SiteAdminPage'
-import * as XLSX from 'xlsx';
-import * as fs from 'fs';
 
 let jiraIssueKey: string | undefined;
 // import { LearnerCoursePage } from '../pages/LearnerCoursePage'
@@ -72,7 +69,7 @@ type expertusFixture = {
     managerHome: ManagerPage
     readContentHome: ReadContentPage
     adminRoleHome: AdminRolePage
-    excelReader: ExcelReader
+    excelReader: ExcelReader | null
     universalSearch: UniversalSearchPage
     learnerGroup: LearnerGroupPage
     siteAdmin: SiteAdminPage
@@ -80,177 +77,96 @@ type expertusFixture = {
 
 import { Page } from '@playwright/test';
 
-export const test = baseTest.extend<expertusFixture & { pageWithLogging: Page }>({
-    pageWithLogging: async ({ page, context }, use, testInfo) => {
-        const client = await context.newCDPSession(page);
-        await client.send('Network.enable');
+export const test = baseTest.extend<expertusFixture>({
 
-        type TimingEntry = {
-            requestId: string;
-            url: string;
-            method: string;
-            type?: string;
-            status?: number;
-            startTime?: number;
-            duration?: number;
-            postData?: string;
-        };
-
-        const timings: TimingEntry[] = [];
-        const requests = new Map<string, TimingEntry>();
-
-        client.on('Network.requestWillBeSent', async (event) => {
-            const entry: TimingEntry = {
-                requestId: event.requestId,
-                url: event.request.url,
-                method: event.request.method,
-                type: event.type,
-                startTime: Date.now(),
-            };
-
-            if (event.request.hasPostData) {
-                try {
-                    const data = await client.send('Network.getRequestPostData', {
-                        requestId: event.requestId,
-                    });
-                    entry.postData = data.postData;
-                } catch {
-                    // some requests won’t expose body
-                }
-            }
-            requests.set(event.requestId, entry);
-        });
-
-        client.on('Network.responseReceived', (event) => {
-            const entry = requests.get(event.requestId);
-            if (entry) {
-                entry.status = event.response.status;
-                requests.set(event.requestId, entry);
-            }
-        });
-
-        client.on('Network.loadingFinished', (event) => {
-            const entry = requests.get(event.requestId);
-            if (entry && entry.startTime) {
-                entry.duration = Date.now() - entry.startTime;
-                timings.push(entry);
-            }
-        });
-
-        await use(page);
-
-        // Prepare slow/normal sets
-        const slowOnes = timings.filter((t) => (t.duration ?? 0) > 2000);
-        const logData = slowOnes.length > 0 ? slowOnes : timings;
-
-        console.log(`\n=== Network timings for test: ${testInfo.title} ===`);
-        console.table(
-            logData.map(({ method, type, status, duration, url, postData }) => ({
-                method,
-                type,
-                status,
-                duration,
-                url,
-                body: postData
-                    ? postData.slice(0, 120) + (postData.length > 120 ? '...' : '')
-                    : undefined,
-            }))
-        );
-
-        // 🔹 Save Excel
-        saveRequestsToExcel('network_timings_all.xlsx', timings, testInfo.title);
-        saveRequestsToExcel('network_timings_slow.xlsx', slowOnes, testInfo.title);
-    },
-
-
-    /*  adminLogin: async ({ pageWithLogging, context }, use) => {
-         const adLogin = new AdminLogin(pageWithLogging, context);
+    /*  adminLogin: async ({ page, context }, use) => {
+         const adLogin = new AdminLogin(page, context);
          await adLogin.adminLogin()
          await use(adLogin);
          //console.log("Login is verified"        
      }, */
 
-    adminHome: async ({ pageWithLogging, context }, use,) => {
-        const adminHome = new AdminHomePage(pageWithLogging, context);
+    adminHome: async ({ page, context }, use,) => {
+        const adminHome = new AdminHomePage(page, context);
         await use(adminHome);
     },
 
-    learnerLogin: async ({ pageWithLogging, context }, use) => {
-        const lnLogin = new LearnerLogin(pageWithLogging, context);
+    learnerLogin: async ({ page, context }, use) => {
+        const lnLogin = new LearnerLogin(page, context);
         // await lnLogin.learnerLogin(credentialConstants.LEARNERUSERNAME, credentialConstants.PASSWORD);
         await use(lnLogin);
         console.log("Login is verified");
 
     },
-    CompletionCertification: async ({ pageWithLogging, context }, use) => {
-        const CompletionCertification = new CompletionCertificationPage(pageWithLogging, context);
+    CompletionCertification: async ({ page, context }, use) => {
+        const CompletionCertification = new CompletionCertificationPage(page, context);
         await use(CompletionCertification);
     },
 
-    createUser: async ({ pageWithLogging, context }, use) => {
-        const createUser = new UserPage(pageWithLogging, context);
+    createUser: async ({ page, context }, use) => {
+        const createUser = new UserPage(page, context);
         await use(createUser);
     },
-    createCourse: async ({ pageWithLogging, context }, use) => {
-        const createCourse = new CoursePage(pageWithLogging, context);
+    createCourse: async ({ page, context }, use) => {
+        const createCourse = new CoursePage(page, context);
         await use(createCourse);
     },
-    learningPath: async ({ pageWithLogging, context }, use) => {
-        const learningPath = new LearningPathPage(pageWithLogging, context);
+    learningPath: async ({ page, context }, use) => {
+        const learningPath = new LearningPathPage(page, context);
         await use(learningPath);
     },
 
-    editCourse: async ({ pageWithLogging, context }, use) => {
-        const editCourse = new EditCoursePage(pageWithLogging, context);
+    editCourse: async ({ page, context }, use) => {
+        const editCourse = new EditCoursePage(page, context);
         await use(editCourse);
     },
-    location: async ({ pageWithLogging, context }, use) => {
-        const location = new LocationPage(pageWithLogging, context);
+    location: async ({ page, context }, use) => {
+        const location = new LocationPage(page, context);
         await use(location);
     },
-    learnerHome: async ({ pageWithLogging, context }, use) => {
-        const learnerHome = new LearnerHomePage(pageWithLogging, context);
+    learnerHome: async ({ page, context }, use) => {
+        const learnerHome = new LearnerHomePage(page, context);
         await use(learnerHome);
     },
-    learnerCourse: async ({ pageWithLogging, context }, use) => {
-        const learnercourse = new LearnerCoursePage(pageWithLogging, context);
+    learnerCourse: async ({ page, context }, use) => {
+        const learnercourse = new LearnerCoursePage(page, context);
         await use(learnercourse);
     },
-    SurveyAssessment: async ({ pageWithLogging, context }, use) => {
-        const SurveyAssessment = new SurveyAssessmentPage(pageWithLogging, context);
+    SurveyAssessment: async ({ page, context }, use) => {
+        const SurveyAssessment = new SurveyAssessmentPage(page, context);
         await use(SurveyAssessment);
     },
-    catalog: async ({ pageWithLogging, context }, use) => {
-        const catalog = new CatalogPage(pageWithLogging, context);
+    catalog: async ({ page, context }, use) => {
+        const catalog = new CatalogPage(page, context);
         await use(catalog);
     },
-    dashboard: async ({ pageWithLogging, context }, use) => {
-        const dashboard = new LearnerDashboardPage(pageWithLogging, context);
+    dashboard: async ({ page, context }, use) => {
+        const dashboard = new LearnerDashboardPage(page, context);
         await use(dashboard);
     },
-    // learnercourse: async ({ pageWithLogging, context }, use) => {
-    //     const learnerCourse = new LearnerCoursePage(pageWithLogging, context);
+    // learnercourse: async ({ page, context }, use) => {
+    //     const learnerCourse = new LearnerCoursePage(page, context);
     //     await use(learnerCourse);
     // },
-    metadatalibrary: async ({ pageWithLogging, context }, use) => {
-        const metadatalibrary = new MetaLibraryPage(pageWithLogging, context);
+    metadatalibrary: async ({ page, context }, use) => {
+        const metadatalibrary = new MetaLibraryPage(page, context);
         await use(metadatalibrary);
     },
-    adminGroup: async ({ pageWithLogging, context }, use) => {
-        const adminGroup = new AdminGroupPage(pageWithLogging, context);
+    adminGroup: async ({ page, context }, use) => {
+        const adminGroup = new AdminGroupPage(page, context);
         await use(adminGroup);
     },
-    organization: async ({ pageWithLogging, context }, use) => {
-        const organization = new OrganizationPage(pageWithLogging, context);
+    organization: async ({ page, context }, use) => {
+        const organization = new OrganizationPage(page, context);
         await use(organization);
     },
-    commercehome: async ({ pageWithLogging, context }, use) => {
-        const commercehome = new CommerceHomePage(pageWithLogging, context);
+    commercehome: async ({ page, context }, use) => {
+        const commercehome = new CommerceHomePage(page, context);
         await use(commercehome);
     },
 
-    bannerHome: async ({ pageWithLogging, context }, use) => {
-        const bannerHome = new BannerPage(pageWithLogging, context);
+    bannerHome: async ({ page, context }, use) => {
+        const bannerHome = new BannerPage(page, context);
         await use(bannerHome);
     },
     dataBase: async ({ }, use) => {
@@ -258,56 +174,62 @@ export const test = baseTest.extend<expertusFixture & { pageWithLogging: Page }>
         await use(dataBase);
     },
 
-    costCenter: async ({ pageWithLogging, context }, use) => {
-        const costcenter = new CostcenterPage(pageWithLogging, context);
+    costCenter: async ({ page, context }, use) => {
+        const costcenter = new CostcenterPage(page, context);
         await use(costcenter);
     },
 
 
-    announcementHome: async ({ pageWithLogging, context }, use) => {
-        const announcementHome = new AnnouncementPage(pageWithLogging, context);
+    announcementHome: async ({ page, context }, use) => {
+        const announcementHome = new AnnouncementPage(page, context);
         await use(announcementHome);
     },
-    contentHome: async ({ pageWithLogging, context }, use) => {
-        const ContentHome = new ContentHomePage(pageWithLogging, context);
+    contentHome: async ({ page, context }, use) => {
+        const ContentHome = new ContentHomePage(page, context);
         await use(ContentHome);
     },
 
-    profile: async ({ pageWithLogging, context }, use) => {
-        const profile = new ProfilePage(pageWithLogging, context);
+    profile: async ({ page, context }, use) => {
+        const profile = new ProfilePage(page, context);
         await use(profile);
     },
-    enrollHome: async ({ pageWithLogging, context }, use) => {
-        const enrollHome = new EnrollmentPage(pageWithLogging, context);
+    enrollHome: async ({ page, context }, use) => {
+        const enrollHome = new EnrollmentPage(page, context);
         await use(enrollHome);
     },
-    instructorHome: async ({ pageWithLogging, context }, use) => {
-        const instructorHome = new InstructorPage(pageWithLogging, context);
+    instructorHome: async ({ page, context }, use) => {
+        const instructorHome = new InstructorPage(page, context);
         await use(instructorHome);
     },
-    managerHome: async ({ pageWithLogging, context }, use) => {
-        const managerHome = new ManagerPage(pageWithLogging, context);
+    managerHome: async ({ page, context }, use) => {
+        const managerHome = new ManagerPage(page, context);
         await use(managerHome);
     },
-    readContentHome: async ({ pageWithLogging, context }, use) => {
-        const readContentHome = new ReadContentPage(pageWithLogging, context);
+    readContentHome: async ({ page, context }, use) => {
+        const readContentHome = new ReadContentPage(page, context);
         await use(readContentHome);
     },
 
-    adminRoleHome: async ({ pageWithLogging, context }, use) => {
-        const adminRoleHome = new AdminRolePage(pageWithLogging, context);
+    adminRoleHome: async ({ page, context }, use) => {
+        const adminRoleHome = new AdminRolePage(page, context);
         await use(adminRoleHome);
     },
-    universalSearch: async ({ pageWithLogging, context }, use) => {
-        const universalSearch = new UniversalSearchPage(pageWithLogging, context);
+
+    excelReader: async ({}, use) => {
+        // ExcelReader needs a file path, so it will be instantiated in tests when needed
+        const excelReader = null; // Placeholder - instantiate in tests with file path
+        await use(excelReader);
+    },
+    universalSearch: async ({ page, context }, use) => {
+        const universalSearch = new UniversalSearchPage(page, context);
         await use(universalSearch);
     },
-    learnerGroup: async ({ pageWithLogging, context }, use) => {
-        const learnerGroup = new LearnerGroupPage(pageWithLogging, context);
+    learnerGroup: async ({ page, context }, use) => {
+        const learnerGroup = new LearnerGroupPage(page, context);
         await use(learnerGroup);
     },
-    siteAdmin: async ({ pageWithLogging, context }, use) => {
-        const siteAdmin = new SiteAdminPage(pageWithLogging, context);
+    siteAdmin: async ({ page, context }, use) => {
+        const siteAdmin = new SiteAdminPage(page, context);
         await use(siteAdmin);
     },
 
@@ -326,10 +248,9 @@ test.afterAll(async ({}) => {
     }
 }); */
 // Perform logout after each test to ensure clean session state between tests.
-// Uses the pageWithLogging fixture so we can interact with the current page.
-test.afterEach(async ({ pageWithLogging }, testInfo) => {
+// Uses the page fixture so we can interact with the current page.
+test.afterEach(async ({ page }, testInfo) => {
     try {
-        const page = pageWithLogging;
         // Strategy 1: look for a common logout link/button
         const logoutSelectors = [
             "//div[@class='logout']/a",
@@ -376,124 +297,3 @@ test.afterEach(async ({ pageWithLogging }, testInfo) => {
         console.warn('afterEach logout failed or was skipped:', err);
     }
 });
-
-function saveRequestsToExcel(
-    filename: string,
-    requests: any[],
-    testName: string
-) {
-    if (requests.length === 0) return;
-
-    let workbook: XLSX.WorkBook;
-    // Try to read existing workbook. If the file is corrupted or cannot be parsed,
-    // back it up with a .corrupt timestamped suffix and continue with a new workbook
-    if (fs.existsSync(filename)) {
-        try {
-            workbook = XLSX.readFile(filename);
-        } catch (err) {
-            // Backup the corrupted file so it can be inspected later
-            try {
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                const backupName = `${filename}.corrupt.${timestamp}`;
-                fs.copyFileSync(filename, backupName);
-                console.warn(`Failed to read Excel file '${filename}'. Backed up corrupted file as '${backupName}' and continuing with a new workbook.`);
-            } catch (copyErr) {
-                console.warn(`Failed to backup corrupted Excel file '${filename}':`, copyErr);
-            }
-            workbook = XLSX.utils.book_new();
-        }
-    } else {
-        workbook = XLSX.utils.book_new();
-    }
-
-    const sheetName = 'Requests';
-    let worksheet = workbook.Sheets[sheetName];
-
-    let existingData: any[] = [];
-    if (worksheet) {
-        existingData = XLSX.utils.sheet_to_json(worksheet);
-    }
-
-    // Excel cell text limit is 32767 characters. Truncate cell text to avoid write errors
-    // and store full bodies in separate files under ./excel_payloads for later inspection.
-    //
-    // Behaviour:
-    // - If a request.postData body exceeds 32767 chars, we save the full payload to
-    //   ./excel_payloads/<test>_<timestamp>_<idx>.txt and place a truncated preview in
-    //   the Excel cell with a reference to the backup filename in `fullBodyFile` column.
-    // - This prevents XLSX.writeFile from failing with "Text length must not exceed 32767"
-    //   while preserving full request bodies for debugging.
-    const payloadsDir = path.resolve(process.cwd(), 'excel_payloads');
-    if (!fs.existsSync(payloadsDir)) {
-        try { fs.mkdirSync(payloadsDir); } catch (e) { /* ignore */ }
-    }
-
-const MAX_EXCEL_TEXT = 32767;
-
-const truncateText = (text: any, maxLength = MAX_EXCEL_TEXT): string => {
-  if (!text) return '';
-  const str = typeof text === 'string' ? text : String(text);
-  return str.length > maxLength 
-    ? str.slice(0, maxLength - 20) + '...[TRUNCATED]'
-    : str;
-};
-
-// Truncate existing data from the Excel file
-const sanitizedExistingData = existingData.map(row => ({
-  test: truncateText(row.test),
-  method: truncateText(row.method),
-  type: truncateText(row.type),
-  status: row.status,
-  duration: row.duration,
-  url: truncateText(row.url),
-  body: truncateText(row.body),
-  fullBodyFile: truncateText(row.fullBodyFile),
-}));
-
-const newRows = requests.map((t, idx) => {
-  let body = typeof t.postData === 'string'
-    ? t.postData
-    : t.postData
-      ? JSON.stringify(t.postData)
-      : '';
-
-  let fullBodyFile: string | undefined;
-
-  if (body.length > MAX_EXCEL_TEXT) {
-    try {
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const safeTestName = testName.replace(/[^a-z0-9-_]/gi, '_').slice(0, 60);
-      fullBodyFile = path.join('excel_payloads', `${safeTestName}_${timestamp}_${idx}.txt`);
-
-      fs.writeFileSync(path.resolve(process.cwd(), fullBodyFile), body, 'utf8');
-
-      body =
-        body.slice(0, MAX_EXCEL_TEXT - 100) +
-        `\n...TRUNCATED... full payload saved to ${fullBodyFile}`;
-    } catch {
-      body = body.slice(0, MAX_EXCEL_TEXT - 50) + '\n...TRUNCATED... (save failed)';
-    }
-  }
-
-  return {
-    test: truncateText(testName),
-    method: truncateText(t.method),
-    type: truncateText(t.type),
-    status: t.status,
-    duration: t.duration,
-    url: truncateText(t.url),
-    body: truncateText(body),
-    fullBodyFile: truncateText(fullBodyFile),
-  };
-});
-
-const updatedData = [...sanitizedExistingData, ...newRows];
-worksheet = XLSX.utils.json_to_sheet(updatedData);
-    if (!workbook.SheetNames.includes(sheetName)) {
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    } else {
-        workbook.Sheets[sheetName] = worksheet;
-    }
-
-    XLSX.writeFile(workbook, filename);
-}

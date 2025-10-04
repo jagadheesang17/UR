@@ -20,7 +20,7 @@ test(`Upload Mp4 Content`, async ({ adminHome ,contentHome,bannerHome,createCour
     await contentHome.uploadContent("samplevideo.mp4");
     await bannerHome.clickPublish();
     await createCourse.clickProceed();
-    await createCourse.verifySuccessMessage() 
+   await createCourse.verifySuccessMessage() 
 })
 
 

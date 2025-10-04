@@ -360,10 +360,10 @@ export class UserPage extends AdminHomePage {
     }
 
     public async fillImpersonateForm() {
-        let option = URLConstants.portal1
+      //  let option = URLConstants.portal1
         await this.validateElementVisibility(this.selectors.impersonateLabel, "Impersonate Label");
-        await this.click(this.selectors.impersonateOptionDD, "Select Domain you want ?", "Drop Down");
-        await this.click(this.selectors.impersonateDomainValue(option), "Select Domain you want ?", "Option");
+      //  await this.click(this.selectors.impersonateOptionDD, "Select Domain you want ?", "Drop Down");
+      //  await this.click(this.selectors.impersonateDomainValue(option), "Select Domain you want ?", "Option");
         await this.type(this.selectors.reasonInput, "Reason", FakerData.getDescription());
         await this.click(this.selectors.impersonateProceedBtn, "Proceed", "Button");
         await this.wait('mediumWait');

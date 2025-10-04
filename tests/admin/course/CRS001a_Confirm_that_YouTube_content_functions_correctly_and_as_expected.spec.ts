@@ -4,6 +4,7 @@ import { generateCode } from "../../../data/apiData/formData";
 import { FakerData } from '../../../utils/fakerUtils';
 import { ContentHomePage } from "../../../pages/ContentPage";
 import { credentials } from "../../../constants/credentialData";
+import { EditCoursePage } from "../../../pages/EditCoursePage";
 
 let createdCode: any
 const code = "CRS"+"-"+generateCode()
