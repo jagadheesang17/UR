@@ -3,6 +3,7 @@ import { FakerData } from '../../utils/fakerUtils';
 import { readDataFromCSV } from '../../utils/csvUtil';
 import { updateJiraIssue } from '../../jira/jira-integration';
 import { logADefectInJira } from '../../jira/log-a-defect';
+import { generateCode } from '../../data/apiData/formData';
 
 const courseName = FakerData.getCourseName();
 const description = FakerData.getDescription();
@@ -29,6 +30,7 @@ test.describe(`TC110 Add Preferernce`, async () => {
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.enter("course-title", courseName);
         await createCourse.selectLanguage("English");
+        await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();

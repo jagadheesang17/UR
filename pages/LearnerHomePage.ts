@@ -350,20 +350,25 @@ public async clickmyprofile()
 
     public async captureAndReadQRCode(): Promise<string> {
         const qrLocator = this.page.locator(this.selectors.qrLocator);
-        //xpath qrLocator:'//img[@class="img-fluid usr-prof-qrcodeimage modal_img my-2"]',
-        const screenshotPath = this.selectors.qrImagePath;
+        // xpath qrLocator: '//img[@class="img-fluid usr-prof-qrcodeimage modal_img my-2"]'
         await qrLocator.scrollIntoViewIfNeeded();
         await qrLocator.waitFor({ state: 'visible' });
-        await qrLocator.screenshot({ path: screenshotPath });
-        const image = await Jimp.read(screenshotPath);
-        const qr = new QrCode();
-        return await new Promise((resolve, reject) => {
-            qr.callback = (err: any, result: any) => {
-                if (err || !result) return reject(`QR code could not be read: ${err || "No result"}`);
-                resolve(result.result);
-            };
-            qr.decode(image.bitmap);
-        });
+
+        // Take in-memory screenshot buffer to avoid FS dependency
+        const buffer = await qrLocator.screenshot();
+
+        // Decode QR using pngjs + jsqr (no heavy image lib, robust in CJS/ESM)
+        const [{ PNG }, { default: jsQR }] = await Promise.all([
+            import('pngjs'),
+            import('jsqr')
+        ]);
+        const png = PNG.sync.read(buffer as Buffer);
+        const rgba = new Uint8ClampedArray(png.data.buffer, png.data.byteOffset, png.data.byteLength);
+        const result = jsQR(rgba, png.width, png.height);
+        if (!result || !result.data) {
+            throw new Error('QR code could not be read: No result');
+        }
+        return result.data;
     }
 
     public async verifyUserInformations(expectedEmail: string, expectedPhone: string): Promise<void> {

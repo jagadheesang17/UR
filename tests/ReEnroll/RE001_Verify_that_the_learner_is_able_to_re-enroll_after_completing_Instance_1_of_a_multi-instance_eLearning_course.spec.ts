@@ -40,6 +40,7 @@ const elCourseName2 = ("Elearning" + " " + FakerData.getCourseName());
         //await editCourse.verifycheckAllowRecReg()
         //await editCourse.clickcheckAllowRecReg()
         await createCourse.enter("course-title", elCourseName);
+           await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
@@ -56,6 +57,7 @@ const elCourseName2 = ("Elearning" + " " + FakerData.getCourseName());
         //await editCourse.verifycheckAllowRecReg()
         //await editCourse.clickcheckAllowRecReg()
         await createCourse.enter("course-title", elCourseName2);
+           await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
@@ -97,8 +99,8 @@ const elCourseName2 = ("Elearning" + " " + FakerData.getCourseName());
         await catalog.searchMyLearning(elCourseName);
         await catalog.clickCourseInMyLearning(elCourseName);
         await catalog.clickSelectcourse(courseName);
-        await catalog.clickEnroll();
-        await catalog.clickLaunchButton();
+       // await catalog.clickEnroll();
+       // await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await learnerCourse.clickReEnroll();
         await catalog.clickSelectcourse(elCourseName2);

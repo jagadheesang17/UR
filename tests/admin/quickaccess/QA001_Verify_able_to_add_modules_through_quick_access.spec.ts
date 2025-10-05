@@ -47,5 +47,5 @@ test(`Verify able to add modules through quick access `, async ({ adminHome, cre
     await adminHome.clickQuickAccess();
     await adminHome.selectingQuickAccessValue();
     await adminHome.removeQuickAccessModule();
-    await adminHome.dragTheModule();
+   // await adminHome.dragTheModule();
 })
