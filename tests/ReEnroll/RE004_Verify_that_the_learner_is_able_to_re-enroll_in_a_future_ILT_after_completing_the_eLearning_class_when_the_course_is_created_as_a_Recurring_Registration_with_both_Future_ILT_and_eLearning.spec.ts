@@ -1,0 +1,116 @@
+import { expect } from "@playwright/test";
+import { test } from "../../customFixtures/expertusFixture";
+import { FakerData, getRandomSeat } from "../../utils/fakerUtils";
+import { credentials } from "../../constants/credentialData";
+import { generateCode } from "../../data/apiData/formData";
+
+
+const courseName = FakerData.getCourseName();
+const instanceName=FakerData.getCourseName();
+const elCourseName = FakerData.getCourseName() + "E-learning";
+const sessionName = FakerData.getSession();
+const description = FakerData.getDescription();
+const instructorName = credentials.INSTRUCTORNAME.username
+let addInstancepre: any
+let addInstancepost: any
+let tag: any
+test.describe(`Verify_that_the_learner_is_able_to_re-enroll_in_a_future_ILT_after_completing_the_eLearning_class`, async () => {
+    test.describe.configure({ mode: 'serial' })
+
+    test(`Verify_that_the_learner_is_able_to_re-enroll_in_a_future_ILT_after_completing_the_eLearning_class`, async ({ createCourse, adminHome, editCourse }) => {
+        test.info().annotations.push(
+            { type: `Author`, description: `Vidya` },
+            { type: `TestCase`, description: `Verify_that_the_learner_is_able_to_re-enroll_in_a_future_ILT_after_completing_the_eLearning_class` },
+            { type: `Test Description`, description: `Verify_that_the_learner_is_able_to_re-enroll_in_a_future_ILT_after_completing_the_eLearning_class` }
+        );
+        await adminHome.loadAndLogin("CUSTOMERADMIN")
+        await adminHome.menuButton();
+        await adminHome.clickLearningMenu();
+        await adminHome.clickCourseLink();
+        await createCourse.clickCreateCourse();
+        await createCourse.verifyCreateUserLabel("CREATE COURSE");
+        await createCourse.enter("course-title", courseName);
+        await createCourse.selectLanguage("English");
+          await createCourse.enterCode("CRS-" + generateCode());
+        await createCourse.typeDescription(description);
+        await createCourse.selectdeliveryType("Classroom")
+        await createCourse.handleCategoryADropdown();
+        await createCourse.providerDropdown()
+        await createCourse.selectTotalDuration();
+        await createCourse.typeAdditionalInfo();
+        addInstancepre = await createCourse.visiblityOfaddInstance()
+        await createCourse.clickCatalog();
+        await createCourse.clickSave();
+        await createCourse.clickProceed();
+        await createCourse.clickEditCourseTabs()
+        await editCourse.clickTagMenu();
+        tag = await editCourse.selectTags();
+        console.log(tag);
+        await editCourse.clickClose();
+        // await createCourse.clickCatalog();
+        // await createCourse.clickUpdate();
+        // await createCourse.verifySuccessMessage();
+        // await createCourse.clickEditCourseTabs();
+        addInstancepost = await createCourse.visiblityOfaddInstance()
+        expect(addInstancepost).not.toBe(addInstancepre)
+        await createCourse.addInstances();
+
+        async function addinstance(deliveryType: string) {
+            await createCourse.selectInstanceDeliveryType(deliveryType);
+            await createCourse.clickCreateInstance();
+        }
+        await addinstance("Classroom");
+         await createCourse.enter("course-title", instanceName);
+        await createCourse.enterSessionName(sessionName);
+        await createCourse.setMaxSeat();
+        await createCourse.enterDateValue();
+        await createCourse.startandEndTime();
+        await createCourse.selectInstructor(instructorName);
+        await createCourse.selectLocation();
+        await createCourse.clickCatalog();
+        await createCourse.clickUpdate();
+        await createCourse.verifySuccessMessage();
+        await createCourse.editcourse();
+        await createCourse.clickinstanceClass();
+        await createCourse.addInstances();
+        await addinstance("E-Learning");
+        await createCourse.enter("course-title", elCourseName)
+        await createCourse.contentLibrary();
+        await createCourse.clickCatalog();
+        await createCourse.clickUpdate();
+        await createCourse.verifySuccessMessage();
+        await createCourse.editcourse();
+        await editCourse.clickBusinessRule();
+        await editCourse.verifycheckAllowRecReg();
+        //await createCourse.clickUpdate();
+    })
+
+    test(`Verification from learner site`, async ({ learnerHome, learnerCourse, catalog }) => {
+        test.info().annotations.push(
+            { type: `Author`, description: `vidya` },
+            { type: `TestCase`, description: `Learner Side Re-Enrollment for future ILT class` },
+            { type: `Test Description`, description: `Verify that learner can reenroll the for the future ILT course and request class is displayed for the E-learn` }
+        );
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "Portal");
+        await learnerHome.clickCatalog();
+        await catalog.mostRecent();
+        //await catalog.searchCatalog(courseName);
+        await catalog.clickFilter();
+        //await catalog.enterSearchFilter(tag)
+        await catalog.selectresultantTags(tag);
+        await catalog.clickApply()
+        await catalog.clickMoreonCourse(courseName);
+        await catalog.clickSelectcourse(elCourseName);
+        await catalog.clickEnroll();
+        await catalog.clickLaunchButton();
+        await catalog.saveLearningStatus();
+        await learnerCourse.clickReEnroll();
+        await catalog.clickSelectcourse(instanceName);
+         await catalog.clickEnroll();
+        await learnerCourse.reEnrollPopup();
+        await catalog.clickMyLearning();
+        await catalog.clickCompletedButton()
+        await catalog.verifyCompletedCourse(elCourseName)    // await catalog.searchMyLearning(elCourseName)
+    })
+
+})
