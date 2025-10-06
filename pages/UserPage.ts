@@ -103,6 +103,13 @@ export class UserPage extends AdminHomePage {
         //auto generate username
         autoGenerateUsernameLabel: "//span[text()='Auto-Generate']",
         autoGenerateUsernameCheckbox: "(//span[text()='Auto-Generate']//preceding-sibling::i)[1]",
+
+          //enter org name
+        orgName: `#user-organization-filter-field`,
+        orgNameList: (name: string) => `//li[text()='${name}']`,
+        userNameOnListingPage: (name: string) => `//div[text()='${name}']`,
+        userNotFoundMessage:`//h3[contains(text(),'There are no results that match your current filters. Try removing some of them to get better results')]`,
+
     }
 
     constructor(page: Page, context: BrowserContext) {
@@ -485,5 +492,23 @@ export class UserPage extends AdminHomePage {
             console.log("auto generation already unchecked")
         
         }
-}}
+}
+
+ async enrterOrgName(orgNameData: string) {
+        await this.wait("minWait")
+        await this.typeAndEnter(this.selectors.orgName, "Organization Name", orgNameData);
+        await this.click(this.selectors.orgNameList(orgNameData), "Organization Name", "List")
+    }
+
+    async verifyUserSegmentation(user:string,otherUser:string) {
+            await this.verification(this.selectors.userNameOnListingPage(user),user); 
+            await this.typeAndEnter(this.selectors.searchField, "Search Field", otherUser);
+            const message = await this.getInnerText(this.selectors.userNotFoundMessage);
+            expect(message).toContain('There are no results that match your current filters');
+            console.log("User Segmentation is working correctly");
+    }
+
+
+
+}
 
