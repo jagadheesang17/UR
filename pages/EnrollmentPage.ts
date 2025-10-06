@@ -365,11 +365,11 @@ export class EnrollmentPage extends AdminHomePage {
 
     }
 
-         public async searchTPCourse(user:string) {
+         public async searchTPCourse(Instance:string) {
         await this.wait("maxWait");
         await this.page.locator("(//input[@placeholder='Search'])[2]").scrollIntoViewIfNeeded();
-       await this.type("(//input[@placeholder='Search'])[2]", "User", user);
-       await this.click(this.selectors.tpInstanceResult(user), "select course", "Link")
+       await this.type("(//input[@placeholder='Search'])[2]", "User", Instance);
+       await this.click(this.selectors.tpInstanceResult(Instance), "select course", "Link")
        //await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
     }
 

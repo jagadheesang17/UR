@@ -94,7 +94,7 @@ test.describe(`TC103 Verify future Class recurring Registration`, async () => {
     await createCourse.editcourse();
     await editCourse.clickBusinessRule();
     await editCourse.clickcheckAllowRecReg();
-    //await createCourse.clickUpdate();
+    await createCourse.clickUpdate();
 
     await contentHome.gotoListing();
     await createCourse.catalogSearch(elCourseName);
