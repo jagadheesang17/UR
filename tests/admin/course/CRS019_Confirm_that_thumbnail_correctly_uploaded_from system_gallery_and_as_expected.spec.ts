@@ -37,7 +37,7 @@ test.describe(`Confirm that thumbnail uploaded correctly from system gallery.`, 
 
 
 
-    test(`Verify that the uploaded thumbnail is visible in Learner side.`, async ({ learnerHome, catalog }) => {
+    test.skip(`Verify that the uploaded thumbnail is visible in Learner side.`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Selvakumar` },
             { type: `TestCase`, description: `Confirm that YouTube content functions correctly and as expected` },

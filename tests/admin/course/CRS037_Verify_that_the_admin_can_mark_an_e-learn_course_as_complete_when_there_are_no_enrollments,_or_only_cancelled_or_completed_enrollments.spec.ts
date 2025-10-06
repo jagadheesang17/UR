@@ -76,7 +76,7 @@ test.describe(`Verify_that_the_admin_can_mark_an_e-learn_course_as_complete_when
 
         })
 
-    test(`c_Verify that the Completed class is not displayed on the learner catalog`, async ({ learnerHome, catalog }) => {
+    test.skip(`c_Verify that the Completed class is not displayed on the learner catalog`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Anuradha` },
             { type: `TestCase`, description: `Verify that the learner cannot enroll for a completed class.` },

@@ -58,6 +58,7 @@ test.describe(`Verify_that_admin_edit_the_session_details_of_multi_instance_ILT_
             await createCourse.clickCreateInstance();
         }
         await addinstance("Classroom");
+        await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.enterSessionName(sessionName);
         await createCourse.setMaxSeat();
         await createCourse.enterDateValue();

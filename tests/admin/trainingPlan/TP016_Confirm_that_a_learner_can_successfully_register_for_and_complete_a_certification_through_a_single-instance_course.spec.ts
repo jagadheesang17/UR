@@ -1,6 +1,7 @@
 import { test } from "../../../customFixtures/expertusFixture";
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
 let courseName = FakerData.getCourseName();
 let description = FakerData.getDescription();
@@ -21,8 +22,8 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode("CRS-" + generateCode());
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode("CRS-" + generateCode());
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
@@ -39,7 +40,7 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
     })
     const title = FakerData.getCourseName();
 
-    test(`Certification enroll and completion with single instance`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Certification enroll and completion with single instance`, async ({ adminHome, enrollHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Certification enroll and completion with single instance` },
@@ -50,8 +51,8 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
         await adminHome.menuButton();
         await adminHome.clickLearningMenu();
         await adminHome.clickCertification();
-    await learningPath.clickCreateCertification();
-    await createCourse.entercode("CRT-" + generateCode());
+        await learningPath.clickCreateCertification();
+        await createCourse.entercode("CRT-" + generateCode());
         await learningPath.title(title);
         await learningPath.description(description);
         await learningPath.language();
@@ -69,15 +70,25 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-           await learningPath.description(description);
+        await learningPath.description(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Certification");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
 
 
     })
 
-    test(`Confirm that a learner can successfully register for and complete a certification through a single-instance course.`, async ({ learnerHome, catalog }) => {
+    test(`Confirm that a learner can successfully register for and complete a certification through a single-instance course.`, async ({ learnerHome,dashboard, catalog }) => {
 
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
@@ -85,12 +96,13 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
             { type: `Test Description`, description: `Confirm that a learner can successfully register for and complete a certification through a single-instance course.` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewCertificationDetails();
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await catalog.clickViewCertificate();

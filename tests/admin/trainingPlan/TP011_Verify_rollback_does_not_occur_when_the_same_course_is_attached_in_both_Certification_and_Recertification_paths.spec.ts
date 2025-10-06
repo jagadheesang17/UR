@@ -87,7 +87,7 @@ test.describe(`Verify_rollback_does_not_occur_when_the_same_course_is_attached_i
         await adminHome.menuButton()
         await adminHome.clickEnrollmentMenu();
         await adminHome.clickEnroll();
-        await enrollHome.selectByOption("Learning Path");
+        await enrollHome.selectByOption("Certification");
         await enrollHome.selectBycourse(TPName)
         await enrollHome.clickSelectedLearner();
         await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)

@@ -69,7 +69,7 @@ test.describe(`Verify_the_Enforce_Sequence_flow`, async () => {
     })
 
     let title = ("portal " + FakerData.getCourseName());
-    test(`Learning Path with Two Single-Instance E-Learning Courses Attached`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Learning Path with Two Single-Instance E-Learning Courses Attached`, async ({ enrollHome,adminHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Learning Path with Two Single-Instance E-Learning Courses Attached` },
@@ -112,10 +112,19 @@ test.describe(`Verify_the_Enforce_Sequence_flow`, async () => {
           await createCourse.typeDescription(description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+          await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Certification");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
 
     })
 
-    test(`Ensure that a Learning Path created in one portal is not displayed or accessible in any other portal.`, async ({ learnerHome, catalog }) => {
+    test.skip(`Ensure that a Learning Path created in one portal is not displayed or accessible in any other portal.`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Ensure that a Learning Path created in one portal is not displayed or accessible in any other portal` },

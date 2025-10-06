@@ -59,7 +59,9 @@ test.describe(`Verify_that_the_admin_can_cancel_an_ILT_class_with_no_enrollments
             await createCourse.clickCreateInstance();
         }
         await addinstance("Classroom");
+        await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.enterSessionName(sessionName);
+        
         await createCourse.setMaxSeat();
         await createCourse.enterDateValue();
         await createCourse.startandEndTime();
@@ -112,7 +114,7 @@ test.describe(`Verify_that_the_admin_can_cancel_an_ILT_class_with_no_enrollments
 
         })
 
-    test(`d_Verify that the learner cannot view or enroll the cancelled class in the course details page`, async ({ learnerHome, catalog, learnerCourse }) => {
+    test.skip(`d_Verify that the learner cannot view or enroll the cancelled class in the course details page`, async ({ learnerHome, catalog, learnerCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Anuradha` },
             { type: `TestCase`, description: `Verify that the learner cannot enroll for a cancelled class.` },

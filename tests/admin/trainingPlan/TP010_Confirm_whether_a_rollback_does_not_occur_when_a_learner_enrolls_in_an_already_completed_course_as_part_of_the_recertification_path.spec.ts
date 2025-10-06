@@ -142,7 +142,7 @@ test.describe(`Confirm_whether_a_rollback_does_not_occur_when_a_learner_enrolls_
                 await adminHome.menuButton()
                 await adminHome.clickEnrollmentMenu();
                 await adminHome.clickEnroll();
-                await enrollHome.selectByOption("Learning Path");
+                await enrollHome.selectByOption("Certification");
                 await enrollHome.selectBycourse(TPName)
                 await enrollHome.clickSelectedLearner();
                 await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)

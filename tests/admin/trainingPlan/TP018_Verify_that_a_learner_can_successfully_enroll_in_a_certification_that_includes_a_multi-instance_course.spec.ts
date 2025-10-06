@@ -75,7 +75,7 @@ test.describe(`Certification_with_multi_instance_course_is_attached`, async()=>{
 
 
     const title = FakerData.getCourseName();
-    test(`Creation of certification with multi instance course is attached`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Creation of certification with multi instance course is attached`, async ({ adminHome, enrollHome,learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of certification with multi instance course is attached` },
@@ -108,6 +108,15 @@ test.describe(`Certification_with_multi_instance_course_is_attached`, async()=>{
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+          await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Certification");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
 
 
     })
@@ -123,12 +132,14 @@ test.describe(`Certification_with_multi_instance_course_is_attached`, async()=>{
 
        //  let title="Neural Array Index";
 
-        await learnerHome.learnerLogin("LEARNERUSERNAME","LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewCertificationDetails();
+           await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
+
         await catalog.tpCourseSearch("Attend-In Person"); //Classroom instance is selected
 		await catalog.tpCourseSelection();
 		await catalog.tpSelectedCourseRegister();

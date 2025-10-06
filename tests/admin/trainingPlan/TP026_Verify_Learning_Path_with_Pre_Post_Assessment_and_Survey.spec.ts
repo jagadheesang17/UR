@@ -2,6 +2,7 @@ import { test } from "../../../customFixtures/expertusFixture";
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from "../../../data/apiData/formData";
 import { URLConstants } from "../../../constants/urlConstants";
+import { credentials } from "../../../constants/credentialData";
 
 
 let courseName = FakerData.getCourseName();
@@ -12,7 +13,7 @@ const surveyTitle = ("Survey " + FakerData.AssessmentTitle());
 
 test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creatation of Pre-Assessment`, async ({ createCourse,adminHome, SurveyAssessment }) => {
+    test(`Creatation of Pre-Assessment`, async ({ createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creatation of Pre-Assessment` },
@@ -96,7 +97,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
 
     })
 
-    test(`Creation of Survey Questions`, async ({createCourse, adminHome, SurveyAssessment }) => {
+    test(`Creation of Survey Questions`, async ({ createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: 'Author', description: 'Ajay Michael' },
             { type: 'TestCase', description: 'Creation of Survey QUestions' },
@@ -110,7 +111,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await SurveyAssessment.clickCreateSurvey();
         await SurveyAssessment.fillSurveyTitle(surveyTitle);
         await SurveyAssessment.selectLanguage();
-                await createCourse.enterCode("SUR-" + generateCode());
+        await createCourse.enterCode("SUR-" + generateCode());
         await SurveyAssessment.fillDescription();
         await SurveyAssessment.clickSaveDraft();
         await SurveyAssessment.clickProceed();
@@ -153,13 +154,13 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await adminHome.clickLearningMenu();
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
-    await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enterCode("CRS-" + generateCode());
+        await createCourse.verifyCreateUserLabel("CREATE COURSE");
+        await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.enter("course-title", courseName);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course,:" + description);
         await createCourse.contentLibrary(); //By default Youtube content will be attached to the course
-        await createCourse.clickCatalog(); 
+        await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
@@ -167,7 +168,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
     })
     let title = FakerData.getCourseName();
 
-    test(`Verify_Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel-Admin_Site`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Verify_Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel-Admin_Site`, async ({ adminHome, enrollHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Verify_Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel-Admin_Site` },
@@ -178,8 +179,8 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await adminHome.menuButton();
         await adminHome.clickLearningMenu();
         await adminHome.clickLearningPath();
-    await learningPath.clickCreateLearningPath();
-    await createCourse.enterCode("LP-" + generateCode());
+        await learningPath.clickCreateLearningPath();
+        await createCourse.enterCode("LP-" + generateCode());
         await learningPath.title(title);
         await learningPath.description(description);
         await learningPath.language();
@@ -201,9 +202,18 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await createCourse.clickCatalog()
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Learning Path");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
     })
 
-    test(`Verify learner able to launch TP level survey and assessment and complete it`, async ({ learnerHome, catalog }) => {
+    test(`Verify learner able to launch TP level survey and assessment and complete it`, async ({ learnerHome, dashboard,catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Verify learner able to launch TP level survey and assessment and complete it` },
@@ -211,14 +221,13 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
 
         );
 
-      //  let title="Neural Protocol Synthesize";
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        //await catalog.searchCatalog("Bluetooth Pixel Compress");
-        await catalog.clickEnrollButton();
-        await catalog.clickViewLearningPathDetails();
+       await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        // await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         await catalog.tpPreAssessmentLaunch();
         async function assessment() {
             await catalog.writeContent();

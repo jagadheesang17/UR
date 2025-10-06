@@ -42,7 +42,7 @@ test.describe(`Verify that certification enrollment and completion occurred at t
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", elCourseName);
-    await createCourse.entercode("CRS-" + generateCode());
+    await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
@@ -56,7 +56,7 @@ test.describe(`Verify that certification enrollment and completion occurred at t
     })
     const title = FakerData.getCourseName();
 
-    test(`Creation of Certification with module`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Creation of Certification with module`, async ({ adminHome, learningPath, enrollHome,createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Creation of Certification with module` },
@@ -92,11 +92,20 @@ test.describe(`Verify that certification enrollment and completion occurred at t
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+                await adminHome.menuButton()
+                await adminHome.clickEnrollmentMenu();
+                await adminHome.clickEnroll();
+                await enrollHome.selectByOption("Certification");
+                await enrollHome.selectBycourse(title)
+                await enrollHome.clickSelectedLearner();
+                await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+                await enrollHome.clickEnrollBtn();
+                await enrollHome.verifytoastMessage()
 
 
     })
 
-    test(`Confirm that a learner can successfully register for and complete a certification through a module`, async ({ learnerHome, catalog }) => {
+    test(`Confirm that a learner can successfully register for and complete a certification through a module`, async ({ learnerHome, dashboard,catalog }) => {
 
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
@@ -104,12 +113,13 @@ test.describe(`Verify that certification enrollment and completion occurred at t
             { type: `Test Description`, description: `Confirm that a learner can successfully register for and complete a certification through a module` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewCertificationDetails();
+      await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await catalog.clickOnNextCourse(elCourseName)

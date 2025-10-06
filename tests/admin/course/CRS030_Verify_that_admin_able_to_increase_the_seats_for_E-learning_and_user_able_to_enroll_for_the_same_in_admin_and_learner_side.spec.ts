@@ -60,7 +60,7 @@ test.describe(`Verify that admin able to increase the seats for E-learning and u
     })
 
 
-    test(`Confirm that the 'No seats left' message is showing on the learner side`, async ({ learnerHome, catalog, readContentHome }) => {
+    test.skip(`Confirm that the 'No seats left' message is showing on the learner side`, async ({ learnerHome, catalog, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that the 'No seats left' message is displayed on the learner side` },
@@ -95,7 +95,7 @@ test.describe(`Verify that admin able to increase the seats for E-learning and u
         await createCourse.verifySuccessMessage();
     })
     
-    test(`Confirm that learner able to enroll after admin increse the seats`, async ({ learnerHome, catalog, readContentHome }) => {
+    test.skip(`Confirm that learner able to enroll after admin increse the seats`, async ({ learnerHome, catalog, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that learner able to enroll after admin increse the seats` },

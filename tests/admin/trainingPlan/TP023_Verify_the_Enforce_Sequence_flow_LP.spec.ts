@@ -98,7 +98,7 @@ test.describe(`Verify_the_Enforce_Sequence_flow`, async () => {
 
     let title = FakerData.getCourseName();
 
-    test(`Learning Path with Three Single-Instance E-Learning Courses Attached`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Learning Path with Three Single-Instance E-Learning Courses Attached`, async ({ enrollHome,adminHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Learning Path with Three Single-Instance E-Learning Courses Attached` },
@@ -138,23 +138,32 @@ test.describe(`Verify_the_Enforce_Sequence_flow`, async () => {
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+                await adminHome.menuButton()
+                await adminHome.clickEnrollmentMenu();
+                await adminHome.clickEnroll();
+                await enrollHome.selectByOption("Learning Path");
+                await enrollHome.selectBycourse(title)
+                await enrollHome.clickSelectedLearner();
+                await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+                await enrollHome.clickEnrollBtn();
+                await enrollHome.verifytoastMessage()
 
     })
 
-    test(`Verify Enforce Sequence Flow Functionality for Learner`, async ({ learnerHome, catalog }) => {
+    test(`Verify Enforce Sequence Flow Functionality for Learner`, async ({ learnerHome, dashboard,catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Verify Enforce Sequence Flow Functionality for Learner` },
             { type: `Test Description`, description: `Verify Enforce Sequence Flow Functionality for Learner` }
 
         );
-     //   title="Neural Microchip Generate";
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewLearningPathDetails();
+  await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        // await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         await catalog.clickLaunchButton(); //First course is launched
         await catalog.saveLearningStatus();
         await catalog.clickSecondaryCourse(courseName3, "Verification"); //Trying to launch the third course without launching the second one.

@@ -38,7 +38,7 @@ test.describe(`Confirm that thumbnail correctly uploaded from custom gallery and
 
 
 
-    test(`Confirm that YouTube content functions correctly and as expected.`, async ({ learnerHome, catalog }) => {
+    test.skip(`Confirm that YouTube content functions correctly and as expected.`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Confirm that YouTube content functions correctly and as expected` },

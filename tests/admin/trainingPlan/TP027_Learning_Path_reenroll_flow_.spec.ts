@@ -1,6 +1,7 @@
 import { test } from "../../../customFixtures/expertusFixture";
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
 let courseName = FakerData.getCourseName();
 const description = FakerData.getDescription();
@@ -10,7 +11,7 @@ const surveyTitle = ("Survey " + FakerData.AssessmentTitle());
 
 test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel`, async () => {
     test.describe.configure({ mode: "serial", timeout: 700000 });
-    test(`Creation of Pre-Assessment`, async ({ createCourse,adminHome, SurveyAssessment }) => {
+    test(`Creation of Pre-Assessment`, async ({ createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Pre-Assessment` },
@@ -51,7 +52,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await SurveyAssessment.clickPublish();
         await SurveyAssessment.verifySuccessMessage();
     })
-    test(`Creation of Post-Assessment`, async ({ createCourse,adminHome, SurveyAssessment }) => {
+    test(`Creation of Post-Assessment`, async ({ createCourse, adminHome, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Pre-Assessment` },
@@ -152,8 +153,8 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await adminHome.clickLearningMenu();
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
-    await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enterCode("CRS-" + generateCode());
+        await createCourse.verifyCreateUserLabel("CREATE COURSE");
+        await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.enter("course-title", courseName);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course,:" + description);
@@ -166,7 +167,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
     })
     let title = FakerData.getCourseName();
 
-    test(`Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel-Admin_Site`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel-Admin_Site`, async ({ adminHome, enrollHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Verify_Learning_Path__single_instance_with_survey_and_assessment_in_TPlevel-Admin_Site` },
@@ -177,8 +178,8 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await adminHome.menuButton();
         await adminHome.clickLearningMenu();
         await adminHome.clickLearningPath();
-    await learningPath.clickCreateLearningPath();
-    await createCourse.enterCode("LP-" + generateCode());
+        await learningPath.clickCreateLearningPath();
+        await createCourse.enterCode("LP-" + generateCode());
         await learningPath.title(title);
         await learningPath.description(description);
         await learningPath.language();
@@ -203,30 +204,39 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         await createCourse.clickDetailButton();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Learning Path");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
     })
 
-    test(`Verify LP reenroll flow in the learner side`, async ({ learnerHome, catalog }) => {
+    test(`Verify LP reenroll flow in the learner side`, async ({ learnerHome,dashboard, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Verify LP reenroll flow in the learner side` },
             { type: `Test Description`, description: `Verify LP reenroll flow in the learner side` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-       //await catalog.searchCatalog("LPT-00291");
-       await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewLearningPathDetails();
+           await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        // await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         await catalog.tpPreAssessmentLaunch(); //To click the play icon
         async function assessment() {
             await catalog.writeContent();
             await catalog.submitMyAnswer();
         }
         await assessment();//To launch the pre-assessment
-         await catalog.clickLaunchButton();
-          await catalog.saveLearningStatus();
+        await catalog.clickLaunchButton();
+        await catalog.saveLearningStatus();
         await catalog.tpPostAssessmentLaunch();
         async function negativeAssessment() {
             await catalog.negativeWriteContent();

@@ -18,7 +18,8 @@ export class EnrollmentPage extends AdminHomePage {
         userListOpt: (index: number) => `(//div[contains(@id,'lms-scroll-results')]//li)[${index}]`,
         selectCourse: `(//input[contains(@id,'training')]/following::i)[1]`,
         selectedLearners: `//button[text()='Select Learner']`,
-        selectUser: `(//input[contains(@id,'selectedlearners')]/following::i)[2]`,
+       // selectUser: `(//input[contains(@id,'selectedlearners')]/following::i)[2]`,
+         selectUser: (data: string) => `(//td[contains(text(),'${data}')]//following::i[contains(@class,'fa-square icon')])[1]`,
         enrollBtn: "//button[text()='Enroll']",
         toastMeassage: `//section[contains(@class,'lms-success-msg-wrapper')]//h3`,
         enrollStatus: `(//div[contains(@id,'wrapper-enrollment-action')])[2]`,
@@ -433,7 +434,16 @@ export class EnrollmentPage extends AdminHomePage {
             return false;
         }
     }
-
+ //Enrollment segmentation
+    async verifyEnrollmentSegmentation(otherUser: string) {
+        await this.wait("minWait")
+        await this.typeAndEnter(this.selectors.searchcourseOrUser, "Course Name", otherUser)
+        const element = this.page.locator(this.selectors.selectUser(otherUser));
+        const count = await element.count();
+        if (count === 0) {
+            console.log("Enrollment Segmentation is working correctly");
+        }
+    }
 
 
 

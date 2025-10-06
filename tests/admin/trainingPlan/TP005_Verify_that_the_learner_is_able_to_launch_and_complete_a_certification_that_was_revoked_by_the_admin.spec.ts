@@ -54,7 +54,7 @@ test.describe(`Verify_that_the_learner_is_able_to_launch_and_complete_a_certific
         await adminHome.clickCertification();
         await learningPath.clickCreateCertification();
         await learningPath.title(title);
-         await createCourse.entercode("CRT-" + generateCode());
+         await createCourse.entercode("CER-" + generateCode());
         await learningPath.description(description);
         await learningPath.language();
         await learningPath.clickSave();

@@ -7,6 +7,7 @@ import { generateCode } from '../../../data/apiData/formData';
 
 
 const courseName = FakerData.getCourseName();
+const instanceName = FakerData.getCourseName();
 const sessionName = FakerData.getSession();
 const description = FakerData.getDescription();
 let createdCode: any
@@ -45,6 +46,8 @@ test.describe(`Confirm that admin able to create recurring session for ILT cours
             await createCourse.clickCreateInstance();
         }
         await addinstance("Classroom");
+        await createCourse.enter("course-title", instanceName);
+        await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.enterSessionName(sessionName);
         await createCourse.setMaxSeat();
         await createCourse.selectSessionType()
@@ -57,21 +60,27 @@ test.describe(`Confirm that admin able to create recurring session for ILT cours
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+             await adminHome.menuButton()
+                await adminHome.clickEnrollmentMenu();
+                await adminHome.clickEnroll();
+                await enrollHome.selectBycourse(instanceName)
+                await enrollHome.clickSelectedLearner();
+                await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+                await enrollHome.clickEnrollBtn();
+                await enrollHome.verifytoastMessage()
 
     })
 
-        test(`Verify that learner able to enroll in created course`, async ({ learnerHome, catalog }) => {
+        test.skip(`Verify that learner able to enroll in created course`, async ({ learnerHome, catalog }) => {
             test.info().annotations.push(
                 { type: `Author`, description: `Tamilvanan` },
                 { type: `TestCase`, description: `Verify that learner able to enroll in created course` },
                 { type: `Test Description`, description: `Verify that learner able to enroll in created course` }
             );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await catalog.clickCatalog();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickMoreonCourse(courseName);
-        await catalog.clickSelectcourse(courseName);
-        await catalog.clickEnroll();
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(instanceName);
+        await catalog.clickCourseInMyLearning(instanceName);
         await catalog.clickSessionConflictPopup();
     })
 

@@ -1,6 +1,7 @@
 import { test } from "../../../customFixtures/expertusFixture";
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
 const courseName = FakerData.getCourseName();
 const description = FakerData.getDescription();
@@ -28,8 +29,6 @@ test.describe(`Certification_with_single_instance_behavior_Enrolled_tab`, async 
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
-        domain = await createCourse.selectPortal();
-        console.log(`${domain}`);
         await createCourse.contentLibrary();
         await createCourse.clickHere();
         await createCourse.selectImage();
@@ -48,7 +47,7 @@ test.describe(`Certification_with_single_instance_behavior_Enrolled_tab`, async 
     })
 
     const title = FakerData.getCourseName();
-    test(`Creation of Certification with single instance`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Creation of Certification with single instance`, async ({ adminHome,enrollHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Creation of Certification with single instance` },
@@ -83,6 +82,16 @@ test.describe(`Certification_with_single_instance_behavior_Enrolled_tab`, async 
         
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+       await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Certification");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
 
 
     })
@@ -96,17 +105,13 @@ test.describe(`Certification_with_single_instance_behavior_Enrolled_tab`, async 
 
         );
 
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickOkButton();
+      await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await learnerHome.clickDashboardLink();
         await dashboard.clickLearningPath_And_Certification();
         await dashboard.clickCertificationLink();
         await dashboard.searchCertification(title);
         await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
 
     })
 

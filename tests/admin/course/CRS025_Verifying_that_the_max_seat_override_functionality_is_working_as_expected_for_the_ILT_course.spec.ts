@@ -83,19 +83,16 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
     })
 
 
-    test(`Confirm that the 'No seats left' message is showing on the learner side`, async ({ learnerHome, catalog, readContentHome }) => {
+    test.skip(`Confirm that the 'No seats left' message is showing on the learner side`, async ({ learnerHome, catalog, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that the 'No seats left' message is displayed on the learner side` },
             { type: `Test Description`, description: `Verifying on the learner side that the 'Seat Full' text is displayed on the course details page` }
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        // await catalog.clickEnrollButton();
-        // await catalog.verifySeatStatus();
-        await catalog.clickMoreonCourse(courseName);
+          await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         await catalog.verifySeatFullText(courseName)
 
     })

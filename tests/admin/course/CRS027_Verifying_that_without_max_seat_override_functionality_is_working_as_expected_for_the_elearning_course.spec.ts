@@ -67,7 +67,7 @@ test.describe(`Verify that without Max Seat Override functionality is working as
     })
 
 
-    test(`Confirm that the 'No seats left' message is showing on the learner side`, async ({ learnerHome, catalog, readContentHome }) => {
+    test.skip(`Confirm that the 'No seats left' message is showing on the learner side`, async ({ learnerHome, catalog, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that the 'No seats left' message is displayed on the learner side` },

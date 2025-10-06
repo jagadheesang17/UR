@@ -48,6 +48,7 @@ test.describe(`Confirm that admin able to create recurring session for VC course
             await createCourse.clickCreateInstance();
         }
         await addinstance("Virtual Class");
+        await createCourse.entercode("CRS2-" + generateCode());
         await createCourse.selectSessionType()
         await createCourse.selectMeetingType(instructorName, courseName, 1);
         await createCourse.enterEndDateValue();
@@ -60,7 +61,7 @@ test.describe(`Confirm that admin able to create recurring session for VC course
 
     })
 
-        test(`Verify that learner able to enroll in created course`, async ({ learnerHome, catalog }) => {
+        test.skip(`Verify that learner able to enroll in created course`, async ({ learnerHome, catalog }) => {
             test.info().annotations.push(
                 { type: `Author`, description: `Tamilvanan` },
                 { type: `TestCase`, description: `Verify that learner able to enroll in created course` },

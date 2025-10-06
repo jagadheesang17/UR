@@ -1,6 +1,7 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
 const courseName = FakerData.getCourseName();
 const TPName = "Rollback" + " " + FakerData.getCourseName();
@@ -58,7 +59,7 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
         await catalog.verifyCompletedCourse(courseName);
     })
 
-    test(`Learning_Path_single_instance`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Learning_Path_single_instance`, async ({ adminHome, learningPath, enrollHome, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Learning_Path_single_instance` },
@@ -84,6 +85,15 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
         await learningPath.clickCatalogBtn();
         await learningPath.clickUpdateBtn();
         await learningPath.verifySuccessMessage();
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Learning Path");
+        await enrollHome.selectBycourse(TPName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
 
         //   await learningPath.clickEditLearningPath()
         //    await createCourse.clickDetailButton();
@@ -99,10 +109,10 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
             { type: `Test Description`, description: `confirm_that_the_rollback_occurs_successfully_when_a_learner_completes_the_course_and_then_registers_for_the_certification.` }
 
         );
-          await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
         await learnerHome.clickDashboardLink();
         await dashboard.clickLearningPath_And_Certification();
-       // await dashboard.clickCertificationLink();
+        // await dashboard.clickCertificationLink();
         await dashboard.searchCertification(TPName);
         await dashboard.verifyTheEnrolledCertification(TPName);
         await catalog.clickMoreonCourse(TPName);

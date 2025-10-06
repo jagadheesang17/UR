@@ -58,6 +58,7 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
             await createCourse.clickCreateInstance();
         }
         await addinstance("Classroom");
+        await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.enterSessionName(sessionName);
         await createCourse.setMaxSeat();
         await createCourse.enterDateValue();
@@ -101,7 +102,7 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+    await createCourse.entercode("CRS2-" + generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("Classroom")
@@ -132,6 +133,7 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
         }
         await addinstance("Classroom");
         await createCourse.enterSessionName(sessionName);
+        await createCourse.entercode("CRS2-" + generateCode());
         await createCourse.setMaxSeat();
         await createCourse.enterDateValue();
         await createCourse.startandEndTime();

@@ -1,4 +1,3 @@
-import { create } from "domain";
 import { credentialConstants } from "../../../constants/credentialConstants";
 import { credentials } from "../../../constants/credentialData";
 import { test } from "../../../customFixtures/expertusFixture"
@@ -6,23 +5,23 @@ import { LearnerCoursePage } from "../../../pages/LearnerCoursePage";
 import { FakerData, getRandomSeat } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
 
-let createdCode: any
+
 const code = "CRS"+"-"+generateCode();
 const courseName = FakerData.getCourseName();
 const sessionName = FakerData.getSession();
 const elCourseName = ("Elearning" + " " + FakerData.getCourseName());
-const elCourseName1 = ("Elearning" + " " + FakerData.getCourseName());
 const description = FakerData.getDescription();
+const instanceName = FakerData.getCourseName();
 const maxSeat = getRandomSeat()
 let tag: any
 const instructorName = credentials.INSTRUCTORNAME.username
-test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, () => {
+test.describe(`Verify that course should be created as multiple instance when ILT or VC delivery type is choosed`, () => {
     test.describe.configure({ mode: "serial" });
-    test(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, async ({ adminHome, createCourse, editCourse, contentHome ,enrollHome}) => {
+    test(`Multiple Course Creation for Classroom`, async ({ adminHome, createCourse,enrollHome, editCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
-            { type: `TestCase`, description: `CRS003_Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts` },
-            { type: `Test Description`, description: `CRS003_Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts` }
+            { type: `TestCase`, description: `Create the course as multiple instance` },
+            { type: `Test Description`, description: `Verify that course should be created as multiple instance when ILT or VC delivery type is chosen` }
         );
         await adminHome.loadAndLogin("CUSTOMERADMIN")
         await adminHome.clickMenu("Course");
@@ -31,13 +30,11 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
     await createCourse.entercode("CRS"+"-"+generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
-        await createCourse.selectdeliveryType("E-Learning")
+        await createCourse.selectdeliveryType("Classroom")
         await createCourse.handleCategoryADropdown();
         await createCourse.providerDropdown()
         await createCourse.selectTotalDuration();
         await createCourse.typeAdditionalInfo();
-        //Creating as a multi instance--------
-        await createCourse.selectInstanceType("Multi Instance/Class");
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();
@@ -60,60 +57,62 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
             await createCourse.selectInstanceDeliveryType(deliveryType);
             await createCourse.clickCreateInstance();
         }
-        await addinstance("E-Learning");
-    await createCourse.enter("course-title", elCourseName);
-   // await createCourse.entercode(code);
-        await createCourse.selectLanguage("English");
-        await createCourse.typeDescription("This is a new course by name :" + description);
-        await createCourse.contentLibrary();//Youtube content is attached here
+        await addinstance("Classroom");  
+        await createCourse.enter("course-title", instanceName);
+        await createCourse.enterSessionName(sessionName);
+        await createCourse.setMaxSeat();
+        await createCourse.enterDateValue();
+        await createCourse.startandEndTime();
+        await createCourse.selectInstructor(instructorName);
+        await createCourse.selectLocation();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
+        await createCourse.verifySuccessMessage();
         await createCourse.editcourse();
-        //Adding 2nd instance------
         await createCourse.clickinstanceClass();
         await createCourse.addInstances();
         await addinstance("E-Learning");
-    await createCourse.enter("course-title", elCourseName1);
-    await createCourse.entercode("CRS1"+"-"+generateCode());
+    await createCourse.enter("course-title", elCourseName);
+       await createCourse.entercode("CRS"+"-"+generateCode());
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         console.log(courseName);
-        console.log(elCourseName1);
-        await contentHome.gotoListing();
-await adminHome.menuButton()
-await adminHome.clickEnrollmentMenu();
-await adminHome.clickEnroll();
-await enrollHome.selectBycourse(elCourseName)
-await enrollHome.clickSelectedLearner();
-await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
-await enrollHome.clickEnrollBtn();
-await enrollHome.verifytoastMessage()
+        console.log(elCourseName);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(instanceName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
+
     })
 
-
-    test(`Learner_verification_change_class_functionality_E-learning_to_E-learning.`, async ({ learnerHome, catalog, learnerCourse }) => {
+    test(`Verify_the_change_class_functionality_ILT_to_E-learning.`, async ({ learnerHome, catalog, learnerCourse }) => {
         test.info().slow(true)
         test.info().annotations.push(
-            { type: `Author`, description: `Arivazhagan P` },
-            { type: `TestCase`, description: `Learner_verification_change_class_functionality_E-learning_to_E-learning.` },
-            { type: `Test Description`, description: `Learner_verification_change_class_functionality_E-learning_to_E-learning.` }
+            { type: `Author`, description: `Vidya` },
+            { type: `TestCase`, description: `Verify_the_change_class_functionality_ILT_to_E-learning.` },
+            { type: `Test Description`, description: `Verify_the_change_class_functionality_ILT_to_E-learning.` }
         );
 
-       // let courseName="Mobile Card Transmit";
-    //    let elCourseName=" Elearning Mobile System Reboot";
-     //   let tag="E-enable Networks";
+      //First learner is enrolled to ILT then tries to register for Elearning.
+      //Rignt now issue is there in product
 
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
         await catalog.clickMyLearning();
-        await catalog.searchMyLearning(elCourseName);
-        await catalog.clickCourseInMyLearning(elCourseName);
+        await catalog.searchMyLearning(instanceName);
+        await catalog.clickCourseInMyLearning(instanceName);
         await catalog.changeClass();
-        await catalog.clickSelectcourse(elCourseName1);
-        console.log(elCourseName1);
+        await catalog.clickSelectcourse(elCourseName);
         await catalog.clickEnroll();
-       // await catalog.verifyChangeClass();
-        
+     //   await catalog.verifyChangeClass();
+        // await catalog.verifyCompletedCourse(elCourseName);
+        await catalog.clickLaunchButton();
+        await catalog.saveLearningStatus();
+      //  await learnerCourse.clickReEnroll();
     })
 })

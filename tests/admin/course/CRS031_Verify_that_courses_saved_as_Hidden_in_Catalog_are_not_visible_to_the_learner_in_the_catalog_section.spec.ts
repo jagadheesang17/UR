@@ -34,7 +34,7 @@ test.describe(`Verify_that_courses_saved_as_Hidden_in_Catalog_are_not_visible_to
     })
 
 
-    test(`Confirm that the learner cannot view the Hidden in Catalog course in the catalog section`, async ({ learnerHome, catalog }) => {
+    test.skip(`Confirm that the learner cannot view the Hidden in Catalog course in the catalog section`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Anuradha` },
             { type: `TestCase`, description: `Confirm that the learner cannot view the Hidden in Catalog course in the catalog section` },

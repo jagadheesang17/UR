@@ -43,6 +43,7 @@ test.describe(`Verify past ILT Class is not available to the learner`, () => {
             await createCourse.clickCreateInstance();
         }
         await addinstance("Classroom");  
+        await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.enterSessionName(sessionName);
         await createCourse.setMaxSeat();
         await createCourse. enterpastDateValue();

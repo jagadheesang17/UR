@@ -1,6 +1,7 @@
 import { test } from "../../../customFixtures/expertusFixture";
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from "../../../data/apiData/formData";
+import { credentials } from "../../../constants/credentialData";
 
 
 let courseName = FakerData.getCourseName();
@@ -109,7 +110,7 @@ test.describe(`Verify that the learner is able to launch TP-level pre- and post-
  let title = FakerData.getCourseName();
  //let title="Primary Microchip Bypass";
 
-    test(`LP Creation with pre and post assessment attached`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`LP Creation with pre and post assessment attached`, async ({ adminHome,enrollHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Jagadish` },
             { type: `TestCase`, description: `LP Creation with pre and post assessment attached` },
@@ -142,9 +143,18 @@ test.describe(`Verify that the learner is able to launch TP-level pre- and post-
         await createCourse.clickCatalog()
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+           await adminHome.menuButton()
+                await adminHome.clickEnrollmentMenu();
+                await adminHome.clickEnroll();
+                await enrollHome.selectByOption("Learning Path");
+                await enrollHome.selectBycourse(title)
+                await enrollHome.clickSelectedLearner();
+                await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+                await enrollHome.clickEnrollBtn();
+                await enrollHome.verifytoastMessage()
     })
 
-    test(`Verify that the learner is able to launch TP-level pre- and post-video type assessment questions`, async ({ learnerHome, catalog }) => {
+    test(`Verify that the learner is able to launch TP-level pre- and post-video type assessment questions`, async ({ learnerHome,dashboard, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Jagadish` },
             { type: `TestCase`, description: `Verify that the learner is able to launch TP-level pre- and post-video type assessment questions` },
@@ -152,12 +162,13 @@ test.describe(`Verify that the learner is able to launch TP-level pre- and post-
 
         );
 
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewLearningPathDetails();
+          await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        // await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         await catalog.tpPreAssessmentLaunch();
         async function assessment() {
             await catalog.writeContent();

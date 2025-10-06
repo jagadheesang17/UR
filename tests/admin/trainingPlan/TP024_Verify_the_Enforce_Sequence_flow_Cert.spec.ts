@@ -69,7 +69,7 @@ test.describe(`Verify_the_Enforce_Sequence_flow_1`, async () => {
     })
 
     let title = FakerData.getCourseName();
-    test(`Certification with Two Single-Instance E-Learning Courses Attached`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Certification with Two Single-Instance E-Learning Courses Attached`, async ({ enrollHome,adminHome, learningPath, createCourse }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Learning Path with Two Single-Instance E-Learning Courses Attached` },
@@ -113,22 +113,32 @@ test.describe(`Verify_the_Enforce_Sequence_flow_1`, async () => {
           await createCourse.typeDescription(description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
+             await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectByOption("Certification");
+        await enrollHome.selectBycourse(title)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
 
     })
 
-    test(`Verify Enforce Sequence Flow Functionality for Learner`, async ({ learnerHome, catalog }) => {
+    test(`Verify Enforce Sequence Flow Functionality for Learner`, async ({ learnerHome,dashboard, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Verify Enforce Sequence Flow Functionality for Learner` },
             { type: `Test Description`, description: `Verify Enforce Sequence Flow Functionality for Learner` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewCertificationDetails();
+           await learnerHome.learnerLogin("LEARNERUSERNAME", "leanerURL");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.verifyTheEnrolledCertification(title);
+        await catalog.clickMoreonCourse(title);
         /* await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await catalog.clickSecondaryCourse(courseName2);

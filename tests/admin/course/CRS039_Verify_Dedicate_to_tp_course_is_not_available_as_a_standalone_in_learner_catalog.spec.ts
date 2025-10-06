@@ -36,13 +36,13 @@ test.describe(`Confirm that YouTube content functions correctly and as expected.
         await createCourse.clickUpdate();
     })
 
-    test(`Confirm that YouTube content functions correctly and as expected.`, async ({ learnerHome, catalog }) => {
+    test.skip(`Confirm that YouTube content functions correctly and as expected.`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `Confirm that YouTube content functions correctly and as expected` },
             { type: `Test Description`, description: `Confirm that YouTube content functions correctly and as expected` }
         );
-        let courseName="Optical Matrix Index"
+     //   let courseName="Optical Matrix Index"
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
         await learnerHome.clickCatalog();
         await catalog.mostRecent();

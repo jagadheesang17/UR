@@ -58,6 +58,7 @@ test.describe(`Verify_that_the_admin_cannot_delete_an_ILT_class_with_active_enro
             await createCourse.clickCreateInstance();
         }
         await addinstance("Classroom");
+        await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.enterSessionName(sessionName);
         await createCourse.setMaxSeat();
         await createCourse.enterDateValue();

@@ -28,6 +28,12 @@ export class AdminGroupPage extends PlaywrightWrapper {
         clickActivateBtn:`//span[text()='Activate']`,
         adminGroupValue: `//label[text()='Learner Group']//preceding::label[@class='form-label d-block my-0 me-1 text-break']`,
         adminGroupValueInUser: `//label[text()='Admin Group']//following::label[@class='form-label d-block my-0 me-1 text-break']`,
+
+            //adding org to admin group
+        clickOrgLink: `//label[text()='Organization ']//following::i[contains(@class,'fa-arrow-up')]`,
+        orgTreeScrollDown: `//div[@id='OrgTreeModal']//div[contains(@class,'lmsfilterscroll background_1')]`,
+        orgTree: `//div[@id='OrgTreeModal']//ul[@class='folder-tree']`,
+        okBtn: `//button[text()='OK']`,
     
     }
 
@@ -165,6 +171,32 @@ export class AdminGroupPage extends PlaywrightWrapper {
     }
     public async clickSelelctUsers() {
         await this.click(this.selectors.clickSelectUser, "Username", "Checkbox ");
+    }
+
+
+        //adding organization to admin group
+    async selectOrg(orgName: string) {
+        await this.wait("minWait");
+        await this.click(this.selectors.clickOrgLink, "Organization", "Link");
+        //     await this.page.locator("//span[@class='ms-2 information_text']").first().hover();
+        //     const orgTree = this.page.locator("//div[@id='OrgTreeModal']//div[contains(@class,'lmsfilterscroll background_1')]")
+        //     for(let i=0;i<=4;i++){
+        //     await orgTree.hover({ force: true, position: { x: 0, y: 0 } })
+        //     await this.page.mouse.down();
+        //     await this.page.mouse.move(0, 456);
+        //     await this.page.mouse.up();
+        // }
+
+        const popupLocator = this.page.locator("//div[@id='OrgTreeModal']//ul[@class='folder-tree']");
+        await popupLocator.hover();
+        for (let i = 0; i<50; i++) {
+            await this.page.mouse.wheel(0, 2000);
+            await this.page.waitForTimeout(1000);
+            await this.page.mouse.wheel(0, -10);
+        }
+        const orgCheckBox=this.page.locator(`//span[text()='${orgName}']//preceding::label[contains(@class,'custom-control-label')]//i`).last();
+        await orgCheckBox.click();
+        await this.click(this.selectors.okBtn, "OK", "Button");
     }
 
 }

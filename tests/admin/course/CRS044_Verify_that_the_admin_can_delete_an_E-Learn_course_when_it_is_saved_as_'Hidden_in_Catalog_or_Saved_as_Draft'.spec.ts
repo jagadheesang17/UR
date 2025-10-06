@@ -63,7 +63,7 @@ test.describe(`Verify_that_admin_can_delete_single_instance_Elearn_course`, asyn
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+    await createCourse.entercode("CRS1-" + generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here

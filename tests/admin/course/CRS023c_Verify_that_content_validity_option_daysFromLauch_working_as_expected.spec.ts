@@ -64,6 +64,9 @@ await enrollHome.verifytoastMessage()
             { type: `Test Description`, description: `Confirm that whether the content expired based on given criteria` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+                await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
 
 
     })
