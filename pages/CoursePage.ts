@@ -1432,7 +1432,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
             await doContentAdd("AutoPDF");
         }
         else {
-            await doContentAdd("TEST CONTENT");
+            await doContentAdd("content testing-001");
         }
     }
 

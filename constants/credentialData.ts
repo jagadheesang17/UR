@@ -297,7 +297,7 @@ switch (environmentSetup) {
         password: "Welcome1@",
       },
       COMMERCEADMIN: {
-        username: "davidmiller100",
+        username: "urpreprod@expertusone.cloud",
         password: "Welcome1@",
       },
       SUPERADMIN: {
@@ -305,7 +305,7 @@ switch (environmentSetup) {
         password: "Welcome1@",
       },
       PEOPLEADMIN: {
-        username: "davidmiller100",
+        username: "urpreprod@expertusone.cloud",
         password: "Welcome1@",
       },
       LEARNERPORTAL_User: {
