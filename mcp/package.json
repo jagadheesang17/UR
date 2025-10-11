@@ -1,0 +1,21 @@
+{
+  "name": "mcp-codegen",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Lightweight Playwright codegen harness that saves manual interactions with clear steps",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "node ./codegen.js",
+    "codegen:dry": "node ./codegen.js --dry-run",
+    "server": "node ./server.js",
+    "run:spec": "node ./server.js & timeout 2 > NUL & powershell -NoProfile -Command \"(Invoke-WebRequest -Uri 'http://127.0.0.1:${env:MCP_PORT -or 3001}/health' -UseBasicParsing).StatusCode\"",
+    "refine:run": "node ./server.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2"
+  }
+}
