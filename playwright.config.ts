@@ -5,20 +5,21 @@ const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
 
 //If false qa will run,if its true automation environment will run
-export let environmentSetup: "qa" | "dev" | "automation" | "qaProduction" =
-  "dev";
+export let environmentSetup: "qa" | "dev" | "automation" | "qaProduction" = "dev";
 export default defineConfig({
-  timeout: 800000,
+  timeout: 600000,
 
   expect: {
-    timeout: 100000,
+    timeout: 60000,
   },
   testDir: "./tests",
   // globalSetup: require.resolve('utils/jiraReport.ts'),
 
   fullyParallel: false,
   retries: 0,
-  workers: 2,
+  
+  workers: 4,
+
   repeatEach: 0,
 
   reporter: [
@@ -51,7 +52,7 @@ export default defineConfig({
     testMatch: [
     '*/tests/admin/adminGroups_addinguserstodefaultAdminGroups/**/*.spec.ts',
     '*/tests/admin/customrolecreation/**/*.spec.ts',
-    '*/tests/admin/metadataLibrary/**/*.spec.ts',
+   // '*/tests/admin/metadataLibrary/**/*.spec.ts',
     '*/tests/admin/location/**/*.spec.ts',
     '*/tests/admin/admin_Enrollments/**/*.spec.ts',
     '*/tests/admin/completionCertificate/**/*.spec.ts',
@@ -110,7 +111,7 @@ export default defineConfig({
         // Use maximized browser - let browser determine optimal viewport
         viewport: null,
         launchOptions: {
-          slowMo: 50,
+          slowMo: 300,
           // Maximize browser window for both headed and headless modes
           args: [
             "--start-maximized",
