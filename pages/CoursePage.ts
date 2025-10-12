@@ -892,10 +892,9 @@ async handleSaveUntilProceed(maxRetries = 6) {
 
     try {
       // Wait before clicking each time
-      await this.wait("mediumWait");
-
       // Click Save button
       await this.click(this.selectors.saveBtn, "Save", "Button");
+       await this.wait("maxWait");
       await this.spinnerDisappear();
       const proceedVisible = await this.page.locator(this.selectors.proceedBtn).isVisible();
       const saveVisible = await this.page.locator(this.selectors.saveBtn).isVisible();
