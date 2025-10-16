@@ -19,7 +19,7 @@ export class EnrollmentPage extends AdminHomePage {
         selectCourse: `(//input[contains(@id,'training')]/following::i)[1]`,
         selectedLearners: `//button[text()='Select Learner']`,
        // selectUser: `(//input[contains(@id,'selectedlearners')]/following::i)[2]`,
-         selectUser: (data: string) => `(//td[contains(text(),'${data}')]//following::i[contains(@class,'fa-square icon')])[1]`,
+         selectUser: (data: string) => `(//td[contains(text(),'${data}')]//following::i[contains(@class,'square icon')])[1]`,
         enrollBtn: "//button[text()='Enroll']",
         toastMeassage: `//section[contains(@class,'lms-success-msg-wrapper')]//h3`,
         enrollStatus: `(//div[contains(@id,'wrapper-enrollment-action')])[2]`,
@@ -133,11 +133,13 @@ export class EnrollmentPage extends AdminHomePage {
     }
     async enterSearchUser(data: string) {
         await this.waitSelector(this.selectors.searchcourseOrUser, "User Name")
-        await this.type(this.selectors.searchcourseOrUser, "Course Name", data)
-        const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
-        const randomIndex = Math.floor(Math.random() * index) + 1;
-        await this.click(this.selectors.userListOpt(randomIndex), "Course", "Options")
-        await this.click(this.selectors.selectUser, "Select Course", "Radio button")
+        await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
+        await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
+         await this.click("(//label[contains(@id,'selectedlearners')])[1]", "learner selection", "Button")
+        // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
+        // const randomIndex = Math.floor(Math.random() * index) + 1;
+        // await this.click(this.selectors.userListOpt(randomIndex), "Course", "Options")
+        // await this.click(this.selectors.selectUser, "Select Course", "Radio button")
     }
     async clickEnrollBtn() {
         await this.click(this.selectors.enrollBtn, "Enroll", "Button")

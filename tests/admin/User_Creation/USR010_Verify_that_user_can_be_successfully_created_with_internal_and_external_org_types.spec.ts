@@ -25,9 +25,9 @@ test.describe(`Verify_that_user_can_be_successfully_created_with_internal_and_ex
         await adminHome.user();
         await createUser.clickCreateUser();
         await createUser.verifyCreateUserLabel();
-    await createUser.uncheckInheritAddressIfPresent();
-    await createUser.uncheckInheritEmergencyContactIfPresent();
-    await createUser.uncheckAutoGenerateUsernameIfPresent();
+        await createUser.uncheckInheritAddressIfPresent();
+        await createUser.uncheckInheritEmergencyContactIfPresent();
+        await createUser.uncheckAutoGenerateUsernameIfPresent();
         await createUser.enter("first_name", FakerData.getFirstName());
         await createUser.enter("last_name", FakerData.getLastName());
         await createUser.enter("username", username);

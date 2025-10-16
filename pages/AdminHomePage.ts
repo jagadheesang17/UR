@@ -275,15 +275,19 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         await this.validateElementVisibility(this.selectors.quickAccessIcon, "QuickAccess Icon");
         await this.click(this.selectors.quickAccessIcon, "QuickAccess Icon", "Icon");
         await this.wait('mediumWait');
-        for (let index = 0; index < 5; index++) {
-            let count = await this.page.locator(this.selectors.deleteIcon).count();
-            let randomNumber = Math.floor(Math.random() * (count / 3)) + 1;
-            await this.click(`(${this.selectors.deleteIcon})[${randomNumber}]`, "Delete Icon", "Icon");
+        let count = await this.page.locator(this.selectors.deleteIcon).count();
+        for (let index = 0; index < count; index++) {
+            // Get fresh count each time as elements are being removed
+            let currentCount = await this.page.locator(this.selectors.deleteIcon).count();
+            if (currentCount === 0) break; // No more delete icons to click
+            
+            // Always click the first available delete icon since elements shift after deletion
+            await this.click(`(${this.selectors.deleteIcon})[1]`, "Delete Icon", "Icon");
             await this.wait('minWait');
             await this.click(this.selectors.yesBtn, "Yes", "Button");
         }
         await this.click(this.selectors.tickIcon, "Tick Icon", "Icon");
-        await this.spinnerDisappear();
+        // await this.spinnerDisappear();
 
     }
 
