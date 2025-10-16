@@ -347,11 +347,13 @@ export class SurveyAssessmentPage extends AdminHomePage {
 
 
   async enterPasspercentage(data: string) {
+    await this.wait('minWait');
     await this.type(this.selectors.passPercentage, "Pass Percentage", data)
   }
 
 
   async selectRandomizeOption(option: string) {
+    await this.wait('minWait');
     await this.click(this.selectors.randomizedropdown, "Randomize", "Dropdown")
     await this.click(this.selectors.randomizeOption(option), "Randomize ", "option")
   }

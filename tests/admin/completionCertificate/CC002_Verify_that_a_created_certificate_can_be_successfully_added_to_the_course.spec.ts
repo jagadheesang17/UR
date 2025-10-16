@@ -32,6 +32,7 @@ test(`Verify_that_a_created_certificate_can_be_successfully_added_to_the_course`
     await createCourse.clickCertificateCheckBox();
     await createCourse.clickAdd();
     await createCourse.clickCatalog();
+    await createCourse.typeDescription("This is a new course by name :" + description);
     await createCourse.clickUpdate();
     await createCourse.verifySuccessMessage()
 })
