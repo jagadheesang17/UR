@@ -63,7 +63,7 @@ test.describe(`Verify_that_courses_saved_as_Hidden_in_Catalog_are_not_visible_to
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
     await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+    await createCourse.entercode("CRS" + "-" + generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here

@@ -46,7 +46,7 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-                await createCourse.typeDescription(description);
+        await createCourse.typeDescription(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
@@ -73,6 +73,7 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await addinstance("E-Learning");
         await createCourse.enter("course-title", elCourseName);
         await createCourse.contentLibrary();
+        await createCourse.typeDescription(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();

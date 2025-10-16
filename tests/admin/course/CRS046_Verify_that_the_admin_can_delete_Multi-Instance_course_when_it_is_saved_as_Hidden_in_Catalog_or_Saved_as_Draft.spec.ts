@@ -64,6 +64,7 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
         await createCourse.enterDateValue();
         await createCourse.startandEndTime();
         await createCourse.selectInstructor(instructorName);
+        await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.selectLocation();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
@@ -82,7 +83,9 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
         await adminHome.clickCourseLink();
         await createCourse.catalogSearch(courseName);
         await createCourse.clickEditIcon();
+        await createCourse.typeDescription("This is an edited course by name :" + courseName);
         await createCourse.clickHideinCatalog();
+
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         await createCourse.clickEditCourseTabs();
@@ -139,6 +142,7 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
         await createCourse.startandEndTime();
         await createCourse.selectInstructor(instructorName);
         await createCourse.selectLocation();
+        await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.clickSaveasDraft();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();

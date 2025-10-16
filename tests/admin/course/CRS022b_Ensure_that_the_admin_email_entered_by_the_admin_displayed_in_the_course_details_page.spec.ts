@@ -21,7 +21,7 @@ test(`Enter the Customer_Admin email into the Contact email field`, async ({ adm
     await adminHome.menuButton();
     await adminHome.people();
     await adminHome.user();
-    await createUser.typeAndSelectIUser(credentials.LEARNERADMIN.username);
+    await createUser.typeAndSelectIUser("Tamara_Klein12@hotmail.com");
     // await createUser.enter("email", FakerData.getEmail());
     // await createUser.updateUser();
     // await createUser.verifyUserCreationSuccessMessage();
