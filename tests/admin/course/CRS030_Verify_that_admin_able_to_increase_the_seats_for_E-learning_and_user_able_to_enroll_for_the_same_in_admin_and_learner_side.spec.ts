@@ -90,7 +90,8 @@ test.describe(`Verify that admin able to increase the seats for E-learning and u
         await createCourse.catalogSearch(courseName)
         await createCourse.clickEditIcon();
         await createCourse.setSeatsMax('3')
-        await createCourse.clickCatalog();
+        await createCourse.typeDescription("This is a new course by name :" + description);
+       // await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
     })

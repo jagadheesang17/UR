@@ -133,9 +133,13 @@ export class EnrollmentPage extends AdminHomePage {
     }
     async enterSearchUser(data: string) {
         await this.waitSelector(this.selectors.searchcourseOrUser, "User Name")
+         await this.page.fill(this.selectors.searchcourseOrUser, '');
         await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
         await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
-         await this.click("(//label[contains(@id,'selectedlearners')])[1]", "learner selection", "Button")
+        await this.wait("minWait")
+        await this.waitSelector(`(//td[text()='${data}']//following::i)[2]`, "User")
+        await this.click(`(//td[text()='${data}']//following::i)[2]`, "User", "Radio button")
+        // await this.click("(//label[contains(@id,'selectedlearners')])[1]", "learner selection", "Button")
         // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
         // const randomIndex = Math.floor(Math.random() * index) + 1;
         // await this.click(this.selectors.userListOpt(randomIndex), "Course", "Options")
@@ -303,9 +307,12 @@ export class EnrollmentPage extends AdminHomePage {
         await this.verification(this.selectors.seatMaxPopupMsg, "You have exceeded the maximum seat for this training")
         await this.click(this.selectors.clickYesBtn, "Yes", "Button")
     }
+
+
+
     async verifyMaxSeatPopup() {
         await this.wait('mediumWait');
-        await this.verification(this.selectors.seatMaxPopupMsg, "was not successful")
+        await this.verification(this.selectors.seatMaxPopupMsg, "max seat reachedseat available only for 0 users")
         await this.click(this.selectors.okBtn, "Ok", "Button")
     }
     async clickEnrollButton() {

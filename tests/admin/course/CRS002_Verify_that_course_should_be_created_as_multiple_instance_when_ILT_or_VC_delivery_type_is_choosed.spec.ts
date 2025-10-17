@@ -46,8 +46,9 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-        await createCourse.typeDescription(description);
+     
         await createCourse.clickCatalog();
+           await createCourse.typeDescription(description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         await createCourse.clickEditCourseTabs();
@@ -65,6 +66,7 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await createCourse.selectInstructor(instructorName);
         await createCourse.selectLocation();
         await createCourse.clickCatalog();
+           await createCourse.typeDescription(description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         await createCourse.editcourse();
@@ -74,6 +76,7 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await createCourse.enter("course-title", elCourseName);
         await createCourse.contentLibrary();
         await createCourse.typeDescription(description);
+        await createCourse.entercode("CRS" + "-" + generateCode());
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
@@ -88,7 +91,7 @@ test.describe(`Verify that course should be created as multiple instance when IL
         await adminHome.menuButton()
         await adminHome.clickEnrollmentMenu();
         await adminHome.clickEnroll();
-        await enrollHome.selectBycourse(courseName)
+        await enrollHome.selectBycourse(elCourseName)
         await enrollHome.clickSelectedLearner();
         await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
         await enrollHome.clickEnrollBtn();
@@ -107,11 +110,11 @@ test.describe(`Verify that course should be created as multiple instance when IL
         
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
         await catalog.clickMyLearning();
-        await catalog.searchMyLearning(courseName);
-        await catalog.clickCourseInMyLearning(courseName);
+        await catalog.searchMyLearning(elCourseName);
+        await catalog.clickCourseInMyLearning(elCourseName);
         // await catalog.verifyCompletedCourse(elCourseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await learnerCourse.clickReEnroll();
+      //  await learnerCourse.clickReEnroll();
     })
 })

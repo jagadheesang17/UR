@@ -11,6 +11,7 @@ export class LearnerDashboardPage extends LearnerHomePage {
         learningPathAndCertification: "//div[@id='mydashboard']//div[text()='Learning path / Certification']",
         certification: "a:text-is('Certification')",
         certificationInput: "#exp-searchundefined input",
+         verify: (titleName: string) => `//h5[text()='${titleName}']`,
         verifyText: (titleName: string) => `//div[text()='${titleName}']`,
         recertifyIcon: (course: string) => `//div[text()='${course}']//following::i[contains(@class,'certificate')]`,
         pendingLabel: "//span[contains(text(),'Pending')]",
@@ -122,8 +123,8 @@ export class LearnerDashboardPage extends LearnerHomePage {
     }
 
     async verifyTheEnrolledCertification(data: string) {
-        await this.validateElementVisibility(this.selectors.verifyText(data), "Certification");
-        await this.verification(this.selectors.verifyText(data), data);
+        await this.validateElementVisibility(this.selectors.verify(data), "Certification");
+        await this.verification(this.selectors.verify(data), data);
     }
 
     async pendingTab(course: string) {

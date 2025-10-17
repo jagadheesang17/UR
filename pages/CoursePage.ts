@@ -816,6 +816,8 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
     }
 
     async typeDescription(data: string) {
+        // Wait for the description field to be visible before interacting with it
+        await this.page.waitForSelector(this.selectors.courseDescriptionInput, { state: 'visible', timeout: 30000 });
         await this.type(this.selectors.courseDescriptionInput, "Description", data);
     }
 
@@ -1347,6 +1349,7 @@ async handleSaveUntilProceed(maxRetries = 6) {
     }
 
     async clickUpdate() {
+        await this.wait('minWait');
         await this.page.locator(this.selectors.updateBtn).scrollIntoViewIfNeeded();
         await this.click(this.selectors.updateBtn, "update", "field");
         const locator = this.page.locator(this.selectors.willResolveLaterBtn);
@@ -1372,6 +1375,8 @@ async handleSaveUntilProceed(maxRetries = 6) {
 
     async save_editedcoursedetails() {
         await this.click(this.selectors.detailsbtn, "details", "button");
+        await this.wait('mediumWait'); // Wait for details tab to load
+        await this.typeDescription("edited course description");
         await this.clickCatalog();
         await this.validateElementVisibility(this.selectors.courseUpdateBtn, "button");
         await this.click(this.selectors.courseUpdateBtn, "Update", "button");

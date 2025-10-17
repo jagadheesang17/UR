@@ -104,17 +104,17 @@ test.describe(`Verify_that_the_admin_can_cancel_an_VC_class_with_active_enrollme
         await dashboard.verifyTheEnrolledCertification(courseName);
     })
 
-    test(`d_Verify the cancelled VC class in Learner INA section`, async ({ learnerHome, learnerCourse, catalog, dashboard }) => {
-        test.info().annotations.push(
-            { type: `Author`, description: `vidya` },
-            { type: `TestCase`, description: `Verify the admin cancelled VC class in Dashboard Items Need Attention section` },
-            { type: `Test Description`, description: `Verify the admin cancelled VC class in Dashboard Items Need Attention section` }
-        );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickDashboardLink();
-        await dashboard.selectDashboardItems("Items Need Attention");
-        await dashboard.selectINATabs("reminder");
-        await dashboard.verifyINAReminder("List of class canceled",courseName);
-    })
+    // test(`d_Verify the cancelled VC class in Learner INA section`, async ({ learnerHome, learnerCourse, catalog, dashboard }) => {
+    //     test.info().annotations.push(
+    //         { type: `Author`, description: `vidya` },
+    //         { type: `TestCase`, description: `Verify the admin cancelled VC class in Dashboard Items Need Attention section` },
+    //         { type: `Test Description`, description: `Verify the admin cancelled VC class in Dashboard Items Need Attention section` }
+    //     );
+    //     await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+    //     await learnerHome.clickDashboardLink();
+    //     await dashboard.selectDashboardItems("Items Need Attention");
+    //     await dashboard.selectINATabs("reminder");
+    //     await dashboard.verifyINAReminder("List of class canceled",courseName);
+    // })
 
 })

@@ -48,6 +48,7 @@ test.describe(`Verify_that_the_admin_can_mark_an_e-learn_course_as_complete_when
             await createCourse.catalogSearch(courseName);
             await createCourse.clickEditIcon();
             //await createCourse.clickEditInstance();
+              await createCourse.contentLibrary();
             await createCourse.clickClassComplete();
             await createCourse.clickUpdate();
 

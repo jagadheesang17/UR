@@ -58,6 +58,7 @@ test.describe(`Verify_that_admin_cannot_delete_single_instance_Elearn_course_wit
         await createCourse.catalogSearch(courseName);
         await createCourse.clickEditIcon();
         await createCourse.clickHideinCatalog();
+        await createCourse.wait('minWait');
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         await createCourse.editcourse();
