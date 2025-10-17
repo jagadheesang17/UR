@@ -49,7 +49,7 @@ export class LearnerGroupPage extends PlaywrightWrapper {
     }
 
     async getLearnerGroups() {
-        await this.wait("mediumWait");
+        await this.wait("maxWait");
         const locator = this.page.locator(this.selectors.learnerGroupValue);
         const count = await locator.count();
         let learnerGroup: any = [];
@@ -67,7 +67,10 @@ export class LearnerGroupPage extends PlaywrightWrapper {
         return learnerGroups;
     }
     async verifyGroups(actual: string[], expected: string[]) {
-        expect(actual).toEqual(expected);
+        // Sort both arrays to make comparison order-independent
+        const sortedActual = [...actual].sort();
+        const sortedExpected = [...expected].sort();
+        expect(sortedActual).toEqual(sortedExpected);
     }
 
 

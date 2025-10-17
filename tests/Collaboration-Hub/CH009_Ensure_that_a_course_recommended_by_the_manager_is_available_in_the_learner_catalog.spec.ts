@@ -18,8 +18,8 @@ test.describe(`Ensure_that_a_course_recommended_by_the_manager_is_available_in_t
         await adminHome.clickLearningMenu();
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
-    await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enterCode("CRS-" + generateCode());
+        await createCourse.verifyCreateUserLabel("CREATE COURSE");
+        await createCourse.enterCode("CRS-" + generateCode());
         await createCourse.enter("course-title", courseName);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);

@@ -168,7 +168,7 @@ test.describe(`Certification_with_multi_instance_course_is_attached`, async()=>{
         await adminHome.menuButton();
         await adminHome.clickLearningMenu();
         await adminHome.clickCertification();
-    await createCourse.catalogSearch("Bulk_Instance")
+         await createCourse.catalogSearch("Back-end Bandwidth Back up")
 
         // await learningPath.clickCreateCertification();
         // await learningPath.title(title);

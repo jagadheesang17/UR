@@ -1,4 +1,5 @@
 import { test } from "../../customFixtures/expertusFixture"
+import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from '../../utils/fakerUtils';
 
 const courseName = FakerData.getCourseName();
@@ -19,6 +20,7 @@ test.describe(`Confirm that YouTube content functions correctly and as expected.
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.enter("course-title", courseName);
+        await createCourse.entercode("CRS-" + generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here

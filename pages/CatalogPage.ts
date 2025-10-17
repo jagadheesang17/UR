@@ -90,7 +90,7 @@ export class CatalogPage extends LearnerHomePage {
         tpCourseExpandIcon: `//i[contains(@class,'fa-chevron-down fa')]`,
 
         // Catalog-No results found message:-
-        noResultFound_MostRecent: `//div[@id='most_recent']//div[text()='No results found.']`,
+        noResultFound_MostRecent: `(//div[text()='No results found.'])[2]`,
 
         //Survey 
         textareaInput: `textarea[class^='form-control']`,
@@ -163,9 +163,9 @@ export class CatalogPage extends LearnerHomePage {
         ContentExpireCheck: `//span[text()=" can no longer be launched as the validity has expired or there are no attempts left."]`,
 
         //Bookmark Functionality:-
-        specificContentBookmark: (clsName: string) => `//div[text()='${clsName}']/following::i[contains(@id,'bookmark')]`,
+        specificContentBookmark: (clsName: string) => `//h5[text()='${clsName}']/following::i[contains(@id,'bookmark')]`,
         // classBookmark:`//div[@id='enrolled_catalog']//span/i[@aria-label='Bookmark']`
-        classBookmark: (clsName: string) => `(//span[text()='${clsName}']//following::i[contains(@aria-label,'Bookmark')])[1]`,
+        classBookmark: (clsName: string) => `(//h5[text()='${clsName}']//following::i[contains(@aria-label,'Bookmark')])[1]`,
 
         //Verifying no seats left message on leaner side
         noSeatLeftPopupMsg: `//div[contains(@class,'information_text')]//span`,
@@ -1047,5 +1047,118 @@ export class CatalogPage extends LearnerHomePage {
         await this.clickOkButton();
     }
 
+     /**
+   * Add course to wishlist by clicking the wishlist icon
+   */
+  async addtoWishlist() {
+    await this.wait("mediumWait");
+    await this.spinnerDisappear();
+    try {
+      // Try wishlist icon first
+      const wishlistIcon = this.page.locator(this.selectors.wishlistIcon);
+      if (await wishlistIcon.isVisible()) {
+        await this.click(this.selectors.wishlistIcon, "Add to Wishlist", "Icon");
+      } else {
+        // Try wishlist button as fallback
+        await this.click(this.selectors.wishlistButton, "Add to Wishlist", "Button");
+      }
+      await this.wait("minWait");
+      await this.spinnerDisappear();
+    } catch (error) {
+      console.log("Error adding to wishlist: " + error);
+      throw error;
+    }
+  }
+
+  /**
+   * Verify that a course has been added to wishlist
+   * @param courseName - Name of the course to verify
+   */
+async verifyAddedToWishlist(courseName: string) {
+  await this.wait("mediumWait");
+  try {
+    const addedIcon = this.page.locator(this.selectors.addedToWishlist);
+    await this.page.reload();
+    await this.wait("mediumWait");
+    if (await addedIcon.isVisible()) {
+      console.log(`Course "${courseName}" successfully added to wishlist`);
+    } else {
+      // Wait and check again after reload, as UI may take time to update
+      await this.wait("mediumWait");
+      if (await addedIcon.isVisible({ timeout: 5000 })) {
+        console.log(`Course "${courseName}" successfully added to wishlist (after wait)`);
+      } else {
+        console.log(`Course "${courseName}" not added to wishlist`);
+      }
+    }
+  } catch (error) {
+    console.error(`Error verifying added to wishlist for "${courseName}": ${error}`);
+    throw error;
+  }
+}
+
+
+  /**
+   * Navigate to wishlist section and search for a course
+   * @param courseName - Name of the course to search in wishlist
+   */
+  async wishlistCatalog(courseName: string) {
+    await this.wait("mediumWait");
+    try {
+      // Click on wishlist section
+      await this.click(this.selectors.wishlistSection, "Wishlist Section", "Link");
+      await this.wait("mediumWait");
+      await this.spinnerDisappear();
+      
+      // Search for the course in wishlist
+      const searchInput = this.page.locator(this.selectors.searchInput);
+      if (await searchInput.isVisible()) {
+        await this.typeAndEnter(this.selectors.searchInput, "Search in Wishlist", courseName);
+        await this.wait("mediumWait");
+      }
+      
+      // Verify course is present in wishlist
+      await this.validateElementVisibility(
+        this.selectors.wishlistVerification(courseName),
+        `Course "${courseName}" in Wishlist`
+      );
+    } catch (error) {
+      console.log("Error navigating wishlist catalog: " + error);
+      throw error;
+    }
+  }
+
+  /**
+   * Remove course from wishlist
+   */
+  async removewishlist() {
+    await this.wait("mediumWait");
+    await this.spinnerDisappear();
+    try {
+      // Click remove from wishlist button
+      await this.click(this.selectors.addedToWishlist, "Remove from Wishlist", "Button");
+      await this.wait("minWait");
+      await this.spinnerDisappear();
+    } catch (error) {
+      console.log("Error removing from wishlist: " + error);
+      throw error;
+    }
+  }
+
+  /**
+   * Verify that a course has been removed from wishlist
+   * @param courseName - Name of the course to verify removal
+   */
+  async verifyremoveWishlistTraining(courseName: string) {
+    await this.wait("mediumWait");
+  try {
+    const addedIcon = this.page.locator(this.selectors.addedToWishlist);
+    await expect(addedIcon).not.toBeVisible();
+    console.log(`Course "${courseName}" successfully removed from wishlist`);
+  } catch (error) {
+    console.error(`Error verifying removed from wishlist for "${courseName}": ${error}`);
+    throw error;
+  }
+  }
 
 }

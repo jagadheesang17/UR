@@ -360,6 +360,7 @@ export class CoursePage extends AdminHomePage {
     }
 
     async entercode(code: string) {
+        await this.wait("maxWait");
         await this.validateElementVisibility(this.selectors.codeInput, "Code Input");
         await this.type(this.selectors.codeInput, "Code Input", code);
     }
@@ -885,7 +886,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
 
     await this.handleSaveUntilProceed();
   }
-async handleSaveUntilProceed(maxRetries = 6) {
+    async handleSaveUntilProceed(maxRetries = 6) {
   let attempt = 0;
 
   while (attempt < maxRetries) {
@@ -895,9 +896,10 @@ async handleSaveUntilProceed(maxRetries = 6) {
     try {
       // Wait before clicking each time
       // Click Save button
+      await this.wait("maxWait");
       await this.click(this.selectors.saveBtn, "Save", "Button");
-       await this.wait("maxWait");
-      await this.spinnerDisappear();
+      await this.wait("maxWait");
+      await this.wait("maxWait");
       const proceedVisible = await this.page.locator(this.selectors.proceedBtn).isVisible();
       const saveVisible = await this.page.locator(this.selectors.saveBtn).isVisible();
 

@@ -144,7 +144,7 @@ export class AdminGroupPage extends PlaywrightWrapper {
     }
 
     async getAdminGroups() {
-        await this.wait("mediumWait");
+        await this.wait("maxWait");
         const locator = this.page.locator(this.selectors.adminGroupValue);
         const count = await locator.count();
         let adminGroup: any = [];

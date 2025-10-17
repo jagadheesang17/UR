@@ -28,7 +28,7 @@ export class ProfilePage extends LearnerHomePage {
         TimeZoneSearch: "//label[text()='TimeZone']/following::input[1]",
         oneProfile: "//a[text()='ONE-Profile']",
         oneProfileClick: "(//a[text()='Click Here'])[1]",
-        oneProfilePage: "//h1[text()='One-Profile CEU Summary']",
+        oneProfilePage: "//h1[text()='Professional Training Profile Summary']",
         timezoneOptions: (option: string) => `(//span[contains(text(),'${option}')])[1]`,
         PreferenceLanguagesWrapper: "//label[text()='Language']/following::div[@id='wrapper-lnr_languages']",
         PreferenceLanguageInput: `//label[text()='Language']/following::input[1]`,

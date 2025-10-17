@@ -1,4 +1,5 @@
 import { test } from "../../customFixtures/expertusFixture";
+import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from "../../utils/fakerUtils";
 
 let courseName = FakerData.getCourseName();
@@ -20,6 +21,7 @@ test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certificatio
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
+        await createCourse.entercode("CRS-" + generateCode());
         await createCourse.enter("course-title", courseName);
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");

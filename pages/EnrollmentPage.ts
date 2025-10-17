@@ -181,6 +181,7 @@ export class EnrollmentPage extends AdminHomePage {
     }
 
     async selectEnrollOrCancel(data: string) {
+        await this.wait("minWait");
         await this.click(this.selectors.enrollStatus, "Enroll Status", "Dropdown")
         //await this.click(this.selectors.enrollORCancel(data).first(),"Enroll Status","Option")
         await this.page.locator(this.selectors.enrollORCancel(data)).first().click({ force: true });

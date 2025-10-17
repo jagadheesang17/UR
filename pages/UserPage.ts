@@ -444,6 +444,8 @@ export class UserPage extends AdminHomePage {
 
     //End Impersonation
     async clickendImpersonation() {
+        await this.wait("maxWait")
+        await this.validateElementVisibility(this.selectors.endImpersonation, "End Impersonation")
         await this.click(this.selectors.endImpersonation, "End Impersonation", "Link")
         await this.wait("minWait");
     }

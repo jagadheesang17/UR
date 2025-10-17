@@ -27,9 +27,9 @@ test.describe(`TC109 One profile`, async () => {
             await adminHome.people();
             await adminHome.user();
             await createUser.clickCreateUser();
-             await createUser.uncheckInheritAddressIfPresent();
-    await createUser.uncheckInheritEmergencyContactIfPresent();
-    await createUser.uncheckAutoGenerateUsernameIfPresent();
+            await createUser.uncheckInheritAddressIfPresent();
+            await createUser.uncheckInheritEmergencyContactIfPresent();
+            await createUser.uncheckAutoGenerateUsernameIfPresent();
             await createUser.enter("first_name", FakerData.getFirstName());
             await createUser.enter("last_name", FakerData.getLastName());
             await createUser.enter("username", username);
@@ -49,7 +49,7 @@ test.describe(`TC109 One profile`, async () => {
             await createUser.selectLanguage("English");
             await createUser.organizationType("Internal")
             await createUser.clickSave();
-            await createUser.clickProceed("Proceed");
+            // await createUser.clickProceed("Proceed");
             await createUser.verifyUserCreationSuccessMessage();
             await createUser.clickLogOutButton();
         }

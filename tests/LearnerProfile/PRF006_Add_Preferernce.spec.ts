@@ -4,7 +4,9 @@ import { readDataFromCSV } from '../../utils/csvUtil';
 import { updateJiraIssue } from '../../jira/jira-integration';
 import { logADefectInJira } from '../../jira/log-a-defect';
 import { generateCode } from '../../data/apiData/formData';
+import { credentials } from '../../constants/credentialData';
 
+let createdCode: any
 const courseName = FakerData.getCourseName();
 const description = FakerData.getDescription();
 let CEUVALUE: string;
@@ -14,7 +16,7 @@ let jiraIssueKey: string | undefined; // Declare jiraIssueKey at the top level
 test.describe(`TC110 Add Preferernce`, async () => {
     test.describe.configure({ mode: 'serial' })
 
-    test(`TC060_TP_Prerequisite_Course1_Elearning`, async ({ adminHome, createCourse }) => {
+    test(`TC060_TP_Prerequisite_Course1_Elearning`, async ({ adminHome, createCourse ,contentHome,enrollHome}) => {
         test.info().annotations.push(
             { type: `Author`, description: `Ajay Michael` },
             { type: `TestCase`, description: `TP Prerequisite Course1 Elearning` },
@@ -35,18 +37,21 @@ test.describe(`TC110 Add Preferernce`, async () => {
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
-        await createCourse.modifyTheAccess();
-        await createCourse.clickCEULink();
-        CEUPROVIDER = await createCourse.fillCEUProviderType();
-        console.log(CEUPROVIDER);
-        CEUVALUE = await createCourse.fillCEUType();
-        console.log(CEUVALUE);
-        await createCourse.fillUnit();
-        await createCourse.clickAddCEUButton();
-        await createCourse.clickDetailButton()
-        await createCourse.clickCatalog();
-        await createCourse.clickUpdate();
+        await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
 
     })
 
@@ -57,12 +62,9 @@ test.describe(`TC110 Add Preferernce`, async () => {
             { type: `Test Description`, description: `Verify that course should be created for Single instance` }
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickMoreonCourse(courseName);
-        await catalog.clickSelectcourse(courseName);
-        await catalog.clickEnroll();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
     })
@@ -81,28 +83,29 @@ test.describe(`TC110 Add Preferernce`, async () => {
                 await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
                 await profile.clickProfile();
                 await profile.preferenceTab();
+                // await profile.ceuType();
+                await profile.creditPeriod("March")
                 await profile.preferenceTimeZone("GMT");
+                await profile.creditScore()
+                await profile.selectDateFormat();
                 await profile.selectLanguage()
                 await profile.selectCurrency()
-                await profile.selectCountry()
-                await profile.city()
-                await profile.selectDateFormat();
-                await profile.selectDetailsPage()
-                await profile.ceuType();
-                await profile.creditPeriod("March")
-                await profile.creditScore()
-                await profile.address1()
-                await profile.address2()
-                await profile.zipcode()
-                await profile.mobile()
-                await profile.phone()
-                await profile.selectDepartment()
-                await profile.employeeId()
-                await profile.selectEmployeeType();
-                await profile.selectJobRole();
-                await profile.selectJobTitle();
-                await profile.selectOrganization()
-                await profile.selectUserType()
+
+                // await profile.selectDetailsPage()
+                // await profile.selectCountry()
+                // await profile.city()
+                // await profile.address1()
+                // await profile.address2()
+                // await profile.zipcode()
+                // await profile.mobile()
+                // await profile.phone()
+                // await profile.selectDepartment()
+                // await profile.employeeId()
+                // await profile.selectEmployeeType();
+                // await profile.selectJobRole();
+                // await profile.selectJobTitle();
+                // await profile.selectOrganization()
+                // await profile.selectUserType()
                 await profile.clickSave()
                 await profile.verifySavedChanges()
 

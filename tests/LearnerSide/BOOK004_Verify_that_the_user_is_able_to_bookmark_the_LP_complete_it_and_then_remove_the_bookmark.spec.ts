@@ -1,12 +1,15 @@
+import { credentials } from "../../constants/credentialData";
 import { test } from "../../customFixtures/expertusFixture";
+import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from "../../utils/fakerUtils";
 
+let createdCode: any
 let courseName = FakerData.getCourseName();
 let description = FakerData.getDescription();
 let domain: any
 test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_it_and_then_remove_the_bookmark.spec.ts`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of E-learning single instance `, async ({ adminHome, createCourse, learningPath }) => {
+    test(`Creation of E-learning single instance `, async ({ adminHome, createCourse, learningPath ,contentHome ,enrollHome }) => {
 
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
@@ -21,6 +24,7 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.enter("course-title", courseName);
+        await createCourse.entercode("CRS-" + generateCode());
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
@@ -33,6 +37,22 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()  
+
+
+
 
     })
     const title = FakerData.getCourseName();
@@ -78,10 +98,6 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
 
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
         await catalog.clickViewCertificationDetails();
         await catalog.bookmarkClass(title);
         // await catalog.clickLaunchButton();

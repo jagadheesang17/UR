@@ -1,7 +1,10 @@
+import { credentials } from "../../constants/credentialData";
 import { URLConstants } from "../../constants/urlConstants";
 import { test } from "../../customFixtures/expertusFixture";
+import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from '../../utils/fakerUtils';
 
+let createdCode: any
 const courseName1 ="crsbookmark"+" "+ FakerData.getCourseName();
 const description = FakerData.getDescription();
 let contentName: any;
@@ -11,7 +14,7 @@ const pageUrl = URLConstants.adminURL;
 
 test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_and_then_remove_the_bookmark.spec.ts`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome, createCourse }) => {
+    test(`Creation of Single Instance Elearning with Youtube content`, async ({ adminHome, createCourse ,enrollHome,contentHome}) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Creation of Single Instance Elearning with Youtube content` },
@@ -25,6 +28,7 @@ test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_a
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.enter("course-title", courseName1);
+        await createCourse.entercode("CRS-" + generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here
@@ -33,6 +37,20 @@ test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_a
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
+
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName1)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName1)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()        
     })
 
     test(`Learner registration and Bookmark the course.`, async ({ learnerHome, adminHome, catalog }) => {
@@ -44,12 +62,8 @@ test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_a
         //    await adminHome.clearBrowserCache(pageUrl)
 
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName1);
-        await catalog.clickMoreonCourse(courseName1);
-        await catalog.clickSelectcourse(courseName1);
-        await catalog.clickEnroll();
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName1);
         await catalog.bookmarkClass(courseName1);
        // await catalog.bookmarkSpecificContent(contentName);
 
