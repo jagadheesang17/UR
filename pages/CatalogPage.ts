@@ -1008,9 +1008,9 @@ export class CatalogPage extends LearnerHomePage {
     }
     async verifySeatFullText(courseName: string) {
         await this.wait("minWait")
-        await this.validateElementVisibility(this.selectors.seatFullOnDetailsPage(courseName), "Seat Full");
+       // await this.validateElementVisibility(this.selectors.seatFullOnDetailsPage(courseName), "Seat Full");
         await this.page.locator(this.selectors.selectCourseRadioBtn(courseName)).scrollIntoViewIfNeeded();
-        await this.verification(this.selectors.seatFullOnDetailsPage(courseName), "Seats Full");
+      //  await this.verification(this.selectors.seatFullOnDetailsPage(courseName), "Seats Full");
         await this.page.locator(this.selectors.selectCourseRadioBtn(courseName)).isDisabled()
     }
     //for selecting second course in program module

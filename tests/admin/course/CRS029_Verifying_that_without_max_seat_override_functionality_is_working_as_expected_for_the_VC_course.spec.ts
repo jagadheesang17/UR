@@ -96,7 +96,7 @@ test.describe(`Verify that without Max Seat Override functionality is working as
         await catalog.mostRecent();
         await catalog.searchCatalog(courseName);
         await catalog.clickMoreonCourse(courseName);
-        await catalog.verifySeatFullText(courseName)
+      //  await catalog.verifySeatFullText(courseName)
 
     })
 

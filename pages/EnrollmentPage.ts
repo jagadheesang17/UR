@@ -119,14 +119,23 @@ export class EnrollmentPage extends AdminHomePage {
 
     }
 
-    async selectBycourse(data: string) {
-        await this.type(this.selectors.searchcourseOrUser, "Course Name", data)
-        const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
-        const randomIndex = Math.floor(Math.random() * index) + 1;
-        await this.click(this.selectors.courseListOpt(randomIndex), "Course", "Options")
-        await this.click(this.selectors.selectCourse, "Select Course", "Radio button")
 
-    }
+    async selectBycourse(data: string) {
+        await this.wait("minWait")
+        await this.waitSelector(this.selectors.searchcourseOrUser, "Course Name")
+        await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
+        await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
+        await this.wait("minWait")
+        await this.waitSelector(`//div[text()='${data}']/following::label[@class='custom-control-label']/i[1]`, "User")
+        await this.click(`//div[text()='${data}']/following::label[@class='custom-control-label']/i[1]`, "User", "Radio button")
+         //div[text()='CRS Haptic Card Synthesize']
+       
+        // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
+        // const randomIndex = Math.floor(Math.random() * index) + 1;
+        // await this.click(this.selectors.courseListOpt(randomIndex), "Course", "Options")
+        // await this.click(this.selectors.selectCourse, "Select Course", "Radio button")
+
+    }   
     async clickSelectedLearner() {
         await this.click(this.selectors.selectedLearners, "Select Learners", "Button")
 
@@ -150,7 +159,7 @@ export class EnrollmentPage extends AdminHomePage {
     }
     async verifytoastMessage() {
         await this.verification(this.selectors.toastMeassage, "Enrollment")
-    }
+    }s
     // async selectEnrollOrCancel(data:string){
     //     await this.click(this.selectors.enrollStatus,"Enroll Status","Dropdown")
     //     await this.click(this.selectors.enrollORCancel(data),"Enroll Status","Option")

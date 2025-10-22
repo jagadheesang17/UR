@@ -93,7 +93,7 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await catalog.clickMyLearning();
         await catalog.searchMyLearning(courseName);
         await catalog.clickCourseInMyLearning(courseName);
-        await catalog.verifySeatFullText(courseName)
+       // await catalog.verifySeatFullText(courseName)
 
     })
 

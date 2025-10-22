@@ -1379,7 +1379,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
         await this.click(this.selectors.detailsbtn, "details", "button");
         await this.wait('mediumWait'); // Wait for details tab to load
         await this.typeDescription("edited course description");
-        await this.clickCatalog();
+       // await this.clickCatalog();
         await this.validateElementVisibility(this.selectors.courseUpdateBtn, "button");
         await this.click(this.selectors.courseUpdateBtn, "Update", "button");
     }

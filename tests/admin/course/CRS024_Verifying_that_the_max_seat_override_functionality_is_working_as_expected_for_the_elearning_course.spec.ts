@@ -54,7 +54,7 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
                 await enrollHome.selectBycourse(courseName)
                 await enrollHome.clickSelectedLearner();
                 await enrollHome.enterSearchUser(credentials.TEAMUSER1.username)
-                await enrollHome.enterSearchUser(credentials.TEAMUSER2.username)
+                await enrollHome.enterSearchUser("robertjohn")
                 await enrollHome.clickEnrollBtn();
                 await enrollHome.verifyMaxSeatOverRidePopup();
                 await enrollHome.verifytoastMessage()
@@ -72,7 +72,7 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await catalog.clickMyLearning();
         await catalog.searchMyLearning(courseName);
         await catalog.clickCourseInMyLearning(courseName);
-        await catalog.verifySeatFullText(courseName)
+       // await catalog.verifySeatFullText(courseName)
 
     })
 

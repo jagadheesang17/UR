@@ -108,6 +108,8 @@ test.describe(`Verify_that_the_admin_can_cancel_an_ILT_class_with_no_enrollments
             await createCourse.clickEditIcon();
             await createCourse.clickClassEnrollmentILTVCType();
             await enrollHome.selectEnroll();
+            await enrollHome.selectBycourse(courseName);
+            await enrollHome.clickSelectedLearner();
             await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username);
             await enrollHome.clickEnrollBtn();
             await enrollHome.clickOkBtn();

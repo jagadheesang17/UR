@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from "path";
 import { URLConstants } from "../constants/urlConstants";
 import { getRandomItemFromFile } from "../utils/jsonDataHandler";
+import { tr } from "@faker-js/faker";
 
 
 export class SiteAdminPage extends AdminHomePage {
@@ -128,9 +129,18 @@ emailUsed:string="";
 
   //Max Seat Override
     async clickBusinessRulesEditIcon() {
+        try{
         await this.wait("mediumWait")
         await this.validateElementVisibility(this.selectors.businessRulesEditIcon, "Business Rules Edit")
         await this.click(this.selectors.businessRulesEditIcon, "Business Rules Edit", "Button")
+    }catch(error){
+         await this.validateElementVisibility(this.selectors.adminConfigLink, "Admin Configuration");
+            await this.mouseHover(this.selectors.adminConfigLink, "Admin Configuration");
+            await this.click(this.selectors.adminConfigLink, "Admin Configuration", "Button");
+         await this.wait("mediumWait")
+        await this.validateElementVisibility(this.selectors.businessRulesEditIcon, "Business Rules Edit")
+        await this.click(this.selectors.businessRulesEditIcon, "Business Rules Edit", "Button")      
+    }
     }
     async maxSeatOverRideInBusinessRules(data?: string) {
         await this.wait("mediumWait");

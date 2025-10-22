@@ -454,9 +454,9 @@ export class UserPage extends AdminHomePage {
 
     async typeAndSelectIUser(data: string) {
         await this.wait("minWait")
-        await this.type(this.selectors.searchField, "search", data);
-        await this.validateElementVisibility(this.selectors.customerAdminUserFromDropdown, "dropdown")
-        await this.click(this.selectors.customerAdminUserFromDropdown, "admin", "dropdown");
+        await this.typeAndEnter(this.selectors.searchField, "search", data);
+        // await this.validateElementVisibility(this.selectors.customerAdminUserFromDropdown, "dropdown")
+        // await this.click(this.selectors.customerAdminUserFromDropdown, "admin", "dropdown");
         await this.click(this.selectors.editIcon, "customeradmin", "edit");
     }
     public async uncheckInheritAddressIfPresent() {

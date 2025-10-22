@@ -483,9 +483,11 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
             await this.spinnerDisappear();
         }
         public async siteAdmin_Adminconfig() {
+            await this.wait("minWait");
             await this.validateElementVisibility(this.selectors.adminConfigLink, "Admin Configuration");
             await this.mouseHover(this.selectors.adminConfigLink, "Admin Configuration");
             await this.click(this.selectors.adminConfigLink, "Admin Configuration", "Button");
+            await this.wait("minWait");
             await this.spinnerDisappear();
         }
            public async admin_SiteConfigLink() {
