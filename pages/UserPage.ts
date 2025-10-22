@@ -374,7 +374,7 @@ export class UserPage extends AdminHomePage {
         await this.type(this.selectors.reasonInput, "Reason", FakerData.getDescription());
         await this.click(this.selectors.impersonateProceedBtn, "Proceed", "Button");
         await this.wait('mediumWait');
-        await this.click(this.selectors.okBtn, "OK", "Button");
+        // await this.click(this.selectors.okBtn, "OK", "Button");
 
     }
 

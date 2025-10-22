@@ -163,8 +163,9 @@ export class CatalogPage extends LearnerHomePage {
         ContentExpireCheck: `//span[text()=" can no longer be launched as the validity has expired or there are no attempts left."]`,
 
         //Bookmark Functionality:-
-        specificContentBookmark: (clsName: string) => `//h5[text()='${clsName}']/following::i[contains(@id,'bookmark')]`,
-        // classBookmark:`//div[@id='enrolled_catalog']//span/i[@aria-label='Bookmark']`
+        specificContentBookmark: (clsName: string) => `//div[text()='${clsName}']/following::i[contains(@id,'bookmark')]`,
+        certificateBookmark:(certificateName:string)=>`//span[text()='${certificateName}']/following::i[contains(@id,'bookmark')]`,
+        // classBookmark:`//div[@id='enrolled_catalog']//span/i[@aria-label='Bookmark']` //h5(removed)
         classBookmark: (clsName: string) => `(//h5[text()='${clsName}']//following::i[contains(@aria-label,'Bookmark')])[1]`,
 
         //Verifying no seats left message on leaner side
@@ -209,6 +210,14 @@ export class CatalogPage extends LearnerHomePage {
         await this.validateElementVisibility(this.selectors.specificContentBookmark(contName), "Content Bookmark Icon")
         await this.click(this.selectors.specificContentBookmark(contName), "Bookmarked the content", "Icon");
     }
+
+        async bookmarkCertificate(contName: any) {
+        await this.spinnerDisappear();
+        await this.wait("mediumWait");
+        await this.validateElementVisibility(this.selectors.certificateBookmark(contName), "Content Bookmark Icon")
+        await this.click(this.selectors.certificateBookmark(contName), "Bookmarked the content", "Icon");
+    }
+
     //To Bookmark the class:-
     async bookmarkClass(clsName: string) {
         await this.spinnerDisappear();

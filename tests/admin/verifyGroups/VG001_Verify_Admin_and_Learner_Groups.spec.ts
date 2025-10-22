@@ -148,7 +148,7 @@ test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome,
     await learnerGroup.clickSelelctLearners();
     await adminGroup.clickActivate()
     await adminGroup.clickSave()
-    // await adminGroup.clickYes();
+    await adminGroup.clickYes();
     await adminGroup.clickProceed();
     await createCourse.verifySuccessMessage();
     await contentHome.gotoListing();
@@ -168,6 +168,7 @@ test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome,
     await learnerGroup.clickSelelctLearners();
     await adminGroup.clickActivate()
     await adminGroup.clickSave()
+    await adminGroup.clickYes();
     await adminGroup.clickProceed();
     await createCourse.verifySuccessMessage();
     await contentHome.gotoListing();

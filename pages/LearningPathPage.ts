@@ -109,6 +109,7 @@ export class LearningPathPage extends AdminHomePage {
         const data = "English"
         await this.click(this.selectors.languageBtn, "Language", "Button");
         await this.click(this.selectors.language(data), "Language", "Button");
+        await this.wait("minWait");
     }
 
     async hasRecertification() {

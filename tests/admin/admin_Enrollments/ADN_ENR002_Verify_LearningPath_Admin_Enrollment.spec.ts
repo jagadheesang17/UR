@@ -95,6 +95,7 @@ test.describe(`Certification_enroll_and_completion_with_single_instance.spec`, a
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
         await learnerHome.clickDashboardLink();
         await dashboard.clickLearningPath_And_Certification();
+        await dashboard.clickCertificationLink();
         await dashboard.searchCertification(title);
         await dashboard.verifyTheEnrolledCertification(title);
         await catalog.clickMoreonCourse(title);

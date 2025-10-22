@@ -1,13 +1,19 @@
+import { Console } from "console";
+import { credentials } from "../../constants/credentialData";
 import { test } from "../../customFixtures/expertusFixture";
 import { generateCode } from "../../data/apiData/formData";
 import { FakerData } from "../../utils/fakerUtils";
+import { create } from "domain";
+import { da } from "@faker-js/faker";
 
 let courseName = FakerData.getCourseName();
 let description = FakerData.getDescription();
 let domain: any
+let createdCode: any
+
 test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certification_complete_it_and_then_remove_the_bookmark.spec.ts`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of E-learning single instance `, async ({ adminHome, createCourse, learningPath }) => {
+    test(`Creation of E-learning single instance `, async ({ adminHome, createCourse, learningPath,contentHome,enrollHome }) => {
 
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
@@ -23,6 +29,7 @@ test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certificatio
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.entercode("CRS-" + generateCode());
         await createCourse.enter("course-title", courseName);
+        console.log("Course Name: " + courseName);
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
@@ -35,13 +42,25 @@ test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certificatio
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
-
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage() 
+        
     })
     const title = FakerData.getCourseName();
     // const title = "Certification_2404";
 
 
-    test(`Certification Creation`, async ({ adminHome, learningPath, createCourse }) => {
+    test(`Certification Creation`, async ({ adminHome, learningPath, createCourse,contentHome,enrollHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Certification Creation` },
@@ -54,7 +73,9 @@ test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certificatio
         await adminHome.clickCertification();
         await learningPath.clickCreateCertification();
         await learningPath.title(title);
+        console.log("Title: " + title);
         await learningPath.description(description);
+        await createCourse.entercode("CERT-" + generateCode());
         await learningPath.language();
         await learningPath.clickSave();
         await learningPath.clickProceedBtn();
@@ -70,15 +91,21 @@ test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certificatio
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-           await learningPath.description(description);
+        await learningPath.description(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
 
-
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(title);
+        await createCourse.clickResultEnrollmentButton();
+        await createCourse.selectEnroll();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage() 
     })
 
-    test(`Confirm that a learner can successfully bookmark the certification.`, async ({ learnerHome, catalog }) => {
+    test(`Confirm that a learner can successfully bookmark the certification.`, async ({ learnerHome, catalog,dashboard }) => {
 
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
@@ -86,16 +113,13 @@ test.describe(`Book003_Verify_that_the_user_is_able_to_bookmark_the_Certificatio
             { type: `Test Description`, description: `Confirm that a learner can successfully bookmark the certification.` }
 
         );
-        await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(title);
-        await catalog.clickEnrollButton();
-        await catalog.clickViewCertificationDetails();
-        await catalog.bookmarkClass(title);
-        // await catalog.clickLaunchButton();
-        //  await catalog.saveLearningStatus();
-        //  await catalog.clickViewCertificate();
+        await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.clickCertificateName(title);
+        await catalog.bookmarkCertificate(title);
     })
 
     test(`Verify that a learner can successfully launch and complete the bookmarked certification.`, async ({ learnerHome, catalog, dashboard }) => {

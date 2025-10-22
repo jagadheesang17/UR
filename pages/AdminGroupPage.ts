@@ -34,6 +34,7 @@ export class AdminGroupPage extends PlaywrightWrapper {
         orgTreeScrollDown: `//div[@id='OrgTreeModal']//div[contains(@class,'lmsfilterscroll background_1')]`,
         orgTree: `//div[@id='OrgTreeModal']//ul[@class='folder-tree']`,
         okBtn: `//button[text()='OK']`,
+        yesButton: `//button[text()='Yes']`
     
     }
 
@@ -198,5 +199,8 @@ export class AdminGroupPage extends PlaywrightWrapper {
         await orgCheckBox.click();
         await this.click(this.selectors.okBtn, "OK", "Button");
     }
-
+    public async clickYes() {
+        await this.validateElementVisibility(this.selectors.yesButton, "Yes");
+        await this.click(this.selectors.yesButton, "Yes", "Button");
+    }
 }

@@ -38,18 +38,18 @@ test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_a
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
 
-                await contentHome.gotoListing();
-                await createCourse.catalogSearch(courseName1)
-                createdCode = await createCourse.retriveCode()
-                console.log("Extracted Code is : " + createdCode);
-                await adminHome.menuButton()
-                await adminHome.clickEnrollmentMenu();
-                await adminHome.clickEnroll();
-                await enrollHome.selectBycourse(courseName1)
-                await enrollHome.clickSelectedLearner();
-                await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
-                await enrollHome.clickEnrollBtn();
-                await enrollHome.verifytoastMessage()  
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(courseName1)
+        createdCode = await createCourse.retriveCode()
+        console.log("Extracted Code is : " + createdCode);
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName1)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()  
 
     })
 
@@ -62,6 +62,10 @@ test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_a
         //    await adminHome.clearBrowserCache(pageUrl)
 
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
+        await catalog.clickMyLearning();
+        await catalog.searchMyLearning(courseName1);
+        // await catalog.verifyEnrolledCourseByCODE(createdCode);
+        await catalog.clickCourseInMyLearning(courseName1);
         await catalog.bookmarkSpecificContent(contentName);
 
     })
@@ -114,6 +118,5 @@ test.describe(`Verify_that_the_user_is_able_to_bookmark_the_course_complete_it_a
         await catalog.noResultFound();
 
     })
-
 
 })

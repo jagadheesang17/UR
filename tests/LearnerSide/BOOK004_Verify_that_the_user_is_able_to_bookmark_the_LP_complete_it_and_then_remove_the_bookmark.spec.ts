@@ -58,7 +58,7 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
     const title = FakerData.getCourseName();
     // const title = "Certification_2404";
 
-     test(`Learning Path Creation`, async ({ adminHome, learningPath, createCourse }) => {
+     test(`Learning Path Creation`, async ({ adminHome, learningPath, createCourse ,contentHome, enrollHome }) => {
             test.info().annotations.push(
                 { type: `Author`, description: `Arivazhagan P` },
                 { type: `TestCase`, description: `Learning Path Creation` },
@@ -71,6 +71,7 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
             await adminHome.clickLearningPath();
             await learningPath.clickCreateLearningPath();
             await learningPath.title(title);
+            await createCourse.entercode("LP-" + generateCode());
             await learningPath.description(description);
             await learningPath.language();
             await learningPath.clickSave();
@@ -82,14 +83,17 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
             await learningPath.clickCatalogBtn();
             await learningPath.clickUpdateBtn();
             await learningPath.verifySuccessMessage();
-            // await learningPath.clickEditLearningPath()
-            // await createCourse.clickDetailButton();
-            // await createCourse.clickCatalog()
-            // await createCourse.clickUpdate();
-            // await createCourse.verifySuccessMessage();
+
+        await contentHome.gotoListing();
+        await createCourse.catalogSearch(title);
+        await createCourse.clickResultEnrollmentButton();
+        await createCourse.selectEnroll();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage() 
         })
 
-    test(`Confirm that a learner can successfully bookmark the lp.`, async ({ learnerHome, catalog }) => {
+    test(`Confirm that a learner can successfully bookmark the lp.`, async ({ learnerHome, catalog,dashboard }) => {
 
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
@@ -98,11 +102,12 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
 
         );
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LeanrerPortal");
-        await catalog.clickViewCertificationDetails();
-        await catalog.bookmarkClass(title);
-        // await catalog.clickLaunchButton();
-        //  await catalog.saveLearningStatus();
-        //  await catalog.clickViewCertificate();
+        await learnerHome.clickDashboardLink();
+        await dashboard.clickLearningPath_And_Certification();
+        // await dashboard.clickCertificationLink();
+        await dashboard.searchCertification(title);
+        await dashboard.clickCertificateName(title);
+        await catalog.bookmarkCertificate(title);
     })
 
     test(`Verify that a learner can successfully launch and complete the bookmarked lp.`, async ({ learnerHome, catalog, dashboard }) => {

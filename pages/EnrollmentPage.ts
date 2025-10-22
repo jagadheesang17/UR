@@ -141,6 +141,7 @@ export class EnrollmentPage extends AdminHomePage {
 
     }
     async enterSearchUser(data: string) {
+        await this.wait("minWait");
         await this.waitSelector(this.selectors.searchcourseOrUser, "User Name")
          await this.page.fill(this.selectors.searchcourseOrUser, '');
         await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });

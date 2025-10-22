@@ -11,7 +11,7 @@ export class LearnerDashboardPage extends LearnerHomePage {
         learningPathAndCertification: "//div[@id='mydashboard']//div[text()='Learning path / Certification']",
         certification: "a:text-is('Certification')",
         certificationInput: "#exp-searchundefined input",
-         verify: (titleName: string) => `//h5[text()='${titleName}']`,
+        verify: (titleName: string) => `//h5[text()='${titleName}']`,
         verifyText: (titleName: string) => `//div[text()='${titleName}']`,
         recertifyIcon: (course: string) => `//div[text()='${course}']//following::i[contains(@class,'certificate')]`,
         pendingLabel: "//span[contains(text(),'Pending')]",
@@ -41,7 +41,7 @@ export class LearnerDashboardPage extends LearnerHomePage {
 
         clickMore: (data: string) => `(//div[text()='${data}']//following::i[@aria-label='More'])[1]`,
         titleClick: (title: string) => `//div[contains(text(),'${title}')]`,
-
+        certificate: (certificateName: string) => `(//div[text()='${certificateName}'])[1]`,
 
     }
 
@@ -166,7 +166,11 @@ export class LearnerDashboardPage extends LearnerHomePage {
         await this.click(this.selectors.titleClick(title), "Title", "");
     }
 
-
+    async clickCertificateName(certificateName: string) {
+        await this.wait("minWait");
+        await this.mouseHover(this.selectors.certificate(certificateName), "Certificate");
+        await this.click(this.selectors.certificate(certificateName), "Certificate", "Link");
+    }
 
 
 
