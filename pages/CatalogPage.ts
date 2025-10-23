@@ -164,7 +164,7 @@ export class CatalogPage extends LearnerHomePage {
 
         //Bookmark Functionality:-
         specificContentBookmark: (clsName: string) => `//div[text()='${clsName}']/following::i[contains(@id,'bookmark')]`,
-        certificateBookmark:(certificateName:string)=>`//span[text()='${certificateName}']/following::i[contains(@id,'bookmark')]`,
+        certificateBookmark:(certificateName:string)=>`(//span[text()='${certificateName}']/following::i[contains(@id,'bookmark')])[1]`,
         // classBookmark:`//div[@id='enrolled_catalog']//span/i[@aria-label='Bookmark']` //h5(removed)
         classBookmark: (clsName: string) => `(//h5[text()='${clsName}']//following::i[contains(@aria-label,'Bookmark')])[1]`,
 

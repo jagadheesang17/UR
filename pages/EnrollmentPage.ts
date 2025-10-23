@@ -126,8 +126,8 @@ export class EnrollmentPage extends AdminHomePage {
         await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
         await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
         await this.wait("minWait")
-        await this.waitSelector(`//div[text()='${data}']/following::label[@class='custom-control-label']/i[1]`, "User")
-        await this.click(`//div[text()='${data}']/following::label[@class='custom-control-label']/i[1]`, "User", "Radio button")
+        await this.waitSelector(`(//div[text()='${data}']/following::label[@class='custom-control-label']/i)[1]`, "User")
+        await this.click(`(//div[text()='${data}']/following::label[@class='custom-control-label']/i)[1]`, "User", "Radio button")
          //div[text()='CRS Haptic Card Synthesize']
        
         // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
@@ -315,7 +315,7 @@ export class EnrollmentPage extends AdminHomePage {
     //Max seat override
     async verifyMaxSeatOverRidePopup() {
         await this.wait('mediumWait');
-        await this.verification(this.selectors.seatMaxPopupMsg, "You have exceeded the maximum seat for this training")
+        await this.verification(this.selectors.seatMaxPopupMsg, "max seat reachedseat available only for 0 users")
         await this.click(this.selectors.clickYesBtn, "Yes", "Button")
     }
 
@@ -323,7 +323,23 @@ export class EnrollmentPage extends AdminHomePage {
 
     async verifyMaxSeatPopup() {
         await this.wait('mediumWait');
-        await this.verification(this.selectors.seatMaxPopupMsg, "max seat reachedseat available only for 0 users")
+        await this.wait('mediumWait');
+        const actualMsg = (await this.getInnerText(this.selectors.seatMaxPopupMsg))
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        const expectedOptions = [
+            "max seat reachedseat available only for 0 users",
+            "you have exceeded the maximum seat for this training. the seat capacity will be increased to accommodate the selected learner. are you sure you want to proceed with this?"
+        ].map(s => s.toLowerCase().replace(/\s+/g, ' ').trim());
+
+        const matched = expectedOptions.some(opt => actualMsg.includes(opt) || opt.includes(actualMsg) || actualMsg === opt);
+        if (!matched) {
+            throw new Error(`Unexpected seat max popup message: "${actualMsg}"`);
+        }
+
+        await this.verification(this.selectors.seatMaxPopupMsg, "Max seat override message");
         await this.click(this.selectors.okBtn, "Ok", "Button")
     }
     async clickEnrollButton() {

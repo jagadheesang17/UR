@@ -58,6 +58,7 @@ test.describe(`Verify_instance_creation_when_converting_a_published_single-insta
         await createCourse.selectInstanceType("Multi Instance/Class");
         await createCourse.changeInstancePopUp();
         await createCourse.clickUpdate();
+        await createCourse.contentLibrary();
         await createCourse.verifySuccessMessage();
     })
 
