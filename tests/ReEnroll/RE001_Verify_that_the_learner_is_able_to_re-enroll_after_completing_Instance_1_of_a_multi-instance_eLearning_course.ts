@@ -23,7 +23,7 @@ test(`Verify_that_the_learner_is_able_to_re-enroll_after_completing_Instance_1_o
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.enter("course-title", courseName);
         await createCourse.selectLanguage("English");
-          await createCourse.enterCode("CRS-" + generateCode());
+        await createCourse.enterCode("CRS__" + generateCode());
         await createCourse.typeDescription(description);
         await createCourse.selectInstance();
         await createCourse.clickCatalog();

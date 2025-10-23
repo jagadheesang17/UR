@@ -131,7 +131,7 @@ test.describe(`People Module Suites`, async () => {
         await createUser.clickActivateIcon();
         await createUser.clickImpersonationIcon();
         await createUser.fillImpersonateForm();
-        await learnerHome.termsAndConditionScroll();
+        // await learnerHome.termsAndConditionScroll();
         await createUser.clickendImpersonation();
 
     })

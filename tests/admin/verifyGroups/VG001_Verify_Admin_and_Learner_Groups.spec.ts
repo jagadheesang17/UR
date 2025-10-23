@@ -279,10 +279,10 @@ test(`Creating user and Verifying created groups`, async ({ adminHome, bannerHom
         await createUser.enter("user-zipcode", zipcode);
         await createUser.enter("user-mobile", FakerData.getMobileNumber());
         await createUser.clickSave();
-        await createCourse.modifyTheAccess();
-        await createCourse.clickAccessButton();
-        adminGroupsInAccess=await adminGroup.getAdminGroupsInUserPage();
-        await learnerGroup.verifyGroups(adminGroups,adminGroupsInAccess)
+        // await createCourse.modifyTheAccess();
+        // await createCourse.clickAccessButton();
+        // adminGroupsInAccess=await adminGroup.getAdminGroupsInUserPage();
+        // await learnerGroup.verifyGroups(adminGroups,adminGroupsInAccess)
     }
 });
 

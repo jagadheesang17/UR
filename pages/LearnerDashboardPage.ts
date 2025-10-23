@@ -11,7 +11,11 @@ export class LearnerDashboardPage extends LearnerHomePage {
         learningPathAndCertification: "//div[@id='mydashboard']//div[text()='Learning path / Certification']",
         certification: "a:text-is('Certification')",
         certificationInput: "#exp-searchundefined input",
+<<<<<<< Updated upstream
         verify: (titleName: string) => `//*[text()='${titleName}']`,
+=======
+        verify: (titleName: string) => `//span[text()='${titleName}']`,
+>>>>>>> Stashed changes
         verifyText: (titleName: string) => `//div[text()='${titleName}']`,
         recertifyIcon: (course: string) => `//div[text()='${course}']//following::i[contains(@class,'certificate')]`,
         pendingLabel: "//span[contains(text(),'Pending')]",

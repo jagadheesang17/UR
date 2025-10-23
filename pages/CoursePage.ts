@@ -888,7 +888,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
 
     await this.handleSaveUntilProceed();
   }
-    async handleSaveUntilProceed(maxRetries = 6) {
+    async handleSaveUntilProceed(maxRetries = 3) {
   let attempt = 0;
 
   while (attempt < maxRetries) {

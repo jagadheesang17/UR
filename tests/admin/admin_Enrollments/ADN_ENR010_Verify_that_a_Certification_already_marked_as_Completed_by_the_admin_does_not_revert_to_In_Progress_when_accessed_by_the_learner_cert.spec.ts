@@ -110,8 +110,9 @@ test.describe(`Verify that a Certification already marked as Completed by the ad
         await dashboard.clickLearningPath_And_Certification();
         await dashboard.clickCertificationLink();
         await dashboard.searchCertification(title);
+        await dashboard.clickCertificateName(title);
         await dashboard.verifyTheEnrolledCertification(title);
-        await catalog.clickMoreonCourse(title);
+        // await catalog.clickMoreonCourse(title);
         await catalog.verifyStatus("Completed");
         await catalog.verifyTPOverallProgressPercentage();
         await catalog.verifytpCourseStatus(courseName, "Completed");

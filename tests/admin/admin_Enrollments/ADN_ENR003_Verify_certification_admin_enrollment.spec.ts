@@ -98,9 +98,10 @@ test.describe(`TC068_Certification_enroll_and_completion_with_single_instance.sp
         await dashboard.clickLearningPath_And_Certification();
         await dashboard.clickCertificationLink();
         await dashboard.searchCertification(title);
+        await dashboard.clickCertificateName(title);
         await dashboard.verifyTheEnrolledCertification(title);
        // await dashboard.clickMoreonTP(title);
-        await catalog.clickMoreonCourse(title);
+        // await catalog.clickMoreonCourse(title);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
         await catalog.clickViewCertificate();

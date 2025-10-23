@@ -17,14 +17,14 @@ test(`Verify that an organization can be successfully created with a parent orga
    
     async function createOrg(){
     let orgName=OrgName+" "+FakerData.getLastName();
-       await organization.createOrganization();   
-      await organization.enterName(orgName)
-      await organization.selectOrgType("Internal");
-      await createCourse.enterCode("ORG-" + generateCode());
-      await organization.typeDescription();
-      await organization.clickSave();
-      await CompletionCertification.clickProceed();    
-      return orgName  
+    await organization.createOrganization();   
+    await organization.enterName(orgName)
+    await organization.selectOrgType("Internal");
+    await createCourse.enterCode("ORG-" + generateCode());
+    await organization.typeDescription();
+    await organization.clickSave();
+    await CompletionCertification.clickProceed();    
+    return orgName  
     }
     const parentOrg= await createOrg();
     await contentHome.gotoListing();
