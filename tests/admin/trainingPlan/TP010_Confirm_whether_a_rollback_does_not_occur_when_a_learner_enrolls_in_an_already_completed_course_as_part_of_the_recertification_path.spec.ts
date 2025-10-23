@@ -64,15 +64,15 @@ test.describe(`Confirm_whether_a_rollback_does_not_occur_when_a_learner_enrolls_
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
 
-            await contentHome.gotoListing();
-                await adminHome.menuButton()
-                await adminHome.clickEnrollmentMenu();
-                await adminHome.clickEnroll();
-                await enrollHome.selectBycourse(courseName2)
-                await enrollHome.clickSelectedLearner();
-                await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
-                await enrollHome.clickEnrollBtn();
-                await enrollHome.verifytoastMessage()
+        await contentHome.gotoListing();
+        await adminHome.menuButton();   
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(courseName2);
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username);
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage();
     })
 
 

@@ -552,6 +552,7 @@ export class CatalogPage extends LearnerHomePage {
     }
 
     async saveLearningStatus() {
+        await this.wait('mediumWait');
         await this.click(this.selectors.saveLearningStatus, "save", "button");
         //await this.validateElementVisibility(this.selectors.verificationEnrollment, "button");
         await this.spinnerDisappear();
@@ -574,7 +575,8 @@ export class CatalogPage extends LearnerHomePage {
                 await this.wait('mediumWait');
             }
             await replayButton.scrollIntoViewIfNeeded();
-            console.log("The Video Has Completed");
+                console.log("The Video Has Completed");
+                await this.wait('mediumWait');
            await this.click(this.selectors.saveLearningStatus, "save", "button")
         }
         } catch (error) {
