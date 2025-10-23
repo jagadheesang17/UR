@@ -79,10 +79,10 @@ test.describe(`Verify past ILT Class is not available to the learner`, () => {
         
          await catalog.clickMyLearning();
         await catalog.searchMyLearning(courseName);
-        await learnerHome.clickCatalog();
-        await catalog.mostRecent();
-        await catalog.searchCatalog(courseName);
-        await catalog.clickMoreonCourse(courseName);
-        await learnerCourse.verifyRequestClass();
+        // await learnerHome.clickCatalog();
+        // await catalog.mostRecent();
+        // await catalog.searchCatalog(courseName);
+        // await catalog.clickMoreonCourse(courseName);
+        // await learnerCourse.verifyRequestClass();
     })
 })

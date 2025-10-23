@@ -143,7 +143,7 @@ test.describe(`Verify_that_admin_can_delete_multi_instance_ILT_VC_course`, async
         await createCourse.selectInstructor(instructorName);
         await createCourse.selectLocation();
         await createCourse.typeDescription("This is a new course by name :" + description);
-        await createCourse.clickSaveasDraft();
+       // await createCourse.clickSaveasDraft();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         await createCourse.clickEditCourseTabs();

@@ -71,6 +71,8 @@ test.describe(`Verify_that_the_admin_can_mark_an_e-learn_course_as_complete_when
             await createCourse.clickEditIcon();
             await createCourse.enrollforElearn();
             await enrollHome.selectEnroll();
+            await enrollHome.selectBycourse(courseName);
+            await enrollHome.clickSelectedLearner();
             await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username);
             await enrollHome.clickEnrollBtn();
             await enrollHome.clickOkBtn();

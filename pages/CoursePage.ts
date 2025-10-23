@@ -284,7 +284,7 @@ export class CoursePage extends AdminHomePage {
         //Class enrollment E-Learn as an admin from the course edit page:-
         enrollElearn: `//a[@href="/admin/learning/enrollments/viewstatus"]//following::span[text()='Enrollments']`,
         //bulk class creation - manual
-        NoOfClass: `//label[text()="Delivery Type"]/following::input[@type="text"]`,
+        NoOfClass: `//label[text()="Delivery Type"]/following::input[contains(@class,'shadow-none form_field_active')]`,
         sessionNameInput_bulk: (i) => `(//label[text()="Session Name"]/following::input[contains(@id,'instanceClassCode')])[${i + 1}]`,
         instructorDropdown_bulk: (i) => `//input[@id="instructors_intance_${i}-filter-field"]`,
         instructorOption_bulk: (instructorName: string, i) => `//input[@id="instructors_intance_${i}"]/following::li[contains(text(),'${instructorName}')]`,
@@ -379,6 +379,8 @@ export class CoursePage extends AdminHomePage {
     //Delete Course
     async clickDeleteCourse() {
         await this.validateElementVisibility(this.selectors.deleteCourse, "Delete");
+        await this.page.locator(this.selectors.deleteCourse).scrollIntoViewIfNeeded();
+        await this.wait("minWait");
         await this.click(this.selectors.deleteCourse, "Delete", "Icon");
         await this.click(this.selectors.removeButton, "Remove", "Button");
         await this.wait("minWait");

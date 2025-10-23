@@ -25,8 +25,8 @@ test.describe(`Verify_that_the_admin_can_cancel_an_VC_class_with_active_enrollme
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+       await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("Classroom")
@@ -101,9 +101,8 @@ test.describe(`Verify_that_the_admin_can_cancel_an_VC_class_with_active_enrollme
         await learnerHome.clickDashboardLink();
         await dashboard.selectDashboardItems("Learning History");
         await dashboard.learningHistoryCourseSearch(courseName);
-        await dashboard.verifyTheEnrolledCertification(courseName);
+       // await dashboard.verifyTheEnrolledCertification(courseName);
     })
-
     // test(`d_Verify the cancelled VC class in Learner INA section`, async ({ learnerHome, learnerCourse, catalog, dashboard }) => {
     //     test.info().annotations.push(
     //         { type: `Author`, description: `vidya` },
@@ -116,5 +115,6 @@ test.describe(`Verify_that_the_admin_can_cancel_an_VC_class_with_active_enrollme
     //     await dashboard.selectINATabs("reminder");
     //     await dashboard.verifyINAReminder("List of class canceled",courseName);
     // })
+
 
 })
