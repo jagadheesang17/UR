@@ -40,8 +40,8 @@ test.describe(`Certification_with_single_instance_behavior_Enrolled_tab`, async 
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-        await createCourse.typeDescription(description);
         await createCourse.clickCatalog();
+        await createCourse.typeDescription(description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
     })

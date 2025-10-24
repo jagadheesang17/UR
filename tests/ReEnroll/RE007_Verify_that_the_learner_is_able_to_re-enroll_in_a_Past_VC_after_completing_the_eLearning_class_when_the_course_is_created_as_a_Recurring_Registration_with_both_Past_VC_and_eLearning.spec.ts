@@ -62,6 +62,7 @@ test.describe(`TC106 Verify pastVC Elearning recurring Registration`, async () =
         await createCourse.clickinstanceClass();
         await createCourse.addInstances();
         await addinstance("E-Learning");
+        await createCourse.enterCode("CRS_" + generateCode());
         await createCourse.enter("course-title", elCourseName)
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();

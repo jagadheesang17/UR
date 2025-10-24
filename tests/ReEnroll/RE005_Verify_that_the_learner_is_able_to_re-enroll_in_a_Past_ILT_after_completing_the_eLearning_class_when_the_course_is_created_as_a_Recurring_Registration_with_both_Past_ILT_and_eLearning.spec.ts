@@ -72,6 +72,7 @@ test.describe(`TC104 Verify past Class recurring Registration`, async () => {
         await createCourse.clickinstanceClass();
         await createCourse.addInstances();
         await addinstance("E-Learning");
+        await createCourse.enterCode("CRS_" + generateCode());
         await createCourse.enter("course-title", elCourseName)
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();

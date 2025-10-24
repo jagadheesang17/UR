@@ -31,7 +31,7 @@ test.describe(`Verify_that_the_learner_is_able_to_re-enroll_in_a_future_ILT_afte
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
         await createCourse.enter("course-title", courseName);
         await createCourse.selectLanguage("English");
-          await createCourse.enterCode("CRS-" + generateCode());
+        await createCourse.enterCode("CRS_" + generateCode());
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("Classroom")
         await createCourse.handleCategoryADropdown();
@@ -73,6 +73,7 @@ test.describe(`Verify_that_the_learner_is_able_to_re-enroll_in_a_future_ILT_afte
         await createCourse.editcourse();
         await createCourse.clickinstanceClass();
         await createCourse.addInstances();
+        await createCourse.enterCode("CRS_" + generateCode());
         await addinstance("E-Learning");
         await createCourse.enter("course-title", elCourseName)
         await createCourse.contentLibrary();

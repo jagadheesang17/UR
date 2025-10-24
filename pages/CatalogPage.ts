@@ -997,7 +997,10 @@ export class CatalogPage extends LearnerHomePage {
 
     //Learnerside->Course Completion Status
     async verifyStatus(data: string) {
-        await this.wait("maxWait")
+        await this.wait("maxWait");
+        await this.page.reload();
+        await this.wait("mediumWait")
+        await this.page.locator(this.selectors.statusOnDetailsPage).scrollIntoViewIfNeeded();
         await this.validateElementVisibility(this.selectors.statusOnDetailsPage, "Enrollment Status");
         await this.verification(this.selectors.statusOnDetailsPage, data);
     }

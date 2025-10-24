@@ -63,6 +63,7 @@ test.describe(`TC105 Verify futureVC Elearning Recurring Registration`, async ()
         await createCourse.clickinstanceClass();
         await createCourse.addInstances();
         await addinstance("E-Learning");
+        await createCourse.enterCode("CRS_" + generateCode());
         await createCourse.enter("course-title", elCourseName)
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
