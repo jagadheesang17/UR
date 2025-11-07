@@ -64,10 +64,10 @@ switch (environmentSetup) {
         break;
         case "dev":
             URLConstants = {
-                adminURL: "https://urpreprod.expertusone.cloud/backdoor",
-                leanerURL: "https://urpreprod.expertusone.cloud/learner/unitedrentals/",
-                learnerportal: "https://urpreprod.expertusone.cloud/learner/unitedrentals/",
-                learnerportal2: "https://urpreprod.expertusone.cloud/learner/unitedrentals/",
+                adminURL: "https://autotenant.expertusoneqa.in/backdoor",
+                leanerURL: "https://autotenant.expertusoneqa.in/learner/unitedrentals/",
+                learnerportal: "https://autotenant.expertusoneqa.in/learner/unitedrentals/",
+                learnerportal2: "https://autotenant.expertusoneqa.in/learner/unitedrentals/",
                 portal1: "UnitedRentals",
                 portal2: "UnitedRentals",
                 portal3: "UnitedRentals",

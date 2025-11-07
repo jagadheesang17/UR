@@ -178,15 +178,15 @@ switch (environmentSetup) {
   case "qaProduction":
     credentials = {
       CUSTOMERADMIN: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       CUSTOMERADMIN1: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       LEARNERADMIN: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       INSTRUCTORNAME: {
@@ -202,15 +202,15 @@ switch (environmentSetup) {
         password: "Welcome1@",
       },
       COMMERCEADMIN: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       SUPERADMIN: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       PEOPLEADMIN: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       LEARNERPORTAL_User: {
@@ -228,7 +228,7 @@ switch (environmentSetup) {
         password: "Welcome1@",
       },
       ENROLLADMIN: {
-        username: "lmsadmin@nomail.com",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       NEWCUSTOMERADMIN: {
@@ -285,11 +285,11 @@ switch (environmentSetup) {
         password: "Welcome1@",
       },
       INSTRUCTORNAME: {
-        username: "Elvin17",
+        username: "autoins",
         password: "Welcome1@",
       },
       MANAGERNAME: {
-        username: "AlexA17",
+        username: "automnr",
         password: "Welcome1@",
       },
       LEARNERUSERNAME: {
