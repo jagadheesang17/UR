@@ -45,6 +45,7 @@ test.describe(`People Module Suites`, async () => {
             await createUser.enter("user-zipcode", zipcode);
             await createUser.enter("user-mobile", FakerData.getMobileNumber());
             await createUser.userProfileUpload();
+            await createUser.selectOrganization("organization", "ORG_TCS");
             await createUser.clickSave();
             await createUser.verifyUserCreationSuccessMessage();
         }
@@ -93,6 +94,7 @@ test.describe(`People Module Suites`, async () => {
         await createUser.enter("user-phone", FakerData.getMobileNumber());
         await createUser.typeAddress("Address 1", FakerData.getAddress());
         await createUser.typeAddress("Address 2", FakerData.getAddress());
+        await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.updateUser();
         await createUser.verifyUserCreationSuccessMessage();
 

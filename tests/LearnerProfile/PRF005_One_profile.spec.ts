@@ -48,6 +48,7 @@ test.describe(`TC109 One profile`, async () => {
             await createUser.enter("user-employee-id", FakerData.getEmployeeid());
             await createUser.selectLanguage("English");
             await createUser.organizationType("Internal")
+            await createUser.selectOrganization("organization", "ORG_TCS");
             await createUser.clickSave();
             // await createUser.clickProceed("Proceed");
             await createUser.verifyUserCreationSuccessMessage();

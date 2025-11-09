@@ -40,6 +40,7 @@ test.describe(`Verify_that_user_can_be_successfully_created_with_internal_and_ex
         await createUser.selectUserType("usertype")
         await createUser.selectjobTitle("jobtitle");
         await createUser.selectManager(credentials.MANAGERNAME.username)
+        await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
      //   await createUser.clickProceed("Proceed");
       //  await createUser.verifyUserCreationSuccessMessage();
@@ -82,6 +83,7 @@ test.describe(`Verify_that_user_can_be_successfully_created_with_internal_and_ex
         await createUser.selectUserType("usertype")
         await createUser.selectjobTitle("jobtitle");
        await createUser.selectManager(credentials.MANAGERNAME.username)
+       await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
       //  await createUser.clickProceed("Proceed");
      //   await createUser.verifyUserCreationSuccessMessage();

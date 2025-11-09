@@ -63,6 +63,7 @@ test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome,
         await createUser.enter("user-city", city);
         await createUser.enter("user-zipcode", zipcode);
         await createUser.enter("user-mobile", FakerData.getMobileNumber());
+        await createUser.selectOrganization("organization", "ORG_TCS");
         // await createUser.clickRolesButton("Manager")
         await createUser.clickSave();
        // await createUser.clickProceed("Proceed");
@@ -278,6 +279,7 @@ test(`Creating user and Verifying created groups`, async ({ adminHome, bannerHom
         await createUser.enter("user-city", city);
         await createUser.enter("user-zipcode", zipcode);
         await createUser.enter("user-mobile", FakerData.getMobileNumber());
+        await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
         // await createCourse.modifyTheAccess();
         // await createCourse.clickAccessButton();

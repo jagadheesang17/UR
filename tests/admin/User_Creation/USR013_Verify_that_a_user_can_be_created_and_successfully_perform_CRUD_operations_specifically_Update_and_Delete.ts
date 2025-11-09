@@ -32,6 +32,7 @@ test.describe(`TC034 CrudUser`, async () => {
         await createUser.selectDepartmentType("department");
         await createUser.selectUserType("usertype")
         await createUser.selectjobTitle("jobtitle");
+        await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
       //  await createUser.clickProceed("Proceed");
      //   await createUser.verifyUserCreationSuccessMessage();

@@ -31,6 +31,7 @@ test(`Verify_that_admin_able_to_create_and_set_direct_report_to_assigned_manager
         await createUser.enter("user-password", "Welcome1@");
         await createUser.selectLanguage("English")
         await createUser.selectSpecificManager(data.managerName);
+        await createUser.selectOrganization("organization", "ORG_TCS");
         // await createCourse.selectDomainOption(URLConstants.portal2)
         await createUser.clickSave();               
     //    await createUser.clickProceed("Proceed");

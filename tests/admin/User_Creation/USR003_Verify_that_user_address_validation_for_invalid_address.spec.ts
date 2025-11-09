@@ -51,6 +51,7 @@ test(`Verify that user address validation functionality working as expected for 
         await createUser.select("Time Zone", timezone);
         await createUser.enter("user-city", city);
         await createUser.enter("user-zipcode", zipcode);
+        await createUser.selectOrganization("organization", "ORG_TCS");
         // await createUser.clickVerifyAddressBtn();
         // await createUser.verifyUserAddress();
         await createUser.clickSave();               

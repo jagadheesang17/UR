@@ -33,6 +33,7 @@ test(`Create User and assigning Group to the User`, async ({ adminHome, createCo
     await adminGroup.clickuserCheckbox(customAdmin)
     await adminGroup.clickSelectUsers();
     await adminGroup.clickUpdate();
+    await createUser.selectOrganization("organization", "ORG_TCS");
     await createCourse.verifySuccessMessage();
 }
 )

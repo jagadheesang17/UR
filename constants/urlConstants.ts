@@ -65,12 +65,12 @@ switch (environmentSetup) {
         case "dev":
             URLConstants = {
                 adminURL: "https://autotenant.expertusoneqa.in/backdoor",
-                leanerURL: "https://autotenant.expertusoneqa.in/learner/unitedrentals/",
-                learnerportal: "https://autotenant.expertusoneqa.in/learner/unitedrentals/",
-                learnerportal2: "https://autotenant.expertusoneqa.in/learner/unitedrentals/",
-                portal1: "UnitedRentals",
-                portal2: "UnitedRentals",
-                portal3: "UnitedRentals",
+                leanerURL: "https://autotenant.expertusoneqa.in/learner/autotenant/",
+                learnerportal: "https://autotenant.expertusoneqa.in/learner/autotenant/",
+                learnerportal2: "https://autotenant.expertusoneqa.in/learner/autotenant/",
+                portal1: "autotenant",
+                portal2: "autotenant",
+                portal3: "autotenant",
                 LearnerGroup1: "AutoLG1(Do not Use)",
                 LearnerGroup2: "AutoLG2(Do not Use)",
                 creditCardNumber: "4111111111111111",

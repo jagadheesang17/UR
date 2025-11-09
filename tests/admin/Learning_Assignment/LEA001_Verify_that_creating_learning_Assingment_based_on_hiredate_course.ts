@@ -1,6 +1,6 @@
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from '../../../utils/fakerUtils';
-import { learningAssignmentCron, updateSingleInstanceAutoRegister } from "../DB/DBJobs";
+// import { learningAssignmentCron, updateSingleInstanceAutoRegister } from "../DB/DBJobs";
 
 //course creation fuctions 
 const courseName = FakerData.getCourseName();
@@ -45,7 +45,7 @@ const username= FakerData.getUserId();
         await createUser.enter("username", username);
         await createUser.enter("user-password", "Welcome1@");
         await createUser.enter("email", FakerData.getEmail());
-        await createUser.enterHireDate1();
+        // await createUser.enterHireDate1();
         await createUser.clickSave();
         await createUser.clickProceed("Proceed");
         await createUser.verifyUserCreationSuccessMessage();  

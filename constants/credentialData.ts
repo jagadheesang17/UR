@@ -273,15 +273,15 @@ switch (environmentSetup) {
   case "dev":
     credentials = {
       CUSTOMERADMIN: {
-        username: "urpreprod@expertusone.cloud",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       CUSTOMERADMIN1: {
-        username: "urpreprod@expertusone.cloud",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       LEARNERADMIN: {
-        username: "urpreprod@expertusone.cloud",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       INSTRUCTORNAME: {
@@ -297,15 +297,15 @@ switch (environmentSetup) {
         password: "Welcome1@",
       },
       COMMERCEADMIN: {
-        username: "urpreprod@expertusone.cloud",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       SUPERADMIN: {
-        username: "urpreprod@expertusone.cloud",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       PEOPLEADMIN: {
-        username: "urpreprod@expertusone.cloud",
+        username: "automation@mail.com",
         password: "Welcome1@",
       },
       LEARNERPORTAL_User: {

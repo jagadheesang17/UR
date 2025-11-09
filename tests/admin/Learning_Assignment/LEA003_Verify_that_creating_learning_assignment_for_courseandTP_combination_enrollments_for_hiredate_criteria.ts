@@ -47,7 +47,7 @@ const title = FakerData.getCourseName();
         await createUser.enter("username", username);
         await createUser.enter("user-password", "Welcome1@");
         await createUser.enter("email", FakerData.getEmail());
-        await createUser.enterHireDate1();
+        // await createUser.enterHireDate1();
         await createUser.clickSave();
         await createUser.clickProceed("Proceed");
         await createUser.verifyUserCreationSuccessMessage();  

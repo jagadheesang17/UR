@@ -45,6 +45,7 @@ test(`Verify that user address validation functionality working as expected for 
         await createUser.enter("last_name", FakerData.getLastName());
         await createUser.enter("username", courseAdmin);
         await createUser.enter("user-password", "Welcome1@");
+        await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
      //   await createUser.clickProceed("Proceed");
      //   await createUser.verifyUserCreationSuccessMessage();

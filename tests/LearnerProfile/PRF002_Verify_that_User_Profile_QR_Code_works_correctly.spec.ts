@@ -54,6 +54,7 @@ const courseAdmin: any = FakerData.getUserId()
     // await createUser.select("Currency", currency);
     // await createUser.enter("user-city", city);
     // await createUser.enter("user-zipcode", zipcode);
+    await createUser.selectOrganization("organization", "ORG_TCS");
     await createUser.clickSave();
     await learnerHome.basicLogin(courseAdmin, "default");
    //await learnerHome.termsAndConditionScroll();

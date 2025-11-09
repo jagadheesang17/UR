@@ -64,6 +64,7 @@ test(`Elearning course creation`, async ({ createCourse, adminHome, createUser }
         await createUser.enter("user-password", "Welcome1@");
         await createUser.enter("email", FakerData.getEmail());
         await createUser.enter("user-phone", FakerData.getMobileNumber());
+        await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
       //  await createUser.clickProceed("Proceed");
         await createUser.verifyUserCreationSuccessMessage();

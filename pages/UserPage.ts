@@ -77,6 +77,8 @@ export class UserPage extends AdminHomePage {
         enrollmentLabel: "//h1[text()='Manage Enrollments']",
         enrollmentStatus: "//div[contains(@class,'row row-cols-md-')]//span",
         viewEnrollmentStsIcon: "//i[@aria-label='View all the status']",
+            fieldname: (name: string) => `//input[@id='user-${name}-filter-field']`,
+    clickSearchOption: (list: string) => `(//li[text()='${list}'])[1]`,
 
         //For Suspended User success message
         sso_negativemsg: "//span[@id='error-txt']",
@@ -510,6 +512,10 @@ export class UserPage extends AdminHomePage {
             console.log("User Segmentation is working correctly");
     }
 
+  async selectOrganization(name: string, data: string) {
+    await this.typeAndEnter(this.selectors.fieldname(name), "field name", data);
+    await this.click(this.selectors.clickSearchOption(data), "search option", "option");
+  }
 
 
 }
