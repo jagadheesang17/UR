@@ -69,10 +69,10 @@ test.describe(`Ensure that a manager can enroll a team member based on specific 
                await catalog.clickCourseInMyLearning(courseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
 
     })
 

@@ -77,7 +77,7 @@ test.describe(`Confirm_whether_a_rollback_does_not_occur_when_a_learner_enrolls_
 
 
     //Course2 will be completed by the learner and then course2 will be added to the recertification path
-    test(`Learner registration and completion of a single eLearning course.`, async ({ learnerHome, adminHome, catalog }) => {
+    test(`Learner registration and completion of a single eLearning course.`, async ({ learnerHome, adminHome, catalog, dashboard }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Learner registration and completion of a single eLearning course` },
@@ -89,10 +89,10 @@ test.describe(`Confirm_whether_a_rollback_does_not_occur_when_a_learner_enrolls_
         await catalog.clickCourseInMyLearning(courseName2);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName2);
-        await catalog.verifyCompletedCourse(courseName2);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName2);
+        await dashboard.vaidatVisibleCourse_Program(courseName2, "Completed");
     })
 
     test(`Certification Creation With Single instance elearning attached in both path`, async ({ adminHome, learningPath,enrollHome, createCourse }) => {

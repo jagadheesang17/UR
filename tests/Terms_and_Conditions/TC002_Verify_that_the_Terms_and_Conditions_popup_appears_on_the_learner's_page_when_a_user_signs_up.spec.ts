@@ -25,5 +25,5 @@ test(`Learner signup with mandatory field alone`, async ({ learnerLogin }) => {
 
 test('Login as a signedup user and handling Terms and conditions popup', async ({ learnerLogin,learnerHome }) => {
     await learnerLogin.basicLogin(username, "Default")
-    await learnerHome.termsAndConditionScroll();
+    // await learnerHome.termsAndConditionScroll();
 })

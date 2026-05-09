@@ -26,8 +26,8 @@ test.describe(`TC053 Confirm that the admin can manually create multiple classes
         await adminHome.loadAndLogin("SUPERADMIN");
         await adminHome.clickMenu("Course");
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("Classroom")
@@ -45,8 +45,8 @@ test.describe(`TC053 Confirm that the admin can manually create multiple classes
             await createCourse.selectInstanceDeliveryType(deliveryType);
         }
         await addinstance("Classroom");
-        await createCourse.bulkClassCreation("3","manual",courseName);
-      
+        await createCourse.bulkClassCreation("3", "manual", courseName);
+
     })
 
 

@@ -33,7 +33,7 @@ test('Login as a signedup user', async ({ learnerLogin ,learnerHome}) => {
             { type: `Author`, description: `Arivazhagan P` },  
         );
     await learnerLogin.basicLogin(username, "Default")
-     //await learnerHome.termsAndConditionScroll();
+     //// await learnerHome.termsAndConditionScroll();
 
 })
 

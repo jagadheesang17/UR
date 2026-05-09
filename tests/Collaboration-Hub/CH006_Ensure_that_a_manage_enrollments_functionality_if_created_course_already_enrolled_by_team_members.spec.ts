@@ -71,10 +71,10 @@ test.describe(`Ensure that a manage enrollments functionality works correctly if
             { type: `Test Description`, description: `Verifying team member side after enrollment status has changed by manager` }
         );
         await learnerHome.learnerLogin("TEAMUSER1", "DefaultPortal");
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
     })
 
 })

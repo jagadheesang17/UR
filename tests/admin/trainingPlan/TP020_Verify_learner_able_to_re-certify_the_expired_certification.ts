@@ -38,8 +38,8 @@ test.describe(`Verify_certification_expiration_flow`, async () => {
           console.log(`${domain}`); */
         await createCourse.selectDomainOption(portal);
         await createCourse.contentLibrary();
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        //await createCourse.clickHere();
+       // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

@@ -29,8 +29,8 @@ test.describe(`Verify that certification enrollment and completion occurred at t
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.contentLibrary();
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        //await createCourse.clickHere();
+       // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();
@@ -47,8 +47,8 @@ test.describe(`Verify that certification enrollment and completion occurred at t
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.contentLibrary();
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        // await createCourse.clickHere();
+        // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

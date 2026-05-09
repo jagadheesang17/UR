@@ -35,8 +35,8 @@ test.describe(`Verify portal1 course is not availble to portal2 users`, async ()
         await createCourse.typeDescription(description);
         await createCourse.selectDomainOption(URLConstants.portal1);
         await createCourse.contentLibrary(); //Youtube content will be attached here
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        //await createCourse.clickHere();
+       // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

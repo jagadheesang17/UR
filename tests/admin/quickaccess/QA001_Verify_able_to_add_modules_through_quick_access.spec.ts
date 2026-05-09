@@ -20,6 +20,7 @@ test(`Create User and assigning Group to the User`, async ({ adminHome, createCo
     await createUser.enter("last_name", FakerData.getLastName());
     await createUser.enter("username", customAdmin);
     await createUser.enter("user-password", "Welcome1@");
+    await createUser.selectOrganization("organization", "ORG_TCS");
     await createUser.clickRolesButton("Manager");
     await createUser.clickSave();
     //await createUser.clickProceed("Proceed");
@@ -33,7 +34,7 @@ test(`Create User and assigning Group to the User`, async ({ adminHome, createCo
     await adminGroup.clickuserCheckbox(customAdmin)
     await adminGroup.clickSelectUsers();
     await adminGroup.clickUpdate();
-    await createUser.selectOrganization("organization", "ORG_TCS");
+    
     await createCourse.verifySuccessMessage();
 }
 )

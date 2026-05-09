@@ -175,100 +175,6 @@ switch (environmentSetup) {
     };
     break;
 
-  case "qaProduction":
-    credentials = {
-      CUSTOMERADMIN: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      CUSTOMERADMIN1: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      LEARNERADMIN: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      INSTRUCTORNAME: {
-        username: "autoins",
-        password: "Welcome1@",
-      },
-      MANAGERNAME: {
-        username: "automnr",
-        password: "Welcome1@",
-      },
-      LEARNERUSERNAME: {
-        username: "tim",
-        password: "Welcome1@",
-      },
-      COMMERCEADMIN: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      SUPERADMIN: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      PEOPLEADMIN: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      LEARNERPORTAL_User: {
-        //Portal1 user except main
-        username: "portaluser",
-        password: "Welcome1@",
-      },
-      LEARNERPORTAL_2User: {
-        //Portal2 user except main
-        username: "portal1user",
-        password: "Welcome1@",
-      },
-      COMMONUSER: {
-        username: "johnCena@123",
-        password: "Welcome1@",
-      },
-      ENROLLADMIN: {
-        username: "automation@mail.com",
-        password: "Welcome1@",
-      },
-      NEWCUSTOMERADMIN: {
-        username: "Clemens_Steuber@hotmail.com",
-        password: "Welcome1@",
-      },
-      INTERNALUSER: {
-        username: internalUser,
-        password: "Welcome1@",
-      },
-      EXTERNALUSER: {
-        username: externalUser,
-        password: "Welcome1@",
-      },
-      TEAMUSER1: {
-        username: "autodirect",
-        password: "Welcome1@",
-      },
-      TEAMUSER2: {
-        username: "autovirtual",
-        password: "Welcome1@",
-      },
-      SSOUSER: {
-        username: "arivazhaganp",
-        password: "Welcome1@",
-      },
-      SSOUSEREMAIL: {
-        username1: "arivazhaganp@peopleone.co",
-        password1: "Welcome1@",
-      },
-      LearnerGroup1user: {
-        username: "autouser1@DonotUse",
-        password: "Welcome6@",
-      },
-      LearnerGroup2user: {
-        username: "autouser2@DonotUse",
-        password: "Welcome6@",
-      },
-    };
-    break;
 
   case "dev":
     credentials = {
@@ -360,6 +266,99 @@ switch (environmentSetup) {
       },
       LearnerGroup2user: {
         username: "luser2",
+        password: "Welcome1@",
+      },
+    };
+    break;
+
+  case "qaProduction":
+    credentials = {
+      CUSTOMERADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      CUSTOMERADMIN1: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      LEARNERADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      INSTRUCTORNAME: {
+        username: "autoins",
+        password: "Welcome1@",
+      },
+      MANAGERNAME: {
+        username: "automnr",
+        password: "Welcome1@",
+      },
+      LEARNERUSERNAME: {
+        username: "ellis",
+        password: "Welcome1@",
+      },
+      COMMERCEADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      SUPERADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      PEOPLEADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      LEARNERPORTAL_User: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      LEARNERPORTAL_2User: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      COMMONUSER: {
+        username: commonUser,
+        password: "Welcome1@",
+      },
+      ENROLLADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      NEWCUSTOMERADMIN: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      INTERNALUSER: {
+        username: internalUser,
+        password: "Welcome1@",
+      },
+      EXTERNALUSER: {
+        username: externalUser,
+        password: "Welcome1@",
+      },
+      TEAMUSER1: {
+        username: "arjun",
+        password: "Welcome1@",
+      },
+      TEAMUSER2: {
+        username: "aryan",
+        password: "Welcome1@",
+      },
+      SSOUSER: {
+        username: "autoadmin@nomail.com",
+        password: "Welcome1@",
+      },
+      SSOUSEREMAIL: {
+        username1: "autoadmin@nomail.com",
+        password1: "Welcome1@",
+      },
+      LearnerGroup1user: {
+        username: "autolg",
+        password: "Welcome1@",
+      },
+      LearnerGroup2user: {
+        username: "autolg2",
         password: "Welcome1@",
       },
     };

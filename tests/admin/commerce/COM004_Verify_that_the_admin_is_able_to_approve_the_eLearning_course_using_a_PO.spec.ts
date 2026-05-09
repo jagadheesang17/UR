@@ -81,7 +81,7 @@ test(`Login as a learner and verify payment method(Purchase Order)`, async ({ le
 
     );
     await learnerHome.basicLogin(commerceLearner, "default");
-    //await learnerHome.termsAndConditionScroll();
+    //// await learnerHome.termsAndConditionScroll();
     await learnerHome.clickCatalog();
     await catalog.mostRecent();
     await catalog.searchCatalog(courseName);

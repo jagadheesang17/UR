@@ -69,10 +69,10 @@ test.describe(`Ensure_that_a_course_enrolled_by_the_manager_is_available_in_the_
       await catalog.clickCourseInMyLearning(courseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
 
 
     })

@@ -12,8 +12,10 @@ export class LearnerCoursePage extends CatalogPage {
         q1: `//span[text()='1. Pre']/following::i[1]`,
         submitAnswers: `(//span[text()='Submit my Answers'])[2]`,
         contentProgressStatus: `//span[text()='100%']`,
-        reEnrollBtn: `//button[text()='re-enroll']`,
-        reEnrollPopUp: `//span[contains(text(),"You are attempting to retake a class of the same course that you have already completed. Would you like to proceed?")]//parent::div//following-sibling::div/button[text()='Yes']`,
+        reEnrollBtn: `//button[text()='Enroll Again']`,
+        reEnrollBtnLP: `//span[text()='Enroll Again']`,
+        reEnrollPopUp: `//span[text()='You are attempting to retake a class of the same course that you have already completed. Would you like to proceed?']`,
+        reEnrollPopUpYesBtn: `//button[text()='Yes']`,
         requestClass: `//span[text()='REQUEST CLASS']`,
         messageTOadmin: `//textarea[@id='reqclsmsg']`,
         submitButton: `//button[@id='reqcls-btn-submit']`,
@@ -95,5 +97,21 @@ export class LearnerCoursePage extends CatalogPage {
             await this.click(this.selectors.yesBtn,"Yes","Button")
             await this.wait("maxWait")
         }
+    }
+
+    
+    async verifyEnrollAgainNotVisible() {
+        await this.wait("minWait")
+        const enrollAgainBtn = this.page.locator(this.selectors.reEnrollBtn);
+        const isVisible = await enrollAgainBtn.isVisible();
+        if (isVisible) {
+            throw new Error("Enroll Again button should not be visible when the checkbox is unchecked");
+        }
+        console.log("✅ Enroll Again button is not visible as expected");
+    }
+
+    async clickReEnrollLP() {
+        await this.wait("minWait")
+        await this.click(this.selectors.reEnrollBtnLP, "ReEnroll LP", "Button");
     }
 }

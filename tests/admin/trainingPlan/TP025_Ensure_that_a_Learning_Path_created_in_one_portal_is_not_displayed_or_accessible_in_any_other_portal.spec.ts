@@ -109,7 +109,7 @@ test.describe(`Verify_the_Enforce_Sequence_flow`, async () => {
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-          await createCourse.typeDescription(description);
+        await learningPath.description(description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
           await adminHome.menuButton()

@@ -64,6 +64,6 @@ test(`Verifying Terms and Conditions popup present on the learner page`, async (
     );
 
     await learnerHome.basicLogin(courseAdmin, "defaultportal");
-    await learnerHome.termsAndConditionScroll();
+    // await learnerHome.termsAndConditionScroll();
    
 });

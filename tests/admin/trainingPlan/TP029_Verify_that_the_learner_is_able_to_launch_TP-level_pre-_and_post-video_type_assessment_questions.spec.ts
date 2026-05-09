@@ -11,7 +11,7 @@ const postAssessmentTitle = ("PostAssmt " + FakerData.AssessmentTitle());
 
 test.describe(`Verify that the learner is able to launch TP-level pre- and post-video type assessment questions`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Creation of Pre-Assessment`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Pre-Assessment`, async ({ adminHome,createCourse, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Jagadish` },
             { type: `TestCase`, description: `Creatation of Pre-Assessment`},
@@ -24,6 +24,7 @@ test.describe(`Verify that the learner is able to launch TP-level pre- and post-
         await adminHome.assessmentMenu();
         await adminHome.clickOnAssessmentLink();
         await SurveyAssessment.clickCreateAssessment();
+        await createCourse.entercode("Assessment-" + generateCode());
         await SurveyAssessment.fillAssessmentTitle(preAssessmentTitle);
         await SurveyAssessment.selectLanguage();
         await SurveyAssessment.fillDescription();
@@ -46,7 +47,7 @@ test.describe(`Verify that the learner is able to launch TP-level pre- and post-
         await SurveyAssessment.clickPublish();
         await SurveyAssessment.verifySuccessMessage();
     })
-    test(`Creation of Post-Assessment`, async ({ adminHome, SurveyAssessment }) => {
+    test(`Creation of Post-Assessment`, async ({ adminHome,createCourse, SurveyAssessment }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Jagadish` },
             { type: `TestCase`, description: `Creation of Post-Assessment` },
@@ -59,6 +60,7 @@ test.describe(`Verify that the learner is able to launch TP-level pre- and post-
         await adminHome.assessmentMenu();
         await adminHome.clickOnAssessmentLink();
         await SurveyAssessment.clickCreateAssessment();
+        await createCourse.entercode("Assessment-" + generateCode());
         await SurveyAssessment.fillAssessmentTitle(postAssessmentTitle);
         await SurveyAssessment.selectLanguage();
         await SurveyAssessment.fillDescription();

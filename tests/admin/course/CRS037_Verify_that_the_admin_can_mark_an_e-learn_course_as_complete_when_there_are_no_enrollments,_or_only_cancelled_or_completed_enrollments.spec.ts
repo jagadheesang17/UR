@@ -3,7 +3,7 @@ import { credentials } from "../../../constants/credentialData";
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from '../../../data/apiData/formData';
 
-const courseName = "CRS"+" "+FakerData.getCourseName();
+const courseName = FakerData.getCourseName();
 //const courseName = "crs cmpt"
 const description = FakerData.getDescription();
 const code = "CRS" + "-" + generateCode();
@@ -22,8 +22,8 @@ test.describe(`Verify_that_the_admin_can_mark_an_e-learn_course_as_complete_when
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here
@@ -31,53 +31,53 @@ test.describe(`Verify_that_the_admin_can_mark_an_e-learn_course_as_complete_when
         await createCourse.clickSave();
         await createCourse.clickProceed();
         await createCourse.verifySuccessMessage();
-        
+
     })
 
     test(`a_Verify that the admin can mark an e-learn course as complete when there are no enrollments, or only cancelled or completed enrollments`, async ({ adminHome, createCourse }) => {
-            test.info().annotations.push(
-                { type: `Author`, description: `Anuradha` },
-                { type: `TestCase`, description: `Verify Admin mark Complete for the E-Learning Course/class` },
-                { type: `Test Description`, description: `Verify Admin mark Complete for the E-Learning Course/class` }
-            );
-    
-            await adminHome.loadAndLogin("CUSTOMERADMIN")
-            await adminHome.menuButton();
-            await adminHome.clickLearningMenu();
-            await adminHome.clickCourseLink();
-            await createCourse.catalogSearch(courseName);
-            await createCourse.clickEditIcon();
-            //await createCourse.clickEditInstance();
-              await createCourse.contentLibrary();
-            await createCourse.clickClassComplete();
-            await createCourse.clickUpdate();
+        test.info().annotations.push(
+            { type: `Author`, description: `Anuradha` },
+            { type: `TestCase`, description: `Verify Admin mark Complete for the E-Learning Course/class` },
+            { type: `Test Description`, description: `Verify Admin mark Complete for the E-Learning Course/class` }
+        );
 
-        })
+        await adminHome.loadAndLogin("CUSTOMERADMIN")
+        await adminHome.menuButton();
+        await adminHome.clickLearningMenu();
+        await adminHome.clickCourseLink();
+        await createCourse.catalogSearch(courseName);
+        await createCourse.clickEditIcon();
+        //await createCourse.clickEditInstance();
+        await createCourse.contentLibrary();
+        await createCourse.clickClassComplete();
+        await createCourse.clickUpdate();
 
-        test(`b_Verify that the admin cannot enroll a learner in a Completed course`, async ({ adminHome, createCourse, enrollHome, catalog }) => {
-            test.info().annotations.push(
-                { type: `Author`, description: `Anuradha` },
-                { type: `TestCase`, description: `Verify the alert pop-up when the admin enrolls a learner for a completed class.` },
-                { type: `Test Description`, description: `Verify the alert pop-up when the admin enrolls a learner for a completed class.` }
-            );
-    
-            await adminHome.loadAndLogin("CUSTOMERADMIN")
-            await adminHome.menuButton();
-            await adminHome.clickLearningMenu();
-            await adminHome.clickCourseLink();
-            await createCourse.filterByStatus("Completed");
-            await catalog.clickApply();
-            await createCourse.catalogSearch(courseName);
-            await createCourse.clickEditIcon();
-            await createCourse.enrollforElearn();
-            await enrollHome.selectEnroll();
-            await enrollHome.selectBycourse(courseName);
-            await enrollHome.clickSelectedLearner();
-            await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username);
-            await enrollHome.clickEnrollBtn();
-            await enrollHome.clickOkBtn();
+    })
 
-        })
+    test(`b_Verify that the admin cannot enroll a learner in a Completed course`, async ({ adminHome, createCourse, enrollHome, catalog }) => {
+        test.info().annotations.push(
+            { type: `Author`, description: `Anuradha` },
+            { type: `TestCase`, description: `Verify the alert pop-up when the admin enrolls a learner for a completed class.` },
+            { type: `Test Description`, description: `Verify the alert pop-up when the admin enrolls a learner for a completed class.` }
+        );
+
+        await adminHome.loadAndLogin("CUSTOMERADMIN")
+        await adminHome.menuButton();
+        await adminHome.clickLearningMenu();
+        await adminHome.clickCourseLink();
+        await createCourse.filterByStatus("Completed");
+        await catalog.clickApply();
+        await createCourse.catalogSearch(courseName);
+        await createCourse.clickEditIcon();
+        await createCourse.enrollforElearn();
+        await enrollHome.selectEnroll();
+        await enrollHome.selectBycourse(courseName);
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username);
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.clickOkBtn();
+
+    })
 
     test.skip(`c_Verify that the Completed class is not displayed on the learner catalog`, async ({ learnerHome, catalog }) => {
         test.info().annotations.push(

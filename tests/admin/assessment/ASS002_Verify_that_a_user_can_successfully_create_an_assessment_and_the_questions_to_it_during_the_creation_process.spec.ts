@@ -14,9 +14,9 @@ test(`Verify_that_a_user_can_successfully_create_an_assessment_and_the_questions
     await adminHome.assessmentMenu();
     await adminHome.clickOnAssessmentLink();
     await SurveyAssessment.clickCreateAssessment();
+    await createCourse.entercode("Assessment-" + generateCode());
     await SurveyAssessment.fillAssessmentTitle(title);
     await SurveyAssessment.selectLanguage();
-     await createCourse.entercode("LP-" + generateCode());
     await SurveyAssessment.fillDescription();
     await SurveyAssessment.enterPasspercentage("50")
     await SurveyAssessment.selectRandomizeOption("No")

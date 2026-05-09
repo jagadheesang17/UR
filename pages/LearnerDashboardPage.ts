@@ -42,6 +42,7 @@ export class LearnerDashboardPage extends LearnerHomePage {
         clickMore: (data: string) => `(//div[text()='${data}']//following::i[@aria-label='More'])[1]`,
         titleClick: (title: string) => `//div[contains(text(),'${title}')]`,
         certificate: (certificateName: string) => `(//div[text()='${certificateName}'])[1]`,
+        courseStatus: (courseName: string, status: string) => `(//h5[text()='${courseName}']//following::div[contains(text(),'${status}')])[1]`,
 
     }
 
@@ -89,6 +90,15 @@ export class LearnerDashboardPage extends LearnerHomePage {
         await this.validateElementVisibility(this.selectors.courseInput, "Search Field");
         await this.typeAndEnter(this.selectors.courseInput, "Search Field", data);
         await this.wait('maxWait');
+    }
+
+    async vaidatVisibleCourse_Program(data: string, status: string) {
+        await this.wait("maxWait");
+    await this.validateElementVisibility(
+      this.selectors.courseStatus(data, status),
+      "Course/Training Plan with Status"
+    );
+    await this.verification(this.selectors.courseStatus(data, status), status);
     }
 
     async clickCertificationLink() {

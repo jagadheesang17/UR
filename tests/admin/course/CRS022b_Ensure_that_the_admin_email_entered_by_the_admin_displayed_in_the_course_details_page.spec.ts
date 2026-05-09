@@ -1,27 +1,34 @@
-import { credentials } from "../../../constants/credentialData";
 import { test } from "../../../customFixtures/expertusFixture"
-import { SiteAdminPage } from "../../../pages/SiteAdminPage";
 import { FakerData } from '../../../utils/fakerUtils';
-import { generateCode } from "../../../data/apiData/formData";
+import { generateCode, userCreationData } from "../../../data/apiData/formData";
+import { generateOauthToken } from "../../../api/accessToken";
+import { userCreation } from "../../../api/userAPI";
 
 const code = "CRS"+"-"+generateCode();
 const courseName = "EL"+ FakerData.getCourseName();
 const description = FakerData.getDescription()
 const username = FakerData.getUserId();
 
+let access_token: string;
 
-test(`Enter the Customer_Admin email into the Contact email field`, async ({ adminHome, createUser, createCourse }) => {
+test.beforeAll(async () => {
+    access_token = await generateOauthToken();
+});
+
+test(`Enter the Customer_Admin email into the Contact email field`, async ({ adminHome, createUser }) => {
     test.info().annotations.push(
         { type: `Author`, description: `Bala` },
         { type: `TestCase`, description: `Update User for CRUD Operation` },
         { type: `Test Description`, description: `Update User for CRUD Operation` }
     );
 
+    await userCreation(userCreationData(username), { Authorization: access_token });
+
     await adminHome.loadAndLogin("CUSTOMERADMIN");
     await adminHome.menuButton();
     await adminHome.people();
     await adminHome.user();
-    await createUser.typeAndSelectIUser("Tamara_Klein12@hotmail.com");
+    await createUser.typeAndSelectIUser(username);
     // await createUser.enter("email", FakerData.getEmail());
     // await createUser.updateUser();
     // await createUser.verifyUserCreationSuccessMessage();

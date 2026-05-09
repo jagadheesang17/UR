@@ -87,7 +87,7 @@ test.describe(`Verify that the learner able to enroll in a course after completi
 
     })
 
-    test(`Verify that the learner able to enroll in a course after completing all the required prerequisite courses`, async ({ learnerHome, catalog }) => {
+    test(`Verify that the learner able to enroll in a course after completing all the required prerequisite courses`, async ({ learnerHome, catalog, dashboard }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Verifying learner side that able to enroll main course after completing all the required prerequisite courses` },
@@ -124,10 +124,10 @@ test.describe(`Verify that the learner able to enroll in a course after completi
         await catalog.clickEnroll();
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(mainCourseName);
-        await catalog.verifyCompletedCourse(mainCourseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(mainCourseName);
+        await dashboard.vaidatVisibleCourse_Program(mainCourseName, "Completed");
     })
 
 })

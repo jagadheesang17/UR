@@ -47,7 +47,7 @@ await enrollHome.verifytoastMessage()
     })
 
 
-    test(`Confirm that videomp4 content functions correctly and as expected`, async ({ learnerHome, catalog, readContentHome }) => {
+    test(`Confirm that videomp4 content functions correctly and as expected`, async ({ learnerHome,dashboard, catalog, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Vidya` },
             { type: `TestCase`, description: `Confirm that videomp4 content functions correctly and as expected` },
@@ -59,10 +59,10 @@ await enrollHome.verifytoastMessage()
         await catalog.clickCourseInMyLearning(courseName);
 
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
 
     })
 

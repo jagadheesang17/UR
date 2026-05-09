@@ -53,7 +53,7 @@ test.describe(`Confirm that Admin Order creation functions correctly and as expe
         await enrollHome.orderSuccessMsg();
     })
 
-    test(`Confirm that YouTube content functions correctly and as expected`, async ({ learnerHome, catalog }) => {
+    test(`Confirm that YouTube content functions correctly and as expected`, async ({ learnerHome, catalog, dashboard }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that YouTube content functions correctly and as expected` },
@@ -65,10 +65,10 @@ test.describe(`Confirm that Admin Order creation functions correctly and as expe
         await catalog.clickCourseInMyLearning(courseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
     })
 
 })

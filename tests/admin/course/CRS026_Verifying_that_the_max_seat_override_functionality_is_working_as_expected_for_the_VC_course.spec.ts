@@ -10,12 +10,12 @@ const code = "CRS" + "-" + generateCode();
 const instructorName = credentials.INSTRUCTORNAME.username
 test.describe(`Verify that the Max Seat Override functionality is working as expected for the VC course`, async () => {
     test.describe.configure({ mode: "serial" });
-    test(`Verifying that the Max Seat Override functionality is working as expected for the VC course`, async ({ siteAdmin,adminHome,learnerHome}) => {
+    test(`Verifying that the Max Seat Override functionality is working as expected for the eLearning course`, async ({ siteAdmin, adminHome, learnerHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that the 'Seat Max Override' has been enabled from the site settings` },
             { type: `Test Description`, description: `Confirm that the 'Seat Max Override' has been enabled in the site settings` }
-    
+
         );
         await adminHome.loadAndLogin("SUPERADMIN");
         await adminHome.isSignOut();
@@ -24,9 +24,9 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await adminHome.siteAdmin_Adminconfig();
         await siteAdmin.clickBusinessRulesEditIcon()
         await siteAdmin.maxSeatOverRideInBusinessRules();
-        
+
     });
-    test(`Create the course as multiple instance`, async ({ adminHome, createCourse,enrollHome }) => {
+    test(`Create the course as multiple instance`, async ({ adminHome, createCourse, enrollHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Create the course as multiple instance` },
@@ -38,8 +38,8 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + courseName);
         await createCourse.selectdeliveryType("Virtual Class");
@@ -70,11 +70,11 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await adminHome.clickEnroll();
         await enrollHome.selectBycourse(courseName)
         await enrollHome.clickSelectedLearner();
-                await enrollHome.enterSearchUser(credentials.TEAMUSER1.username)
-                await enrollHome.enterSearchUser(credentials.TEAMUSER2.username)
-                await enrollHome.clickEnrollBtn();
-                await enrollHome.verifyMaxSeatOverRidePopup();
-                await enrollHome.verifytoastMessage()
+        await enrollHome.enterSearchUser(credentials.TEAMUSER1.username)
+        await enrollHome.enterSearchUser(credentials.TEAMUSER2.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifyMaxSeatOverRidePopup();
+        await enrollHome.verifytoastMessage()
     })
 
 
@@ -89,7 +89,7 @@ test.describe(`Verify that the Max Seat Override functionality is working as exp
         await catalog.mostRecent();
         await catalog.searchCatalog(courseName);
         await catalog.clickMoreonCourse(courseName);
-       // await catalog.verifySeatFullText(courseName)
+        // await catalog.verifySeatFullText(courseName)
 
     })
 

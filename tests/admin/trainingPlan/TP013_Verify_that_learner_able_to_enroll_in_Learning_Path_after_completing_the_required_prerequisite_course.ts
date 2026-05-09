@@ -87,7 +87,7 @@ const description = FakerData.getDescription();
 
     })
 
-    test(`Verify learner able to launch TP level Prerequisite course and complete it`, async ({ learnerHome, catalog }) => {
+    test(`Verify learner able to launch TP level Prerequisite course and complete it`, async ({ learnerHome, catalog, dashboard }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Verify learner able to launch TP level Prerequisite course and  complete it` },
@@ -111,8 +111,9 @@ const description = FakerData.getDescription();
         await catalog.clickEnroll();
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(title);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(title);
+        await dashboard.vaidatVisibleCourse_Program(title, "Completed");
     
     })

@@ -48,7 +48,7 @@ test.describe(`Confirm_that_Tincan_content_functions_correctly_and_as_expected`,
     })
 
 
-    test(`Verification from learner site`, async ({ learnerHome, catalog, readContentHome }) => {
+    test(`Verification from learner site`, async ({ learnerHome, catalog, dashboard, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Vidya` },
             { type: `TestCase`, description: `Learner Side Course Enrollment` },
@@ -61,10 +61,10 @@ test.describe(`Confirm_that_Tincan_content_functions_correctly_and_as_expected`,
         await catalog.clickCourseInMyLearning(courseName);
         await readContentHome.readTinCan();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
 
     })
 

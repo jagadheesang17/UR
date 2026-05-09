@@ -39,7 +39,7 @@
 //     );   
 //         await learnerHome.clearBrowserCache(URLConstants.leanerURL);
 //         await learnerHome.basicLogin(courseAdmin, "Portal");
-//         await learnerHome.termsAndConditionScroll();
+//         // await learnerHome.termsAndConditionScroll();
 //         await profile.clickProfile();
 //         await profile.clickOneProfile();
 //         await profile.verifyRequestPhysicalWalletCardDeliveryCheckbox();

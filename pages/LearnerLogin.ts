@@ -24,6 +24,7 @@ const sso_signInUsingCompanyLogin = "//button[contains(text(),'Sign in using')]"
 const sso_signInButton = "//input[@value='Sign In']";
 const sso_username = "//div[contains(@class,'nav-profile-content text')]//h2";
 const sso_negativemsg = "//body[text()='User is not in active state']";
+const myProfileCloseBtn = `//div[contains(@class,'modal-header d-flex ')]//following-sibling::i`;
 
 ////for address validation need to add more fields///////
 const address1 = "#lnr_address1";
@@ -90,6 +91,11 @@ export class LearnerLogin extends PlaywrightWrapper {
             console.log(await this.page.title());
             await this.page.reload({ waitUntil: 'commit' });
             await this.wait('mediumWait');
+     const profileModal = this.page.locator(myProfileCloseBtn);
+            if (await profileModal.isVisible()) {
+                await this.click(myProfileCloseBtn, "Close Button", "Button");
+            }
+
         } catch (error) {
             console.error(`Login attempt failed: ${error}`);
             throw error;
@@ -134,6 +140,10 @@ export class LearnerLogin extends PlaywrightWrapper {
             console.log(`Login successful`);
             console.log(await this.getTitle())
             await this.wait('maxWait');
+              const profileModal = this.page.locator(myProfileCloseBtn);
+            if (await profileModal.isVisible()) {
+                await this.click(myProfileCloseBtn, "Close Button", "Button");
+            }
         } catch (error) {
             console.error(`Login attempt failed: ${error}`);
             throw error;

@@ -531,5 +531,10 @@ export abstract class PlaywrightWrapper {
     }
 
 
+    async verificationByText(ActualText: string, expectedTextSubstring: string) {
+        const lowerCaseText = ActualText.toLowerCase();
+        const lowerCaseExpected = expectedTextSubstring.toLowerCase();
+        expect(lowerCaseText).toContain(lowerCaseExpected);
+    }
 
 }

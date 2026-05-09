@@ -26,6 +26,7 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await adminHome.assessmentMenu();
         await adminHome.clickOnAssessmentLink();
         await SurveyAssessment.clickCreateAssessment();
+        await createCourse.entercode("Assessment-" + generateCode());
         await SurveyAssessment.fillAssessmentTitle(preAssessmentTitle);
         await SurveyAssessment.selectLanguage();
         await SurveyAssessment.fillDescription();
@@ -66,10 +67,10 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await adminHome.assessmentMenu();
         await adminHome.clickOnAssessmentLink();
         await SurveyAssessment.clickCreateAssessment();
+        await createCourse.entercode("Assessment-" + generateCode());
         await SurveyAssessment.fillAssessmentTitle(postAssessmentTitle);
         await SurveyAssessment.selectLanguage();
         await SurveyAssessment.fillDescription();
-        await createCourse.enterCode("ASMT-" + generateCode());
         await SurveyAssessment.enterPasspercentage("50")
         await SurveyAssessment.selectRandomizeOption("No")
         await SurveyAssessment.enterNofAttempts("2")
@@ -109,9 +110,9 @@ test.describe(`Verify_Learning_Path__single_instance_with_survey_and_assessment_
         await adminHome.survey();
         await adminHome.clickOnsurveyLink();
         await SurveyAssessment.clickCreateSurvey();
+        await createCourse.entercode("Survey-" + generateCode());
         await SurveyAssessment.fillSurveyTitle(surveyTitle);
         await SurveyAssessment.selectLanguage();
-        await createCourse.enterCode("SUR-" + generateCode());
         await SurveyAssessment.fillDescription();
         await SurveyAssessment.clickSaveDraft();
         await SurveyAssessment.clickProceed();

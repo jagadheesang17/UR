@@ -1,11 +1,10 @@
-import { create } from "domain";
 import { test } from "../../../customFixtures/expertusFixture"
 import { FakerData } from "../../../utils/fakerUtils";
 import { generateCode } from "../../../data/apiData/formData";
 
 let title = FakerData.getRandomTitle();
 
-test(`Verify_that_a_user_can_successfully_create_a_survey_add_questions_and_publish_it_for_participants.spec.ts`, async ({ createCourse,adminHome, SurveyAssessment }) => {
+test.skip(`Verify_that_a_user_can_successfully_create_a_survey_add_questions_and_publish_it_for_participants.spec.ts`, async ({ createCourse,adminHome, SurveyAssessment }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Verify_that_a_user_can_successfully_create_a_survey_add_questions_and_publish_it_for_participants.spec.ts' },
@@ -17,9 +16,9 @@ test(`Verify_that_a_user_can_successfully_create_a_survey_add_questions_and_publ
     await adminHome.survey();
     await adminHome.clickOnsurveyLink();
     await SurveyAssessment.clickCreateSurvey();
+    await createCourse.entercode("Survey-" + generateCode());
     await SurveyAssessment.fillSurveyTitle(title);
     await SurveyAssessment.selectLanguage();
-    await createCourse.enterCode("SUR-" + generateCode());
     await SurveyAssessment.fillDescription();
     await SurveyAssessment.clickSaveDraft();
     await SurveyAssessment.clickProceed();

@@ -63,7 +63,7 @@ test(`Verify that user address validation functionality working as expected for 
     for (const row of data) {
         const { country,state,timezone,city,zipcode } = row;
         await learnerHome.basicLogin(courseAdmin, "default");
-       // await learnerHome.termsAndConditionScroll();
+       // // await learnerHome.termsAndConditionScroll();
         await profile.clickProfile();
         await profile.preferenceTab();
         await profile.typeAddress("Address 1",FakerData.getAddress() );

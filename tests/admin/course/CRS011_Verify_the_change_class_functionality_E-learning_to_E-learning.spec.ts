@@ -7,7 +7,7 @@ import { FakerData, getRandomSeat } from '../../../utils/fakerUtils';
 import { generateCode } from "../../../data/apiData/formData";
 
 let createdCode: any
-const code = "CRS"+"-"+generateCode();
+const code = "CRS" + "-" + generateCode();
 const courseName = FakerData.getCourseName();
 const sessionName = FakerData.getSession();
 const elCourseName = ("Elearning" + " " + FakerData.getCourseName());
@@ -18,7 +18,7 @@ let tag: any
 const instructorName = credentials.INSTRUCTORNAME.username
 test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, () => {
     test.describe.configure({ mode: "serial" });
-    test(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, async ({ adminHome, createCourse, editCourse, contentHome ,enrollHome}) => {
+    test(`Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts`, async ({ adminHome, createCourse, editCourse, contentHome, enrollHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `CRS003_Verify_the_change_class_functionality_E-learning_to_E-learning.spec.ts` },
@@ -27,8 +27,8 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         await adminHome.loadAndLogin("CUSTOMERADMIN")
         await adminHome.clickMenu("Course");
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode("CRS"+"-"+generateCode());
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode("CRS" + "-" + generateCode());
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("E-Learning")
@@ -61,8 +61,8 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
             await createCourse.clickCreateInstance();
         }
         await addinstance("E-Learning");
-    await createCourse.enter("course-title", elCourseName);
-   // await createCourse.entercode(code);
+        await createCourse.enter("course-title", elCourseName);
+        // await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here
@@ -73,8 +73,8 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         await createCourse.clickinstanceClass();
         await createCourse.addInstances();
         await addinstance("E-Learning");
-    await createCourse.enter("course-title", elCourseName1);
-    await createCourse.entercode("CRS1"+"-"+generateCode());
+        await createCourse.enter("course-title", elCourseName1);
+        await createCourse.entercode("CRS1" + "-" + generateCode());
         await createCourse.contentLibrary();
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
@@ -82,14 +82,14 @@ test.describe(`Verify_the_change_class_functionality_E-learning_to_E-learning.sp
         console.log(courseName);
         console.log(elCourseName1);
         await contentHome.gotoListing();
-await adminHome.menuButton()
-await adminHome.clickEnrollmentMenu();
-await adminHome.clickEnroll();
-await enrollHome.selectBycourse(elCourseName)
-await enrollHome.clickSelectedLearner();
-await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
-await enrollHome.clickEnrollBtn();
-await enrollHome.verifytoastMessage()
+        await adminHome.menuButton()
+        await adminHome.clickEnrollmentMenu();
+        await adminHome.clickEnroll();
+        await enrollHome.selectBycourse(elCourseName)
+        await enrollHome.clickSelectedLearner();
+        await enrollHome.enterSearchUser(credentials.LEARNERUSERNAME.username)
+        await enrollHome.clickEnrollBtn();
+        await enrollHome.verifytoastMessage()
     })
 
 
@@ -101,19 +101,19 @@ await enrollHome.verifytoastMessage()
             { type: `Test Description`, description: `Learner_verification_change_class_functionality_E-learning_to_E-learning.` }
         );
 
-       // let courseName="Mobile Card Transmit";
-    //    let elCourseName=" Elearning Mobile System Reboot";
-     //   let tag="E-enable Networks";
+        // let courseName="Mobile Card Transmit";
+        //    let elCourseName=" Elearning Mobile System Reboot";
+        //   let tag="E-enable Networks";
 
         await learnerHome.learnerLogin("LEARNERUSERNAME", "DefaultPortal");
         await catalog.clickMyLearning();
-        await catalog.searchMyLearning(elCourseName);
-        await catalog.clickCourseInMyLearning(elCourseName);
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         await catalog.changeClass();
-        await catalog.clickSelectcourse(elCourseName1);
-        console.log(elCourseName1);
+        await catalog.clickSelectcourse(courseName);
+        console.log(courseName);
         await catalog.clickEnroll();
-       // await catalog.verifyChangeClass();
-        
+        // await catalog.verifyChangeClass();
+
     })
 })

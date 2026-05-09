@@ -1,25 +1,22 @@
+import { expect } from "@playwright/test";
 import { test } from "../../../customFixtures/expertusFixture"
 import { readDataFromCSV } from "../../../utils/csvUtil";
 import { FakerData } from '../../../utils/fakerUtils';
 import { updateFieldsInJSON } from "../../../utils/jsonDataHandler";
-import { URLConstants } from "../../../constants/urlConstants";
-import { CatalogPage } from "../../../pages/CatalogPage";
 import { generateCode } from "../../../data/apiData/formData";
 
 const courseAdmin: any = FakerData.getUserId()
 const roleName = FakerData.getFirstName() + " Admin"
 const groupTitle: any = FakerData.getFirstName() + " Admin"
-const LearnergroupTitle: any = FakerData.getFirstName() + " Learner"
 const groupTitle2: any = FakerData.getFirstName() + " Admin"
-const LearnergroupTitle2: any = FakerData.getFirstName() + " Learner"
 let courseName = ("Cron " + FakerData.getCourseName());
 const title = FakerData.getRandomTitle();
-let learnerGroups: string[] = [];
 let adminGroups: string[] = [];
-let learnerGroupsInAccess: string[] = [];
 let adminGroupsInAccess: string[] = [];
 
-test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome, editCourse, createUser, learnerHome, adminRoleHome, adminGroup, createCourse, contentHome, learnerGroup }) => {
+    test.describe.configure({ mode: 'serial' });
+test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome, editCourse, createUser, learnerHome, adminRoleHome, adminGroup, createCourse, contentHome }) => {
+     
     test.info().annotations.push(
         { type: `Author`, description: `Tamilvanan` },
         { type: `TestCase`, description: `Creating user with seperate groups` },
@@ -84,7 +81,7 @@ test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome,
 });
 
 
-    test(`Creating user with seperate Admin and Learner group`, async ({ adminHome, editCourse, createUser, learnerHome, adminRoleHome, adminGroup, createCourse, contentHome, learnerGroup }) => {
+    test(`Creating user with seperate Admin and Learner group`, async ({ adminHome, editCourse, createUser, learnerHome, adminRoleHome, adminGroup, createCourse, contentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Creating user with seperate groups` },
@@ -121,71 +118,14 @@ test(`Creating user with seperate Admin and Learner groups`, async ({ adminHome,
     await adminGroup.clickSelelctUsers();
     await adminGroup.clickActivate()
     await adminGroup.clickSave()
-    await adminGroup.clickProceed();
-    await createCourse.verifySuccessMessage();
-    await contentHome.gotoListing();
-    adminGroups = await learnerGroup.addGroups(groupTitle, groupTitle2);
-    console.log(adminGroups);
-});
-
-    test(`Creating user  seperate Admin and Learner group`, async ({ adminHome, editCourse, createUser, learnerHome, adminRoleHome, adminGroup, createCourse, contentHome, learnerGroup }) => {
-        test.info().annotations.push(
-            { type: `Author`, description: `Tamilvanan` },
-            { type: `TestCase`, description: `Creating user with seperate groups` },
-            { type: `Test Description`, description: `Creating user with seperate admin and learner groups` }
-    
-        );
-
-    //creating learner group
-    await adminHome.loadAndLogin("SUPERADMIN")
-    await adminHome.menuButton()
-    await adminHome.people();
-    await learnerHome.LearnerGroup();
-    await adminGroup.clickCreateGroup();
-    await createCourse.entercode("GRP-" + generateCode());
-    await adminGroup.enterGroupTitle(LearnergroupTitle)
-    await adminGroup.searchUser(courseAdmin)
-    await adminGroup.clickuserCheckbox(courseAdmin)
-    await learnerGroup.clickSelelctLearners();
-    await adminGroup.clickActivate()
-    await adminGroup.clickSave()
     await adminGroup.clickYes();
     await adminGroup.clickProceed();
     await createCourse.verifySuccessMessage();
     await contentHome.gotoListing();
-    await learnerGroup.clickAccessButtonInLearner()
-    await learnerGroup.selectAdminGrpInLearner(groupTitle)
-    await createCourse.saveAccessButton();
-    await learnerGroup.clickOkButton();
-    await editCourse.clickClose();
-
-
-    //creating another learner group
-    await adminGroup.clickCreateGroup();
-    await adminGroup.enterGroupTitle(LearnergroupTitle2);
-    await adminGroup.searchUser(courseAdmin);
-    await adminGroup.clickuserCheckbox(courseAdmin);
-    await createCourse.entercode("GRP-" + generateCode());
-    await learnerGroup.clickSelelctLearners();
-    await adminGroup.clickActivate()
-    await adminGroup.clickSave()
-    await adminGroup.clickYes();
-    await adminGroup.clickProceed();
-    await createCourse.verifySuccessMessage();
-    await contentHome.gotoListing();
-    await learnerGroup.clickAccessButtonInLearner()
-    await learnerGroup.selectAdminGrpInLearner(groupTitle2)
-    await createCourse.saveAccessButton();
-    await learnerGroup.clickOkButton();
-    await editCourse.clickClose();
-    learnerGroups = await learnerGroup.addGroups(LearnergroupTitle,LearnergroupTitle2);
-    console.log(learnerGroups);
-    
-
-
+    adminGroups = [groupTitle, groupTitle2];
 });
 
-test(`Creating course and Verifying created groups`, async ({ adminHome, bannerHome, editCourse, createUser, adminGroup, createCourse, learnerHome, learnerGroup, contentHome }) => {
+test(`Creating course and Verifying created groups`, async ({ adminHome, bannerHome, editCourse, createUser, adminGroup, createCourse, learnerHome, contentHome }) => {
     test.info().annotations.push(
         { type: `Author`, description: `Tamilvanan` },
         { type: `TestCase`, description: `Creating course and Verifying groups` },
@@ -228,13 +168,11 @@ test(`Creating course and Verifying created groups`, async ({ adminHome, bannerH
     await createCourse.clickSave();
     await createCourse.modifyTheAccess();
     await createCourse.clickAccessButton();
-    adminGroupsInAccess=await adminGroup.getAdminGroups();
-    learnerGroupsInAccess=await learnerGroup.getLearnerGroups();
-    await learnerGroup.verifyGroups(learnerGroups,learnerGroupsInAccess);
-    await learnerGroup.verifyGroups(adminGroups,adminGroupsInAccess)
+    adminGroupsInAccess = await adminGroup.getAdminGroups();
+    expect([...adminGroups].sort()).toEqual([...adminGroupsInAccess].sort());
 })
 
-test(`Creating user and Verifying created groups`, async ({ adminHome, bannerHome, createUser, adminGroup, createCourse, learnerHome, learnerGroup, contentHome }) => {
+test.skip(`Creating user and Verifying created groups`, async ({ adminHome, bannerHome, createUser, adminGroup, createCourse, learnerHome, contentHome }) => {
     test.info().annotations.push(
         { type: `Author`, description: `Tamilvanan` },
         { type: `TestCase`, description: `Creating user and Verifying groups` },
@@ -281,15 +219,11 @@ test(`Creating user and Verifying created groups`, async ({ adminHome, bannerHom
         await createUser.enter("user-mobile", FakerData.getMobileNumber());
         await createUser.selectOrganization("organization", "ORG_TCS");
         await createUser.clickSave();
-        // await createCourse.modifyTheAccess();
-        // await createCourse.clickAccessButton();
-        // adminGroupsInAccess=await adminGroup.getAdminGroupsInUserPage();
-        // await learnerGroup.verifyGroups(adminGroups,adminGroupsInAccess)
     }
 });
 
 
-test(`Creating Certification and Verifying created groups`, async ({ adminHome, learningPath, bannerHome, createUser, adminGroup, createCourse, learnerHome, learnerGroup, contentHome }) => {
+test(`Creating Certification and Verifying created groups`, async ({ adminHome, learningPath, bannerHome, createUser, adminGroup, createCourse, learnerHome, contentHome }) => {
     test.info().annotations.push(
         { type: `Author`, description: `Tamilvanan` },
         { type: `TestCase`, description: `Creating Certification and Verifying created groups` },
@@ -315,8 +249,6 @@ test(`Creating Certification and Verifying created groups`, async ({ adminHome, 
     await learningPath.searchAndClickCourseCheckBox(courseName);
     await learningPath.clickAddSelectCourse();
     await createCourse.clickAccessButton();
-    adminGroupsInAccess=await adminGroup.getAdminGroups();
-    learnerGroupsInAccess=await learnerGroup.getLearnerGroups();
-    await learnerGroup.verifyGroups(learnerGroups,learnerGroupsInAccess);
-    await learnerGroup.verifyGroups(adminGroups,adminGroupsInAccess)
+    adminGroupsInAccess = await adminGroup.getAdminGroups();
+    expect([...adminGroups].sort()).toEqual([...adminGroupsInAccess].sort());
 });

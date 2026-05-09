@@ -68,7 +68,7 @@ export class CoursePage extends AdminHomePage {
         saveInDraftCheckbox: "//span[contains(text(),'Save as Draft')]",
         deliveryTypeDropdown: "//div[@id='wrapper-course-delivery-type']",
         deliveryTypeOption: (deliveryType: string) => `(//span[text()='${deliveryType}'])[1]`,
-        editCourseTabLink: "//a[text()='Edit Course']",
+        //editCourseTabLink: "//a[text()='Edit Course']",
         addInstancesBtn: "//button[@id='course-btn-add-instances']",
         instanceDeliveryTypeField: "//div[@id='wrapper-instanceDeliveryType']",
         instanceDeliveryTypeOption: (delivery: string) => `//footer/following::a/span[text()='${delivery}']`,
@@ -81,10 +81,17 @@ export class CoursePage extends AdminHomePage {
         instructorDropdownIndex: (index: number) => `(//label[text()='Instructor']/following-sibling::div//input)[${index}]`,
         instructorOption: (instructorName: string) => `//li[contains(text(),'${instructorName}')]`,
         instructorOptionIndex: (instructorName: string, index: number) => `(//li[contains(text(),'${instructorName}')])[${index}]`,
-        locationSelection: "//label[text()='Select Location']/following-sibling::div//input[1]",
-        locationDropdown: "//label[text()='Select Location']/following-sibling::div//input[@placeholder='Search']",
-        locationOption: (locationName: string) => `//li[text()='${locationName}']`,
+        //  locationSelection: "//label[text()='Select Location']/following-sibling::div//input[1]",
+        //  locationDropdown: "//label[text()='Select Location']/following-sibling::div//input[@placeholder='Search']",
+        //locationOption: (locationName: string) => `//li[text()='${locationName}']`,
         CourseCalendaricon: "//div[@id='complete_by_date']/input",
+
+        locationSelection: "//label[text()='Select Location']/following-sibling::div//input[1]",
+        locationSelection2: "(//label[text()='Select Location']/following-sibling::div//input)[2]",
+
+        locationDropdown: "//label[text()='Select Location']/following-sibling::div//input[@placeholder='Search']",
+
+        locationOption: (locationName: string) => `(//li[contains(normalize-space(.),'${locationName}')])[1]`,
         tomorrowdate: "//td[@class='today day']/following-sibling::td[1]",
         nextMonth: `//div[@class='datepicker-days']//th[@class='next']`,
         calanderIcon: "(//label[text()='Date']//following::button[contains(@class,'calendaricon')])[1]",
@@ -102,7 +109,8 @@ export class CoursePage extends AdminHomePage {
         surveyAndAssessmentLink: "//button[text()='Survey/Assessment']",
         //surveyCheckBox: "//div[@id='sur_ass-lms-scroll-survey-list']//i[contains(@class,'fa-duotone fa-square icon')]", -->The XPath has been changed on the product side. We updated it on 10/7/2024
         surveyCheckBox: "//div[contains(@id,'scroll-survey-list')]//i[contains(@class,'fa-duotone fa-square icon')]",
-        editCourseBtn: "//a[text()='Edit Course']",
+        // editCourseBtn: "//a[text()='Edit Course']",
+        editCourseTabLink: "//a[text()='Edit Course'] | //a[text()='Edit Class']",
         //assessmentCheckbox: "//div[@id='sur_ass-lms-scroll-assessment-list']//i[contains(@class,'fa-duotone fa-square icon')]", -->The XPath has been changed on the product side. We updated it on 10/7/2024
         assessmentCheckbox: "//div[contains(@id,'scroll-assessment-list')]//i[contains(@class,'fa-duotone fa-square icon')]",
         addAssessmentBtn: "//button[text()='Add As Assessment']",
@@ -117,7 +125,12 @@ export class CoursePage extends AdminHomePage {
         instructorInputIndex: (index: number) => `(//input[contains(@id,'instructors') and (@placeholder='Search')])[${index}]`,
         //instance_Class: "//a[contains(@title,'Instance/Class')]", -->DOM Contented Changed 08-07-2024
         // instance_Class: "//a[contains(@title,'Instance Class') or contains(@aria-label,'Instance/Class')]", --> update on 18/07/2024
-        instance_Class: "//a[contains(@title,'Instance Class') or contains(@aria-label,'Instance/Class') or contains(@title,'Instance/Class')]",
+        //  instance_Class: "//a[contains(@title,'Instance Class') or contains(@aria-label,'Instance/Class') or contains(@title,'Instance/Class')]",
+
+
+        navigateToMainCoursePage: `(//a[contains(@aria-label,'Instance/Class')])[2]`,
+        instance_Class:
+            "//button[text()='Add instance/Class']",
         clickContentLibrary: "//span[text()='Add Content']//following::span[text()='Click here'][1]",
         allContents: "//i[@class='fa-duotone fa-square icon_16_1']",
         contentIndex: (index: number) => `(//i[contains(@class,'fa-duotone fa-square ico')])[${index}]`,
@@ -243,7 +256,7 @@ export class CoursePage extends AdminHomePage {
         clickHereThumbnail: `//div[@class='form-label']//span[text()='Click here']`,
         addThumbnail: `//label[text()='Click here']/following::input[@type='file']`,
         customGalleryRadioBtn: `//span[text()='custom']//preceding::i[contains(@class,'fa-duotone fa-circle icon')]`,
-        uploadedImgSrc: `//label[@for='course-thumbnail-image']//following::img[contains(@class,'upload')]`,
+        uploadedImgSrc: `//input[@id='course-thumbnail-image']`,
         //thumbnail from system gallery
         selectRandomThumbnailimages: `//div[@class='img-wrapper']`,
         //Retrieving code from edit page
@@ -266,7 +279,7 @@ export class CoursePage extends AdminHomePage {
         instanceClass: `//div[text()='Instance  / Class']`,
 
         //edit instance 
-        editInstance: `//span[@title='Edit Instance/Class']`,
+        editInstance: `(//span[@class='icontxt']//button[contains(@class,'nav-link')])[last()]`,
         //class cancel radio button
         classCancel: `//span[contains(text(),'Cancel')]`,
 
@@ -282,7 +295,7 @@ export class CoursePage extends AdminHomePage {
         selectStatus: (data: string) => `//span[text()='${data}']`,
 
         //Class enrollment E-Learn as an admin from the course edit page:-
-        enrollElearn: `//a[@href="/admin/learning/enrollments/viewstatus"]//following::span[text()='Enrollments']`,
+        enrollElearn: `(//span[text()='Enrollments'])[2]`,
         //bulk class creation - manual
         NoOfClass: `//label[text()="Delivery Type"]/following::input[contains(@class,'shadow-none form_field_active')]`,
         sessionNameInput_bulk: (i) => `(//label[text()="Session Name"]/following::input[contains(@id,'instanceClassCode')])[${i + 1}]`,
@@ -334,7 +347,7 @@ export class CoursePage extends AdminHomePage {
         //Delete Course
         deleteCourse: `//span[text()='Delete Course']`,
         //Delete course conform pop-up
-        removeButton: `//button[text()='Remove']`,
+        removeButton: `(//button[text()='Remove'])[1] | (//button[text()='Remove'])[2]`,
         cancelButton: `//button[text()='Cancel']`,
 
         //edit instance from course listing page
@@ -352,6 +365,11 @@ export class CoursePage extends AdminHomePage {
         //code
         codeInput: `(//input[contains(translate(@id, 'CODE', 'code'), 'code')])[1]`,
 
+        editCourseBtn: "//a[text()='Edit Course'] | //a[text()='Edit Class']",
+        complianceEnrollAgainPopup: "//footer//following::span[text()='To publish this compliance course, please enable the \"Allow learners to enroll again\" option in the business rule.']",
+        lpRestrictionPopup: "//footer//following::span[text()='This action cannot be performed because this course is part of a Learning Path/Re-certification.']",
+        lpRestrictionOKButton: "//footer//following::button[text()='OK']",
+        okBtnOnPopup: "//footer//following::button[text()='OK']",
 
     };
 
@@ -489,7 +507,7 @@ export class CoursePage extends AdminHomePage {
         await this.mouseHover(this.selectors.instructorOption_bulk(instructorName, i), "Instructor Name");
         await this.click(this.selectors.instructorOption_bulk(instructorName, i), "Instructor Name", "Button")
 
-    }async captureDropdownValuesOfLocation(i: any, str: string,): Promise<void> {
+    } async captureDropdownValuesOfLocation(i: any, str: string,): Promise<void> {
         await this.wait("minWait")
         //  1. Click on the textbox to open the dropdown
         await this.page.locator(str).click();
@@ -513,7 +531,7 @@ export class CoursePage extends AdminHomePage {
     }
 
 
-async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
+    async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
         await this.wait("minWait")
         //  1. Click on the textbox to open the dropdown
         await this.page.locator(str).click();
@@ -536,7 +554,7 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
         await this.click(this.selectors.locationOption_Copy(locationName), "Instructor Name", "Button")
     }
     //Bulk class creation
-    async bulkClassCreation(classNos: any, mode: "manual" | "copy/paste",title:string) {
+    async bulkClassCreation(classNos: any, mode: "manual" | "copy/paste", title: string) {
         await this.click(this.selectors.NoOfClass, "TextBox", "click");
         await this.keyboardType(this.selectors.NoOfClass, classNos)
         await this.clickCreateInstance();
@@ -544,9 +562,9 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
             case "manual":
                 // const totalClasses = parseInt(classNos);
                 for (let i = 0; i < classNos; i++) {
-                    await this.enterSessionName_bulk(title+"_"+FakerData.getSession(), i);
+                    await this.enterSessionName_bulk(title + "_" + FakerData.getSession(), i);
                     await this.captureDropdownValues(i, this.selectors.instructorDropdown_bulk(i));
-                    await this.captureDropdownValuesOfLocation(i,this.selectors.locationSelection_bulk(i));
+                    await this.captureDropdownValuesOfLocation(i, this.selectors.locationSelection_bulk(i));
                     await this.enterRandomDate_bulk(i)
                     await this.startandEndTime_bulkClass(i);
                     await this.setMaxSeat_bulk(i);
@@ -669,8 +687,11 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
     }
     //Class enrollment E-Learn as an admin from the course edit page:-
     async enrollforElearn() {
+        await this.wait("mediumWait")
         await this.validateElementVisibility(this.selectors.enrollElearn, "Enrollment");
         await this.click(this.selectors.enrollElearn, "Enrollment", "Icon");
+        await this.wait("mediumWait")
+
     }
 
     //Filter By Status in Course listing
@@ -709,7 +730,7 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
 
     //edit instance on course edit page
     async clickEditInstance() {
-        await this.wait("minWait");
+        await this.wait("mediumWait");
         await this.validateElementVisibility(this.selectors.editInstance, "Edit Instance");
         await this.click(this.selectors.editInstance, "Edit Instance", "Icon");
     }
@@ -729,6 +750,16 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
         await this.wait("minWait");
         await this.validateElementVisibility(this.selectors.clickEdit, "Content");
         await this.click(this.selectors.clickEdit, "Content", "button");
+    }
+
+    // Method to search for a course in the course listing
+    async searchCourse(courseName: string) {
+        await this.wait("minWait");
+        const searchField = "//input[@id='course-search-field'] | //input[contains(@placeholder, 'Search')] | //input[@type='search']";
+        await this.type(searchField, "Course Search", courseName);
+        await this.keyboardAction(searchField, "Enter", "Input", "Course Search");
+        await this.wait("mediumWait");
+        console.log(`🔍 Searched for course: ${courseName}`);
     }
 
     //Duration within 30 mins
@@ -859,13 +890,13 @@ async captureDropdownValuesOfLocationCopy(str: string,): Promise<void> {
         await this.page.locator(this.selectors.showInCatalogBtn).scrollIntoViewIfNeeded();
         await this.wait("maxWait");
         await this.page.waitForFunction(() => {
-  const el = document.querySelector('#publishedcatalog');
-  return el && !el.hasAttribute('disabled');
-}, { timeout: 15000 });
+            const el = document.querySelector('#publishedcatalog');
+            return el && !el.hasAttribute('disabled');
+        }, { timeout: 15000 });
 
-// Once enabled, click via label (safer than clicking input)
-await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show in Catalog' }).click();
-        
+        // Once enabled, click via label (safer than clicking input)
+        await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show in Catalog' }).click();
+
         // await this.validateElementVisibility(this.selectors.showInCatalogBtn, "Show in Catalog");
         // const catalogBtn = this.page.locator(this.selectors.showInCatalogBtn);
         // await catalogBtn.waitFor({ state: "attached", timeout: 10000 });
@@ -881,49 +912,105 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
         await this.click(this.selectors.clickSaveasDraft, "Draft", "CheckBox");
     }
 
-  async clickSave() {
-    await this.wait("maxWait");
-    await this.validateElementVisibility(this.selectors.saveBtn, "Save");
-    // await this.click(this.selectors.saveBtn, "Save", "Button");
-
-    await this.handleSaveUntilProceed();
-  }
-    async handleSaveUntilProceed(maxRetries = 3) {
-  let attempt = 0;
-
-  while (attempt < maxRetries) {
-    attempt++;
-    console.log(`Attempt ${attempt}: Clicking Save button...`);
-
-    try {
-      // Wait before clicking each time
-      // Click Save button
-      await this.wait("maxWait");
-      await this.click(this.selectors.saveBtn, "Save", "Button");
-      await this.wait("maxWait");
-      await this.wait("maxWait");
-      const proceedVisible = await this.page.locator(this.selectors.proceedBtn).isVisible();
-      const saveVisible = await this.page.locator(this.selectors.saveBtn).isVisible();
-
-      if (proceedVisible) {
-        console.log("Proceed button visible. Save successful.");
-        return;
-      }
-
-      if (!saveVisible) {
-        console.log("Save button hidden. Assuming Save successful.");
-        return;
-      }
-
-      console.log("Save button still visible. Retrying...");
-
-    } catch (error) {
-      console.log(`Error during Save attempt ${attempt}: ${error.message}`);
+    async clickSave() {
+        await this.ensureRequiredCourseFields();
+        await this.wait("maxWait");
+        await this.validateElementVisibility(this.selectors.saveBtn, "Save");
+        await this.handleSaveUntilProceed();
     }
-  }
+    async ensureRequiredCourseFields() {
+        // Keep API integration course creation stable by auto-filling
+        // common required fields when they are present but empty.
+        try {
+            const codeField = this.page.locator(this.selectors.codeInput).first();
+            if (await codeField.isVisible()) {
+                const currentCode = (await codeField.inputValue()).trim();
+                if (!currentCode) {
+                    await this.entercode(`API-${Date.now()}`);
+                }
+            }
+        } catch (error) {
+            console.log(`Skipping code auto-fill: ${error}`);
+        }
 
-  console.log("Proceed button not visible even after 6 attempts. Save may have failed.");
-}
+        try {
+            const durationField = this.page.locator(this.selectors.totalDurationInput).first();
+            if (await durationField.isVisible()) {
+                const currentDuration = (await durationField.inputValue()).trim();
+                if (!currentDuration) {
+                    await this.selectTotalDuration();
+                }
+            }
+        } catch (error) {
+            console.log(`Skipping total duration auto-fill: ${error}`);
+        }
+
+        try {
+            const infoField = this.page.locator(this.selectors.additionalInfoInput).first();
+            if (await infoField.isVisible()) {
+                const currentInfo = ((await infoField.textContent()) ?? "").trim();
+                if (!currentInfo) {
+                    await this.typeAdditionalInfo();
+                }
+            }
+        } catch (error) {
+            console.log(`Skipping additional info auto-fill: ${error}`);
+        }
+
+        try {
+            const provider = this.page.locator(this.selectors.providerDropdown).first();
+            if (await provider.isVisible()) {
+                await this.providerDropdown();
+            }
+        } catch (error) {
+            console.log(`Skipping provider auto-fill: ${error}`);
+        }
+
+        try {
+            const category = this.page.locator(this.selectors.selectCategoryBtn).first();
+            if (await category.isVisible()) {
+                await this.handleCategoryADropdown();
+            }
+        } catch (error) {
+            console.log(`Skipping category auto-fill: ${error}`);
+        }
+    }
+    async handleSaveUntilProceed(maxRetries = 3) {
+        let attempt = 0;
+
+        while (attempt < maxRetries) {
+            attempt++;
+            console.log(`Attempt ${attempt}: Clicking Save button...`);
+
+            try {
+                // Wait before clicking each time
+                // Click Save button
+                await this.wait("maxWait");
+                await this.click(this.selectors.saveBtn, "Save", "Button");
+                await this.wait("maxWait");
+                await this.wait("maxWait");
+                const proceedVisible = await this.page.locator(this.selectors.proceedBtn).isVisible();
+                const saveVisible = await this.page.locator(this.selectors.saveBtn).isVisible();
+
+                if (proceedVisible) {
+                    console.log("Proceed button visible. Save successful.");
+                    return;
+                }
+
+                if (!saveVisible) {
+                    console.log("Save button hidden. Assuming Save successful.");
+                    return;
+                }
+
+                console.log("Save button still visible. Retrying...");
+
+            } catch (error) {
+                console.log(`Error during Save attempt ${attempt}: ${error.message}`);
+            }
+        }
+
+        throw new Error(`Proceed button not visible after ${maxRetries} save attempts. Save may have failed.`);
+    }
 
 
 
@@ -932,6 +1019,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
         await this.wait("maxWait")
         await this.validateElementVisibility(this.selectors.proceedBtn, "Proceed");
         await this.click(this.selectors.proceedBtn, "Proceed", "Button");
+        await this.wait("minWait")
         // await this.wait("maxWait") //It is added to fix TP Structure loading issue
     }
 
@@ -1255,13 +1343,34 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
     }
 
     async selectLocation() {
-        await this.click(this.selectors.locationSelection, "Select Location", "DropDown");
-        await this.click(this.selectors.locationDropdown, "Select Location", "DropDown");
-        let location = getRandomLocation()
-        await this.type(this.selectors.locationDropdown, "Select Location", location);
-        await this.mouseHover(this.selectors.locationOption(location), "Location");
-        await this.click(this.selectors.locationOption(location), "Location", getRandomLocation());
-
+        await this.wait("minWait");
+        await this.page.locator(this.selectors.locationSelection).waitFor({ state: 'visible', timeout: 5000 });
+        await this.page.locator(this.selectors.locationSelection).scrollIntoViewIfNeeded();
+        await this.page.locator(this.selectors.locationSelection).scrollIntoViewIfNeeded();
+        await this.click(
+            this.selectors.locationSelection,
+            "Select Location",
+            "DropDown"
+        );
+        await this.click(
+            this.selectors.locationDropdown,
+            "Select Location",
+            "DropDown"
+        );
+        let location = getRandomLocation();
+        await this.type(
+            this.selectors.locationDropdown,
+            "Select Location",
+            location
+        );
+        //await this.mouseHover(this.selectors.locationOption(location), "Location");
+        await this.wait("minWait");
+        await this.page.locator(this.selectors.locationOption(location)).waitFor({ state: 'visible', timeout: 15000 });
+        await this.click(
+            this.selectors.locationOption(location),
+            "Location",
+            location
+        );
     }
     async enterStartDate() {
         const date = gettomorrowDateFormatted();
@@ -1381,7 +1490,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
         await this.click(this.selectors.detailsbtn, "details", "button");
         await this.wait('mediumWait'); // Wait for details tab to load
         await this.typeDescription("edited course description");
-       // await this.clickCatalog();
+        // await this.clickCatalog();
         await this.validateElementVisibility(this.selectors.courseUpdateBtn, "button");
         await this.click(this.selectors.courseUpdateBtn, "Update", "button");
     }
@@ -1413,12 +1522,30 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
 
     async clickinstanceClass() {
         await this.wait("mediumWait");
-        await this.page.waitForSelector(this.selectors.instance_Class);
-        await this.click(this.selectors.instance_Class, "Edit Instance Class", "Button");
+        await this.spinnerDisappear();
+
+        // Wait for page to be fully loaded after edit course navigation
+        // await this.page.waitForLoadState('load');
+        await this.wait("minWait");
+
+        await this.page.waitForSelector(this.selectors.navigateToMainCoursePage, { timeout: 30000 });
+
+        // Scroll to ensure the tab is in view
+        await this.page.locator(this.selectors.navigateToMainCoursePage).scrollIntoViewIfNeeded();
+
+        await this.click(
+            this.selectors.navigateToMainCoursePage,
+            "Edit Instance Class",
+            "Button"
+        );
+
+        // Wait for the tab content to load
+        await this.wait("mediumWait");
+        await this.spinnerDisappear();
     }
 
     //To upload the content through course details page:-
-    async contentLibrary(content?: "AICC" | "AICC&SCORM" | "Passed-Failed-SCORM2004" | "Completed-Incomplete-SCORM-1.2" | "AutoVimeo" | "tin_can" | "AutoAudioFile" | "AutoPDF"| any) {
+    async contentLibrary(content?: "AICC" | "AICC&SCORM" | "Passed-Failed-SCORM2004" | "Completed-Incomplete-SCORM-1.2" | "AutoVimeo" | "tin_can" | "AutoAudioFile" | "AutoPDF" | any) {
         await this.spinnerDisappear();
         await this.validateElementVisibility(this.selectors.clickContentLibrary, "Content");
         await this.mouseHover(this.selectors.clickContentLibrary, "Content");
@@ -1477,7 +1604,7 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
         else if (content == content && content != undefined) {
             await doContentAdd(content);
         }
-         else if (content == "AutoPDF") {
+        else if (content == "AutoPDF") {
             await doContentAdd("AutoPDF");
         }
         else {
@@ -2018,6 +2145,22 @@ await this.page.locator("label[for='publishedcatalog'] span", { hasText: 'Show i
         await this.validateElementVisibility(this.selectors.editCourseFromListingPage, "editCourse");
         await this.click(this.selectors.editCourseFromListingPage, "edit", "button")
     }
+
+
+    async clickOKButton() {
+        await this.wait("minWait");
+        await this.click(this.selectors.okBtnOnPopup, "OK", "Button");
+    }
+
+    async verifyComplianceEnrollAgainPopup() {
+        await this.validateElementVisibility(
+            this.selectors.complianceEnrollAgainPopup,
+            "Compliance Enroll Again Popup"
+        );
+        await this.verification(
+            this.selectors.complianceEnrollAgainPopup, "")
+    }
+
 
 
 

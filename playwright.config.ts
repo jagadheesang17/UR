@@ -5,7 +5,7 @@ const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
 
 //If false qa will run,if its true automation environment will run
-export let environmentSetup: "qa" | "dev" | "automation" | "qaProduction" = "dev";
+export let environmentSetup: "qa" | "dev" | "automation" | "qaProduction" = "qaProduction";
 export default defineConfig({
   timeout: 600000,
 
@@ -13,7 +13,8 @@ export default defineConfig({
     timeout: 60000,
   },
   testDir: "./tests",
-  // globalSetup: require.resolve('utils/jiraReport.ts'),
+  //  globalSetup: require.resolve('global-setup.ts'),
+  
 
   fullyParallel: false,
   retries: 0,
@@ -75,7 +76,7 @@ export default defineConfig({
     '*/tests/LearnerSide/**/*.spec.ts',
     //'*/tests/Instructor/**/*.spec.ts',
     '*/tests/LearnerProfile/**/*.spec.ts',
-    '*/tests/ReEnroll/**/*.spec.ts',
+    '*/tests/admin/EnrollAgain/**/*.spec.ts',
    // '*/tests/EnrollmentByManager/**/*.spec.ts',
     // '*/tests/Terms_and_Conditions/**/*.spec.ts',  
     // '*/tests/SSO/**/*.spec.ts',

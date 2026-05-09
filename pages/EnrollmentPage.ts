@@ -11,20 +11,20 @@ export class EnrollmentPage extends AdminHomePage {
         manageEnrollement: `(//div[@id='wrapper-enrollment-action']//div)[1]`,
         enrollType: `//span[text()='Enroll']`,
         searchcourseOrUser: `//input[contains(@id,'exp-search')]`,
-        noResultFound:`//h3[text()='No matching result found.']`,
+        noResultFound: `//h3[text()='No matching result found.']`,
         courseList: `//div[contains(@id,'exp-search-lms')]//li`,
         courseListOpt: (index: number) => `(//div[contains(@id,'exp-search-lms')]//li)[${index}]`,
         userList: `(//div[contains(@id,'lms-scroll-results')]//li)`,
-        userListOpt: (index: number) => `(//div[contains(@id,'lms-scroll-results')]//li)[${index}]`,
+        userListOpt: (data: string) => `((//*[self::span or self::td][text()='${data}'])[1]/following::label)[1]`,
         selectCourse: `(//input[contains(@id,'training')]/following::i)[1]`,
         selectedLearners: `//button[text()='Select Learner']`,
-       // selectUser: `(//input[contains(@id,'selectedlearners')]/following::i)[2]`,
-         selectUser: (data: string) => `(//td[contains(text(),'${data}')]//following::i[contains(@class,'square icon')])[1]`,
+        // selectUser: `(//input[contains(@id,'selectedlearners')]/following::i)[2]`,
+        selectUser: (data: string) => `(//td[contains(text(),'${data}')]//following::i[contains(@class,'square icon')])[1]`,
         enrollBtn: "//button[text()='Enroll']",
         toastMeassage: `//section[contains(@class,'lms-success-msg-wrapper')]//h3`,
         enrollStatus: `(//div[contains(@id,'wrapper-enrollment-action')])[2]`,
         enrollORCancel: (data: string) => `//span[text()='${data}']`,
-        verifyManageEnrollmentDropdown:`//button[@data-id='enrollment-action']`,
+        verifyManageEnrollmentDropdown: `//button[@data-id='enrollment-action']`,
         reaonDesc: `//textarea[@id='check_box_msgsenrollmentviewstatususer']`,
         submitReason: `//button[text()='Submit']`,
         saveStatus: `//button[text()='Save']`,
@@ -48,7 +48,7 @@ export class EnrollmentPage extends AdminHomePage {
 
         //Class Cancel Reason
         cancelReason: `//textarea[@id='check_box_msgs']`,
-        confirmBth: `//button[text()='Confirm']`,
+        confirmBth: `(//button[text()='Confirm'])[2]`,
         discardBtn: `//button[text()='Discard']`,
 
         //max seat over ride popup
@@ -56,14 +56,14 @@ export class EnrollmentPage extends AdminHomePage {
         clickYesBtn: `//button[text()='Yes']`,
         okBtn: "//button[text()='OK']",
         clickEnrollButton: `//a[contains(@class,'btn') and text()='Enroll']`,
-        
+
         //selecting the user for order creation
         selectUserForOrderCreation: (data: string) => `//td[contains(text(),'${data}')]//following::i[contains(@class,'fa-circle icon')][1]`,
         clickCheckoutBtn: `//button[text()='checkout']`,
         clickCalculateTax: `//button[text()='Calculate Tax']`,
-        clickCreateAndApproveOrder:`//button[text()='create order & approve']`,
-        clickCreateOrderBtn:`//button[text()='Create Order']`,
-        selectCourseForOrderCreation:`(//input[contains(@id,'training')]/following::i)[2]`,
+        clickCreateAndApproveOrder: `//button[text()='create order & approve']`,
+        clickCreateOrderBtn: `//button[text()='Create Order']`,
+        selectCourseForOrderCreation: `(//input[contains(@id,'training')]/following::i)[2]`,
         paymentMethodDropdown: `//label[text()='Payment Method']//following::div[@id='wrapper-state']`,
         paymentMethod: (option: string) => `//span[text()='${option}']`,
         orderSuccessMsg: `//section[contains(@class,'lms-success')]//h3`,
@@ -74,7 +74,7 @@ export class EnrollmentPage extends AdminHomePage {
         // TP Enrollment selectors
         enrollToTpBtn: `//span[text()='View Status/Enroll Learner to TP Courses']`,
         searchUserInput: `//input[@placeholder='Search']`,
-            searchUserCheckbox:(user:string)=>`(//td[text()='${user}']/following::i)[1]`,
+        searchUserCheckbox: (user: string) => `(//td[text()='${user}']/following::i)[1]`,
         userSearchCheckbox: (username: string) => `//td[contains(text(),'${username}')]//following::td//label)[1]`,
         selectLearnerBtn: `//button[text()='Select Learner']`,
         tpSearchInput: `(//input[@placeholder='Search'])[2]`,
@@ -82,7 +82,7 @@ export class EnrollmentPage extends AdminHomePage {
         selectTPRadio: `//input[@type='radio']`,
         tpCourseSearchInput: `//input[@placeholder='Search Course']`,
         tpCourseResult: (courseName: string) => `//td[contains(text(),'${courseName}')]`,
-        tpInstanceResult:(data:string)=>`//li[text()='${data}']`,
+        tpInstanceResult: (data: string) => `//li[text()='${data}']`,
         enrollmentsTab: `//a[text()='Enrollments']`,
 
 
@@ -97,9 +97,9 @@ export class EnrollmentPage extends AdminHomePage {
     async clickViewLearner() {
         await this.click(this.selectors.viewLearner, "View Learner", "Button")
     }
-    
-     //Popup handling when an admin tries to enroll for cancelled/completed class
-     async clickOkBtn(){
+
+    //Popup handling when an admin tries to enroll for cancelled/completed class
+    async clickOkBtn() {
         await this.wait("minWait")
         await this.validateElementVisibility(this.selectors.okBtn, 'OK');
         await this.click(this.selectors.okBtn, "OK", "Button")
@@ -108,9 +108,11 @@ export class EnrollmentPage extends AdminHomePage {
 
     //Class cancel reason in course page
     async classCancelReason() {
+        await this.wait("mediumWait")
         await this.type(this.selectors.cancelReason, "Enroll Status", FakerData.getDescription())
+        await this.wait("mediumWait")
         await this.click(this.selectors.confirmBth, "Submit", "button")
-        await this.wait("maxWait")
+        
     }
 
     async selectEnroll() {
@@ -121,46 +123,47 @@ export class EnrollmentPage extends AdminHomePage {
 
 
     async selectBycourse(data: string) {
-        await this.wait("minWait")
+        await this.wait("mediumWait")
         await this.waitSelector(this.selectors.searchcourseOrUser, "Course Name")
         await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
         await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
         await this.wait("minWait")
-        await this.waitSelector(`(//div[text()='${data}']/following::label[@class='custom-control-label']/i)[1]`, "User")
-        await this.click(`(//div[text()='${data}']/following::label[@class='custom-control-label']/i)[1]`, "User", "Radio button")
-         //div[text()='CRS Haptic Card Synthesize']
-       
+        const courseRow = this.page.locator(`xpath=(//li[.//div[normalize-space(text())='${data}']])[1]`);
+        await courseRow.waitFor({ state: "visible" });
+        const courseSelectorLabel = courseRow.locator("xpath=.//label[contains(@class,'custom-control-label')]").first();
+        await courseSelectorLabel.waitFor({ state: "visible" });
+        await courseSelectorLabel.click({ force: true });
+        //div[text()='CRS Haptic Card Synthesize']
+
         // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
         // const randomIndex = Math.floor(Math.random() * index) + 1;
         // await this.click(this.selectors.courseListOpt(randomIndex), "Course", "Options")
         // await this.click(this.selectors.selectCourse, "Select Course", "Radio button")
 
-    }   
+    }
     async clickSelectedLearner() {
         await this.click(this.selectors.selectedLearners, "Select Learners", "Button")
 
     }
     async enterSearchUser(data: string) {
-        await this.wait("minWait");
-        await this.waitSelector(this.selectors.searchcourseOrUser, "User Name")
-         await this.page.fill(this.selectors.searchcourseOrUser, '');
-        await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
-        await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
-        await this.wait("minWait")
-        await this.waitSelector(`(//td[text()='${data}']//following::i)[2]`, "User")
-        await this.click(`(//td[text()='${data}']//following::i)[2]`, "User", "Radio button")
-        // await this.click("(//label[contains(@id,'selectedlearners')])[1]", "learner selection", "Button")
-        // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
-        // const randomIndex = Math.floor(Math.random() * index) + 1;
-        // await this.click(this.selectors.userListOpt(randomIndex), "Course", "Options")
-        // await this.click(this.selectors.selectUser, "Select Course", "Radio button")
+        await this.wait("mediumWait");
+        await this.click(this.selectors.searchcourseOrUser, "Search User", "Input Field");
+        await this.typeAndEnter(this.selectors.searchcourseOrUser, "User Name", data);
+        try {
+            await this.wait("minWait");
+            await this.click(this.selectors.userListOpt(data), "User", "Options");
+        } catch {
+            await this.typeAndEnter(this.selectors.searchcourseOrUser, "User Name", data);
+            await this.wait("minWait");
+            await this.click(this.selectors.userListOpt(data), "User", "Options");
+        }
     }
     async clickEnrollBtn() {
         await this.click(this.selectors.enrollBtn, "Enroll", "Button")
     }
     async verifytoastMessage() {
         await this.verification(this.selectors.toastMeassage, "Enrollment")
-    }s
+    } s
     // async selectEnrollOrCancel(data:string){
     //     await this.click(this.selectors.enrollStatus,"Enroll Status","Dropdown")
     //     await this.click(this.selectors.enrollORCancel(data),"Enroll Status","Option")
@@ -177,7 +180,7 @@ export class EnrollmentPage extends AdminHomePage {
         await this.click(this.selectors.clickModifyEnroll, "View/Modify Enrollment", "Button")
     }
 
- public async completionDateInAdminEnrollment() {
+    public async completionDateInAdminEnrollment() {
         await this.keyboardType(this.selectors.completionDateInput, getCurrentDateFormatted())
         await this.page.keyboard.press('Tab');
         await this.wait("minWait")
@@ -247,22 +250,22 @@ export class EnrollmentPage extends AdminHomePage {
 
     }
 
-      //manage enrollment
+    //manage enrollment
     async manageEnrollment(data: string) {
         await this.wait("mediumWait")
         await this.click(this.selectors.manageEnrollement, "Manage Enrollment ", "Dropdown")
         await this.click(this.selectors.enrollORCancel(data), "Manage Enrollment ", " EnrollLink")
     }
 
-     async clickOnManageEnrollment() {
+    async clickOnManageEnrollment() {
         await this.wait("mediumWait")
         await this.click(this.selectors.manageEnrollement, "Manage Enrollment ", "Dropdown")
     }
 
-      async verifyEnrollmentDropDown(data: string) {
+    async verifyEnrollmentDropDown(data: string) {
         await this.wait("mediumWait")
-       const dropdown= await this.getInnerText(this.selectors.verifyManageEnrollmentDropdown);
-       await expect(dropdown).toContain(data); 
+        const dropdown = await this.getInnerText(this.selectors.verifyManageEnrollmentDropdown);
+        await expect(dropdown).toContain(data);
     }
 
 
@@ -286,7 +289,7 @@ export class EnrollmentPage extends AdminHomePage {
         await this.click(this.selectors.clickCalculateTax, "Calculate Tax", "button")
         await this.spinnerDisappear();
     }
-    async clickApproveOrder(){
+    async clickApproveOrder() {
         await this.wait("minWait")
         await this.click(this.selectors.clickCreateAndApproveOrder, "Approve Order", "button")
         await this.spinnerDisappear();
@@ -306,7 +309,7 @@ export class EnrollmentPage extends AdminHomePage {
         await this.validateElementVisibility(this.selectors.orderSuccessMsg, "The order has been placed successfully")
         await this.verification(this.selectors.orderSuccessMsg, "The order has been placed successfully")
     }
-    async clickCreateOrder(){
+    async clickCreateOrder() {
         await this.wait("minWait")
         await this.click(this.selectors.clickCreateOrderBtn, "Create Order", "button")
         await this.spinnerDisappear();
@@ -315,7 +318,7 @@ export class EnrollmentPage extends AdminHomePage {
     //Max seat override
     async verifyMaxSeatOverRidePopup() {
         await this.wait('mediumWait');
-        await this.verification(this.selectors.seatMaxPopupMsg, "max seat reachedseat available only for 0 users")
+        await this.verification(this.selectors.seatMaxPopupMsg, "you have exceeded the maximum seat for this training. the seat capacity will be increased to accommodate the selected learner. are you sure you want to proceed with this? ")
         await this.click(this.selectors.clickYesBtn, "Yes", "Button")
     }
 
@@ -324,6 +327,7 @@ export class EnrollmentPage extends AdminHomePage {
     async verifyMaxSeatPopup() {
         await this.wait('mediumWait');
         await this.wait('mediumWait');
+
         const actualMsg = (await this.getInnerText(this.selectors.seatMaxPopupMsg))
             .toLowerCase()
             .replace(/\s+/g, ' ')
@@ -333,23 +337,26 @@ export class EnrollmentPage extends AdminHomePage {
             "max seat reachedseat available only for 0 users",
             "you have exceeded the maximum seat for this training. the seat capacity will be increased to accommodate the selected learner. are you sure you want to proceed with this?"
         ].map(s => s.toLowerCase().replace(/\s+/g, ' ').trim());
+        const matched = expectedOptions.some(opt =>
+            actualMsg.includes(opt) ||
+            opt.includes(actualMsg) ||
+            actualMsg === opt
+        );
 
-        const matched = expectedOptions.some(opt => actualMsg.includes(opt) || opt.includes(actualMsg) || actualMsg === opt);
         if (!matched) {
             throw new Error(`Unexpected seat max popup message: "${actualMsg}"`);
         }
-
-        await this.verification(this.selectors.seatMaxPopupMsg, "Max seat override message");
-        await this.click(this.selectors.okBtn, "Ok", "Button")
+        console.log(`Validated popup message: ${actualMsg}`);
+        await this.click(this.selectors.okBtn, "Ok", "Button");
     }
     async clickEnrollButton() {
         await this.validateElementVisibility(this.selectors.clickEnrollButton, "Enroll Button");
         await this.click(this.selectors.clickEnrollButton, "Enroll Button", "Button")
     }
 
-       async verifyNoResultFound(data:string) {
-        await this.typeAndEnter(this.selectors.searchcourseOrUser,"name",data)
-        await this.validateElementVisibility(this.selectors.noResultFound,"noResultFound")
+    async verifyNoResultFound(data: string) {
+        await this.typeAndEnter(this.selectors.searchcourseOrUser, "name", data)
+        await this.validateElementVisibility(this.selectors.noResultFound, "noResultFound")
     }
 
     // TP Enrollment methods
@@ -360,30 +367,30 @@ export class EnrollmentPage extends AdminHomePage {
         await this.click(this.selectors.enrollToTpBtn, "Enroll To TP", "Button");
     }
 
-    public async searchUser(user:string) {
+    public async searchUser(user: string) {
         await this.wait("maxWait");
-       await this.typeAndEnter("(//input[@placeholder='Search'])[1]", "User", user);
+        await this.typeAndEnter("(//input[@placeholder='Search'])[1]", "User", user);
     }
 
-     public async clickSearchUserCheckbox(user:string) {
-        await this.waitSelector(this.selectors.searchUserCheckbox(user), "searchUserCheckbox" )
+    public async clickSearchUserCheckbox(user: string) {
+        await this.waitSelector(this.selectors.searchUserCheckbox(user), "searchUserCheckbox")
         await this.click(this.selectors.searchUserCheckbox(user), "searchUser", "chkbox")
     }
 
-       public async clickSelectLearner() {
-  await this.wait("maxWait");
-
-  const selectUserLocator = this.page.getByRole('button', { name: 'Select' });
-  await selectUserLocator.scrollIntoViewIfNeeded();
-  await selectUserLocator.waitFor({ state: "visible" });
-  await expect(selectUserLocator).toBeEnabled();
-  await selectUserLocator.click();
-}
-
-    
-      public async searchandSelectTP(TP:string) {
+    public async clickSelectLearner() {
         await this.wait("maxWait");
-     
+
+        const selectUserLocator = this.page.getByRole('button', { name: 'Select' });
+        await selectUserLocator.scrollIntoViewIfNeeded();
+        await selectUserLocator.waitFor({ state: "visible" });
+        await expect(selectUserLocator).toBeEnabled();
+        await selectUserLocator.click();
+    }
+
+
+    public async searchandSelectTP(TP: string) {
+        await this.wait("maxWait");
+
         await this.click("//div[@id='learning-path-selection-filter-icon']", "searchbar", "Button")
         await this.type(this.selectors.searchCourse, "SearchTp", TP)
         await this.click(`//span[text()='${TP}']`, "SelectTp", "Link"
@@ -392,25 +399,25 @@ export class EnrollmentPage extends AdminHomePage {
 
     public async selectCls() {
         await this.wait("maxWait");
-  const selectLocator =  this.page.locator("(//div[contains(@class,'field_title')]//preceding::i[contains(@class,'lms-chevron-up-down')][1])");
-  await selectLocator.scrollIntoViewIfNeeded();
-  await selectLocator.waitFor({ state: "visible" });
-  await expect(selectLocator).toBeEnabled();
-  await selectLocator.click();
- 
-       
+        const selectLocator = this.page.locator("(//div[contains(@class,'field_title')]//preceding::i[contains(@class,'lms-chevron-up-down')][1])");
+        await selectLocator.scrollIntoViewIfNeeded();
+        await selectLocator.waitFor({ state: "visible" });
+        await expect(selectLocator).toBeEnabled();
+        await selectLocator.click();
+
+
 
     }
 
-         public async searchTPCourse(Instance:string) {
+    public async searchTPCourse(Instance: string) {
         await this.wait("maxWait");
         await this.page.locator("(//input[@placeholder='Search'])[2]").scrollIntoViewIfNeeded();
-       await this.type("(//input[@placeholder='Search'])[2]", "User", Instance);
-       await this.click(this.selectors.tpInstanceResult(Instance), "select course", "Link")
-       //await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
+        await this.type("(//input[@placeholder='Search'])[2]", "User", Instance);
+        await this.click(this.selectors.tpInstanceResult(Instance), "select course", "Link")
+        //await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
     }
 
-   
+
 
     async clickEnrollments() {
         await this.click(this.selectors.enrollmentsTab, "Enrollments", "Tab");
@@ -429,7 +436,7 @@ export class EnrollmentPage extends AdminHomePage {
     async isLoadMoreButtonEnabled(): Promise<boolean> {
         const isVisible = await this.isLoadMoreButtonVisible();
         if (!isVisible) return false;
-        
+
         return await this.page.isEnabled(this.selectors.loadMoreBtn);
     }
 
@@ -445,32 +452,32 @@ export class EnrollmentPage extends AdminHomePage {
 
     async verifyLoadMoreButtonAndClick() {
         console.log("Checking Load More button visibility and functionality...");
-        
+
         const isVisible = await this.isLoadMoreButtonVisible();
         console.log(`Load More button visible: ${isVisible}`);
-        
+
         if (isVisible) {
             await this.page.locator(this.selectors.loadMoreBtn).scrollIntoViewIfNeeded();
             const isEnabled = await this.isLoadMoreButtonEnabled();
             console.log(`Load More button enabled: ${isEnabled}`);
-            
+
             // Assert that the button is visible and enabled
             await expect(this.page.locator(this.selectors.loadMoreBtn)).toBeVisible();
             await expect(this.page.locator(this.selectors.loadMoreBtn)).toBeEnabled();
-            
+
             console.log("Load More button assertions passed - visible and enabled");
-            
-             
+
+
             await this.clickLoadMoreButton();
             console.log("Load More button clicked successfully");
-            
+
             return true;
         } else {
             console.log("Load More button is not visible - no action taken");
             return false;
         }
     }
- //Enrollment segmentation
+    //Enrollment segmentation
     async verifyEnrollmentSegmentation(otherUser: string) {
         await this.wait("minWait")
         await this.typeAndEnter(this.selectors.searchcourseOrUser, "Course Name", otherUser)

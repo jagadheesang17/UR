@@ -3,7 +3,7 @@ import { FakerData } from '../../../utils/fakerUtils';
 import { credentials } from "../../../constants/credentialData";
 import { generateCode } from '../../../data/apiData/formData';
 
-const courseName = "course"+" "+FakerData.getCourseName();
+const courseName = "course" + " " + FakerData.getCourseName();
 //const courseName = "course Bluetooth Bus Index"
 const description = FakerData.getDescription()
 const code = "CRS" + "-" + generateCode();
@@ -22,8 +22,8 @@ test.describe(`Verify_instance_creation_when_converting_a_published_single-insta
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription("This is a new course by name :" + description);
         await createCourse.contentLibrary();//Youtube content is attached here
@@ -58,7 +58,7 @@ test.describe(`Verify_instance_creation_when_converting_a_published_single-insta
         await createCourse.selectInstanceType("Multi Instance/Class");
         await createCourse.changeInstancePopUp();
         await createCourse.clickUpdate();
-        await createCourse.contentLibrary();
+        // await createCourse.contentLibrary();
         await createCourse.verifySuccessMessage();
     })
 

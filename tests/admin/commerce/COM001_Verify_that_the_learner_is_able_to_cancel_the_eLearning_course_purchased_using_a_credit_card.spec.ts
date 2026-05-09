@@ -82,7 +82,7 @@ test(`Verify_that_the_learner_is_able_to_cancel_the_eLearning_course_purchased_u
 
     );
     await learnerHome.basicLogin(commerceLearner, "default");
-   // await learnerHome.termsAndConditionScroll();
+   // // await learnerHome.termsAndConditionScroll();
     await learnerHome.clickCatalog();
     await catalog.mostRecent();
     await catalog.searchCatalog(courseName);

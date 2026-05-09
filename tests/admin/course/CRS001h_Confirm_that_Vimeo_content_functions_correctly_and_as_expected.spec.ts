@@ -49,7 +49,7 @@ test.describe(`Confirm that Vimeo content functions correctly and as expected.`,
 
 
 
-    test(`Confirm that Vimeo content functions correctly and as expected.`, async ({ learnerHome, catalog,readContentHome }) => {
+    test(`Confirm that Vimeo content functions correctly and as expected.`, async ({ learnerHome, catalog, dashboard, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Confirm that Vimeo content functions correctly and as expected` },
@@ -61,10 +61,10 @@ test.describe(`Confirm that Vimeo content functions correctly and as expected.`,
         await catalog.clickCourseInMyLearning(courseName);
         await catalog.playVimeo();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
     })
 
 })

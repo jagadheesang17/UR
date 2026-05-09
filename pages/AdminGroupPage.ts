@@ -8,9 +8,9 @@ export class AdminGroupPage extends PlaywrightWrapper {
     static pageUrl = URLConstants.adminURL;
 
     public selectors = {
-        clickAdminGroup: (user: string) => `//div[text()='${user}']`,
+        clickAdminGroup: (user: string) => `(//div[text()='${user}'])[1]`,
         searchUser: "#includeLearner-filter-field",
-        chooseUser: (user: string) => `//li[text()='${user}']`,
+        chooseUser: (user: string) => `(//li[text()='${user}'])[1]`,
         //(username:string)=>`//span[text()=${username}]/following::i[contains(@class,'fa-square icon')][1]
         //selectUser:`(//div[contains(@class,'custom-control custom-chkbox')])[2]`,
         selectUser: `(//div[contains(@class,'chkbox')]//i[contains(@class,'fa-square icon')])[2]`,
@@ -22,7 +22,7 @@ export class AdminGroupPage extends PlaywrightWrapper {
         createGroupButton: `#admin-view-btn-primary`,
         groupTitle: `#title`,
         adminRoledropdown: `//button[@data-id='admin_roles']`,
-        selectRole: (roleName: string) => `//a[@class='dropdown-item']//span[text()='${roleName}']`,
+        selectRole: (roleName: string) => `//a[contains(@class,'dropdown-item')]//span[text()='${roleName}']`,
         saveAdminGroup: `#lrnSaveUpdate`,
         proceedButton: `//button[contains(text(),'Yes, Proceed')]`,
         clickActivateBtn:`//span[text()='Activate']`,
@@ -108,7 +108,9 @@ export class AdminGroupPage extends PlaywrightWrapper {
     }
 
     public async clickSelectUsers() {
+        await this.wait("minWait");
         await this.click(this.selectors.clickSelectUser, "Username", "Checkbox ");
+        await this.wait("mediumWait");
     }
 
     public async clickUpdate() {
@@ -128,19 +130,23 @@ export class AdminGroupPage extends PlaywrightWrapper {
     }
 
     public async selectroleAdmin(roleName: string) {
+  
         await this.click(this.selectors.adminRoledropdown, "Admin Role", "Dropdown")
+              await this.wait('minWait');
         await this.click(this.selectors.selectRole(roleName), "Custom Admin Role", "Option")
     }
 
     public async clickSave() {
             await this.wait('minWait');
         await this.click(this.selectors.saveAdminGroup, "Custom Group Save ", "button")
+        
     }
 
     public async clickProceed() {
         await this.wait("minWait")
         await this.validateElementVisibility(this.selectors.proceedButton, "Proceed");
         await this.click(this.selectors.proceedButton, "Proceed", "button")
+        await this.wait("mediumWait");
 
     }
 

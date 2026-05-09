@@ -64,7 +64,7 @@ test.describe(`TC109 One profile`, async () => {
         );
 
         await learnerHome.basicLogin(username, "DefaultPortal");
-      //  await learnerHome.termsAndConditionScroll();
+      //  // await learnerHome.termsAndConditionScroll();
         await profile.clickProfile();
         await profile.oneProfile();
 

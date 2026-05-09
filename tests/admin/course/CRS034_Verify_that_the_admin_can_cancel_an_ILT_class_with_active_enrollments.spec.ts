@@ -28,8 +28,8 @@ test.describe(`Verify_that_the_admin_can_cancel_an_ILT_class_with_active_enrollm
         await adminHome.clickCourseLink();
         await createCourse.clickCreateCourse();
         await createCourse.verifyCreateUserLabel("CREATE COURSE");
-    await createCourse.enter("course-title", courseName);
-    await createCourse.entercode(code);
+        await createCourse.enter("course-title", courseName);
+        await createCourse.entercode(code);
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.selectdeliveryType("Classroom")

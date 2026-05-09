@@ -38,7 +38,7 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
         await createCourse.verifySuccessMessage();
     })
 
-    test(`Learner registration and completion of a single eLearning course.`, async ({ learnerHome, catalog }) => {
+    test(`Learner registration and completion of a single eLearning course.`, async ({ learnerHome, catalog, dashboard }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Arivazhagan P` },
             { type: `TestCase`, description: `Learner registration and completion of a single eLearning course` },
@@ -53,10 +53,10 @@ test.describe(`confirm_that_the_rollback_occurs_successfully_when_a_learner_comp
         await catalog.clickEnroll();
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
     })
 
     test(`Learning_Path_single_instance`, async ({ adminHome, learningPath, enrollHome, createCourse }) => {

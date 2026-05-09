@@ -57,7 +57,7 @@ const courseAdmin: any = FakerData.getUserId()
     await createUser.selectOrganization("organization", "ORG_TCS");
     await createUser.clickSave();
     await learnerHome.basicLogin(courseAdmin, "default");
-   //await learnerHome.termsAndConditionScroll();
+   //// await learnerHome.termsAndConditionScroll();
     await learnerHome.clickmyprofile();
     const qrLink = await learnerHome.captureAndReadQRCode();
     console.log("QR Code Value:", qrLink);

@@ -96,7 +96,7 @@ test.describe(`Verify that admin able to increase the seats for E-learning and u
         await createCourse.verifySuccessMessage();
     })
     
-    test.skip(`Confirm that learner able to enroll after admin increse the seats`, async ({ learnerHome, catalog, readContentHome }) => {
+    test.skip(`Confirm that learner able to enroll after admin increse the seats`, async ({ learnerHome, catalog, dashboard, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that learner able to enroll after admin increse the seats` },
@@ -111,10 +111,10 @@ test.describe(`Verify that admin able to increase the seats for E-learning and u
         await catalog.clickEnroll();
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
 
     })
 

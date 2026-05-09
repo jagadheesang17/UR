@@ -30,8 +30,8 @@ test.describe(`Certification_with_single_instance_behavior_Enrolled_tab`, async 
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
         await createCourse.contentLibrary();
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        //await createCourse.clickHere();
+       // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

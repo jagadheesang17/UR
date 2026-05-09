@@ -69,7 +69,7 @@ test(`Verify equivalence functionality works correctly for enrolled courses`, as
 
 })
 
-test(`Verifying learner side that equivalence functionality works correctly`, async ({ learnerHome, catalog }) => {
+test(`Verifying learner side that equivalence functionality works correctly`, async ({ learnerHome, catalog, dashboard }) => {
     test.info().annotations.push(
         { type: `Author`, description: `Tamilvanan` },
         { type: `TestCase`, description: `Verifying learner side that equivalence functionality works correctly` },
@@ -96,9 +96,9 @@ test(`Verifying learner side that equivalence functionality works correctly`, as
     await catalog.clickEnroll();   
     await catalog.clickLaunchButton();
     await catalog.saveLearningStatus();
-    await catalog.clickMyLearning();
-    await catalog.clickCompletedButton();
-    await catalog.searchMyLearning(mainCourseName);
-    await catalog.verifyCompletedCourse(mainCourseName);
+    await learnerHome.clickDashboardLink();
+    await dashboard.selectDashboardItems("Learning History");
+    await dashboard.learningHistoryCourseSearch(mainCourseName);
+    await dashboard.vaidatVisibleCourse_Program(mainCourseName, "Completed");
 })
 

@@ -70,6 +70,8 @@ export class UserPage extends AdminHomePage {
         impersonateProceedBtn: "//button[text()='Proceed']",
         okBtn: "//button[text()='OK']",
         logOutBtn: "//div[@class='logout']//a",
+        domainSelect: "//button[@data-id='impersonate']",
+        domainOption: (domain: string) => `(//span[text()='${domain}'])[2]`,
         //Internal
         validateUser: (data: string) => `//div[text()='${data}']`,
         //UserPage Enrollment icon
@@ -95,8 +97,8 @@ export class UserPage extends AdminHomePage {
         checkContactSupport: `//input[@id='course-contact-support']`,
 
         //address inheritance
-        inheritAddressLabel: "//span[text()='Inherit Address From']",
-        inheritAddressCheckbox: "(//span[text()='Inherit Address From']//preceding-sibling::i)[1]",
+        // inheritAddressLabel: "//span[text()='Inherit Address From']",
+        // inheritAddressCheckbox: "(//span[text()='Inherit Address From']//preceding-sibling::i)[1]",
 
         //emergency contact inheritance
         inheritEmergencyContactLabel: "//span[text()='Inherit']",
@@ -111,6 +113,17 @@ export class UserPage extends AdminHomePage {
         orgNameList: (name: string) => `//li[text()='${name}']`,
         userNameOnListingPage: (name: string) => `//div[text()='${name}']`,
         userNotFoundMessage:`//h3[contains(text(),'There are no results that match your current filters. Try removing some of them to get better results')]`,
+
+        emergenctContactNameInput: (id: string) => `//input[@id='${id}']`,
+    /** Container or any element with this id (for inherited/read-only field where value is in wrapper) */
+    emergenctContactNameContainer: (id: string) => `//*[@id='${id}']`,
+
+    checkrole: (role: string) => `(//span[text()='${role}']/preceding-sibling::i)[1]`,
+
+    uncheckInheritFromCheckbox: `//span[contains(text(),'Inherit Address From')]/preceding-sibling::i[@class='fad fa-square-check icon_14_1']`,
+
+    inheritAddressLabel: "//span[contains(text(),'Inherit Address From')]",
+    inheritAddressCheckbox: "(//span[contains(text(),'Inherit Address From')]//preceding-sibling::i)[1]",
 
     }
 
@@ -365,12 +378,12 @@ export class UserPage extends AdminHomePage {
         await this.wait('mediumWait');
         await this.click(this.selectors.impersonationIcon, "Delete Icon", "Delete");
         await this.wait('mediumWait');
-
     }
 
     public async fillImpersonateForm() {
       //  let option = URLConstants.portal1
         await this.validateElementVisibility(this.selectors.impersonateLabel, "Impersonate Label");
+        await this.selectDomain("urautotenant");
       //  await this.click(this.selectors.impersonateOptionDD, "Select Domain you want ?", "Drop Down");
       //  await this.click(this.selectors.impersonateDomainValue(option), "Select Domain you want ?", "Option");
         await this.type(this.selectors.reasonInput, "Reason", FakerData.getDescription());
@@ -443,6 +456,12 @@ export class UserPage extends AdminHomePage {
             console.log("Given Address is Invalid")
         }
     }
+    async selectDomain(domain: string) {
+        await this.click(this.selectors.domainSelect, "Select Domain", "Drop Down");
+        await this.wait("mediumWait");
+        await this.mouseHover(this.selectors.domainOption(domain), "Domain");
+        await this.click(this.selectors.domainOption(domain), "Domain", "Option");
+    }
 
     //End Impersonation
     async clickendImpersonation() {
@@ -461,42 +480,89 @@ export class UserPage extends AdminHomePage {
         // await this.click(this.selectors.customerAdminUserFromDropdown, "admin", "dropdown");
         await this.click(this.selectors.editIcon, "customeradmin", "edit");
     }
-    public async uncheckInheritAddressIfPresent() {
-        const classValue = await this.page.locator('#user-addr1').getAttribute('class');
 
-        // Check if it contains a specific class
-        if (classValue && classValue.includes('form_field_deactived')) {
-            await this.click("//span[text()='Inherit Address From']", "Inherit Address From Checkbox", "Checkbox");
-        } else {
-            console.log("Inherit Address already unchecked")
-            //address inheritance
-        }
+    //address inheritance — optional: try to uncheck within 3s, skip if not visible
+  public async uncheckInheritAddressIfPresent() {
+    await this.wait("minWait");
+    try {
+      const checkbox = this.page.locator(this.selectors.inheritAddressCheckbox);
+      await checkbox.waitFor({ state: 'visible', timeout: 3000 });
+      await checkbox.click({ force: true });
+      console.log("Inherit Address From checkbox unchecked");
+    } catch {
+      console.log("Inherit Address From not present or not visible within 3s — skipping");
     }
-    //emergency contact inheritance
-    public async uncheckInheritEmergencyContactIfPresent() {
-         const classValue = await this.page.locator('#emrg-cont-name').getAttribute('class');
+  }
 
-        // Check if it contains a specific class
-        if (classValue && classValue.includes('form_field_deactived')) {
-            await this.click("//span[text()='Inherit']", "Inherit Address From Checkbox", "Checkbox");
-        } else {
-            console.log("Inherit emergency already unchecked")
-            //address inheritance
-        }
+  //emergency contact inheritance — optional: try within 3s, skip if not visible
+  public async uncheckInheritEmergencyContactIfPresent() {
+    try {
+      const classValue = await this.page.locator('#emrg-cont-name').getAttribute('class').catch(() => null);
+      if (classValue && classValue.includes('form_field_deactived')) {
+        const inheritBtn = this.page.locator("//span[text()='Inherit']");
+        await inheritBtn.waitFor({ state: 'visible', timeout: 3000 });
+        await inheritBtn.click({ force: true });
+        console.log("Inherit emergency contact unchecked");
+      } else {
+        console.log("Inherit emergency already unchecked");
+      }
+    } catch {
+      console.log("Inherit emergency contact not present or not visible within 3s — skipping");
     }
+  }
 
-    //auto generate username
-    public async uncheckAutoGenerateUsernameIfPresent() {
-          const classValue = await this.page.locator('#username').getAttribute('class');
+  //auto generate username — optional: try within 3s, skip if not visible
+  public async uncheckAutoGenerateUsernameIfPresent() {
+    try {
+      const classValue = await this.page.locator('#username').getAttribute('class').catch(() => null);
+      if (classValue && classValue.includes('form_field_deactived')) {
+        const autoGenBtn = this.page.locator("//span[text()='Auto-Generate']");
+        await autoGenBtn.waitFor({ state: 'visible', timeout: 3000 });
+        await autoGenBtn.click({ force: true });
+        console.log("Auto-Generate username unchecked");
+      } else {
+        console.log("auto generation already unchecked");
+      }
+    } catch {
+      console.log("Auto-Generate username not present or not visible within 3s — skipping");
+    }
+  }
+//     public async uncheckInheritAddressIfPresent() {
+//         const classValue = await this.page.locator('#user-addr1').getAttribute('class');
 
-        // Check if it contains a specific class
-        if (classValue && classValue.includes('form_field_deactived')) {
-            await this.click("//span[text()='Auto-Generate']", "Auto-Generate Username Checkbox", "Checkbox");
-        } else {
-            console.log("auto generation already unchecked")
+//         // Check if it contains a specific class
+//         if (classValue && classValue.includes('form_field_deactived')) {
+//             await this.click("//span[text()='Inherit Address From']", "Inherit Address From Checkbox", "Checkbox");
+//         } else {
+//             console.log("Inherit Address already unchecked")
+//             //address inheritance
+//         }
+//     }
+//     //emergency contact inheritance
+//     public async uncheckInheritEmergencyContactIfPresent() {
+//          const classValue = await this.page.locator('#emrg-cont-name').getAttribute('class');
+
+//         // Check if it contains a specific class
+//         if (classValue && classValue.includes('form_field_deactived')) {
+//             await this.click("//span[text()='Inherit']", "Inherit Address From Checkbox", "Checkbox");
+//         } else {
+//             console.log("Inherit emergency already unchecked")
+//             //address inheritance
+//         }
+//     }
+
+//     //auto generate username
+//     public async uncheckAutoGenerateUsernameIfPresent() {
+//           const classValue = await this.page.locator('#username').getAttribute('class');
+
+//         // Check if it contains a specific class
+//         if (classValue && classValue.includes('form_field_deactived')) {
+//             await this.click("//span[text()='Auto-Generate']", "Auto-Generate Username Checkbox", "Checkbox");
+//         } else {
+//             console.log("auto generation already unchecked")
         
-        }
-}
+//         }
+// }
 
  async enrterOrgName(orgNameData: string) {
         await this.wait("minWait")

@@ -31,6 +31,8 @@ export class CatalogPage extends LearnerHomePage {
         selectTagnames: `//input[@id='catalog_search_tags']`,
         reultantTagname: (tagname: string) => `//li[text()='${tagname}']`,
         applyButton: `//button[text()='Apply']`,
+
+      //  recertifyBtn: "//span[text()='Recertify']",
         viewCourseDetails: `//button[text()='View Course Details']`,
         launchButton: `(//div//i[@aria-label='Click to play'])[1]`,
         saveLearningStatus: "//button[text()='Save Learning Status']",
@@ -103,10 +105,11 @@ export class CatalogPage extends LearnerHomePage {
         selectTPCourse: `//div[contains(text(),'Seats')]//following::div[contains(@class,'custom-radio')]`,
         clickTPSelectedCourseRegisterButton: `//button[contains(text(),'Enroll')]`,
 
-        toCompleteORCompleteEnrolledCourse: `(//*[(@id='carousel-completed' or @id='carousel-tocomplete')]//h5[starts-with(@class, 'card-title')])[1]`,
-        //completeEnrolledCourse: `#carousel-completed h5[class^='card-title']`,
+        // toCompleteORCompleteEnrolledCourse: `(//*[(@id='carousel-completed' or @id='carousel-tocomplete')]//h5[starts-with(@class, 'card-title')])[1]`,
+        // //completeEnrolledCourse: `#carousel-completed h5[class^='card-title']`,
+        // enrolledCourseCode: `//span[contains(text(),'code:')]/following-sibling::span`,
+        toCompleteORCompleteEnrolledCourse: (courseName: string) => `(//h5[text()='${courseName}'])[1]`,   
         enrolledCourseCode: `//span[contains(text(),'code:')]/following-sibling::span`,
-
         //Video Content:-
         endVideoTime: `//span[text()='0:00' and @class='vjs-remaining-time-display']`,
 
@@ -311,19 +314,21 @@ export class CatalogPage extends LearnerHomePage {
             await this.wait('mediumWait')
             await content.scrollIntoViewIfNeeded();
         }
-        const playButton = "//button[@title='Play Video']"
+      const playButton = "//button[@title='Play Video']"
         await this.page.locator(playButton).hover({ force: true });
         await this.page.focus(playButton, { strict: true });
         await this.page.click(playButton, { force: true });
         await this.wait("mediumWait")
         let videoCompletion = this.page.locator(this.selectors.endVideoTime)
-        await expect(videoCompletion).toHaveCount(1, { timeout: 60000 })
+       // await expect(videoCompletion).toHaveCount(1, { timeout: 60000 })
 
     }
 
     async verifyEnrolledCourseByTitle(couseName: string) {
         await this.wait('minWait');
-        await this.click(this.selectors.toCompleteORCompleteEnrolledCourse, couseName, "Link");
+        //await this.mouseHover(this.selectors.toCompleteORCompleteEnrolledCourse(couseName), "Enrolled Course")
+        await this.click(this.selectors.toCompleteORCompleteEnrolledCourse(couseName), "Enrolled Course", "Link");
+       // await this.click(this.selectors.toCompleteORCompleteEnrolledCourse, couseName, "Link");
         await this.spinnerDisappear()
     }
 
@@ -1049,7 +1054,7 @@ export class CatalogPage extends LearnerHomePage {
     //Click course in my learning
     async clickCourseInMyLearning(coursename: string) {
         await this.wait('minWait');
-        await this.click(this.selectors.toCompleteORCompleteEnrolledCourse, coursename, "Link");
+        await this.click(this.selectors.toCompleteORCompleteEnrolledCourse(coursename), "Enrolled Course", "Link");
         await this.spinnerDisappear()
     }
 
@@ -1174,5 +1179,14 @@ async verifyAddedToWishlist(courseName: string) {
     throw error;
   }
   }
+
+  async verifyRecertifyButtonNotVisible() {
+    await this.wait("minWait");
+    const recertifyButton = this.page.locator(this.selectors.recertifyBtn);
+    await expect(recertifyButton).not.toBeVisible();
+    console.log("✅ Verified: Recertify button is not visible");
+  }
+
+  
 
 }

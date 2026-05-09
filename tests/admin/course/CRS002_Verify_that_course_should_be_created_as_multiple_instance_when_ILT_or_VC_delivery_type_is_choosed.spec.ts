@@ -110,8 +110,8 @@ test.describe(`Verify that course should be created as multiple instance when IL
         
         await learnerHome.learnerLogin("LEARNERUSERNAME", "LearnerPortal");
         await catalog.clickMyLearning();
-        await catalog.searchMyLearning(elCourseName);
-        await catalog.clickCourseInMyLearning(elCourseName);
+        await catalog.searchMyLearning(courseName);
+        await catalog.clickCourseInMyLearning(courseName);
         // await catalog.verifyCompletedCourse(elCourseName);
         await catalog.clickLaunchButton();
         await catalog.saveLearningStatus();

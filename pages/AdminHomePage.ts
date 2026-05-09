@@ -43,9 +43,9 @@ export class AdminHomePage extends AdminLogin {
         assessmentMenu: `//span[text()='Assessment']`,
         assessmentQuestionLink: `//span[text()='Assessment']//parent::div/following-sibling::ul//a[text()='Questions']`,
         assessmentLink: "//a[text()='Assessment']",
-        resultEnrollmentButton:`(//div[@aria-label='Enrollments'])`,
+        resultEnrollmentButton: `(//div[@aria-label='Enrollments'])`,
         enrollMenu: `(//span[text()='Enrollments'])[1]`,
-        enrollments:   `(//span[text()='Enrollments'])[2]`,
+        enrollments: `(//span[text()='Enrollments'])[2]`,
         enrollLink: `//a[text()='Enroll']`,
         quickAccessIcon: `#dd-icon-wrapper i`,
         quickAccessDD: `button div:text-is('Select Quick Access Buttons To Add Below')`,
@@ -55,31 +55,33 @@ export class AdminHomePage extends AdminLogin {
         yesBtn: `//button[text()='Yes']`,
         quickAccessModules: `//div[contains(@class,'mandatory')]/following-sibling::div`,
         adminRolemenu: `//a[text()='Admin Role']`,
-        siteAdminMenu:`//span[text()='Site Admin']`,
-        learnerConfigLink:`//a[text()='Learner Configuration']`,
-        siteSettingsLink:`//a[text()='Site Settings']`,
-        adminConfigLink:`//a[text()='Admin Configuration']`,
+        siteAdminMenu: `//span[text()='Site Admin']`,
+        learnerConfigLink: `//a[text()='Learner Configuration']`,
+        siteSettingsLink: `//a[text()='Site Settings']`,
+        adminConfigLink: `//a[text()='Admin Configuration']`,
         adminSiteConfigLink: `//div[text()='Admin site configuration']`,
-       // To navigate from Enroll option to view/update status course tp:-
+        // To navigate from Enroll option to view/update status course tp:-
         viewUpdateStatusCourseTpLink: `//a[text()='View/update Status - Course/TP']`,
-       enrollLearnertoTPCourses: `//span[text()='View Status/Enroll Learner to TP Courses']`,
-       enroll:`//span[text()='Enroll']`,
-    enrollDropdown:`(//div[@class='filter-option-inner-inner'])[1]`,
-    searchUserCheckbox:(user:string)=>`(//td[text()='${user}']/following::i)[1]`,
-        searchInput:`//input[@placeholder='Search']`,
-        selectUser:`//button[contains(@class,'btn button_positive')]`,
-        selectCourse:`//input[@placeholder='Select']`,
-        searchCourse:`//input[@placeholder='Search for Title/Code']`,
+        enrollLearnertoTPCourses: `//span[text()='View Status/Enroll Learner to TP Courses']`,
+        enroll: `//span[text()='Enroll']`,
+        enrollDropdown: `(//div[@class='filter-option-inner-inner'])[1]`,
+        searchUserCheckbox: (user: string) => `(//td[text()='${user}']/following::i)[1]`,
+        searchInput: `//input[@placeholder='Search']`,
+        selectUser: `//button[contains(@class,'btn button_positive')]`,
+        selectCourse: `//input[@placeholder='Select']`,
+        searchCourse: `//input[@placeholder='Search for Title/Code']`,
         //for Direct Content Launch
-        directContent:`//a[text()='Direct Content Launch']`,
+        directContent: `//a[text()='Direct Content Launch']`,
 
-customerConfig:  `//a[text()='Customer Config']`,
-walletCard: `//input[contains(@id,'physicalwalletcard')]`,
-submit: `//input[@id='edit_submit']`,
- checkRequestWalletCardDelivery:`//i[contains(@class,'fad fa-square icon_16_1')]`,
-verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
+        customerConfig: `//a[text()='Customer Config']`,
+        walletCard: `//input[contains(@id,'physicalwalletcard')]`,
+        submit: `//input[@id='edit_submit']`,
+        checkRequestWalletCardDelivery: `//i[contains(@class,'fad fa-square icon_16_1')]`,
+        verifyCheckedWalletCardCheckbox: `//i[@class='fad fa-square-check icon_16_2']`,
+        adminmenuIcon: `//i[@id='adminmenu']`,
+        admin: `//a/span[text()='Admin']`,
 
-  
+
     };
 
     constructor(page: Page, context: BrowserContext) {
@@ -87,77 +89,73 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         //this.common(page, context).catch(err => console.error("Error in common setup:", err));
         // this.setupPageListeners();
     }
-//To navigate from Enroll option to view/update status course tp:-
+    //To navigate from Enroll option to view/update status course tp:-
     public async clickviewUpdateStatusCourseTp() {
         await this.click(this.selectors.viewUpdateStatusCourseTpLink, "Update Enrollment", "Link")
     }
 
-     public async searchandSelectTP(TP:string) {
+    public async searchandSelectTP(TP: string) {
         await this.wait("maxWait");
-     
+
         await this.click("//div[@id='learning-path-selection-filter-icon']", "searchbar", "Button")
         await this.type(this.selectors.searchCourse, "SearchTp", TP)
         await this.click(`//span[text()='${TP}']`, "SelectTp", "Link"
         )
     }
-     public async selectCls() {
+    public async selectCls() {
         await this.wait("maxWait");
-  const selectLocator =  this.page.locator("(//div[contains(@class,'field_title')]//preceding::i[contains(@class,'lms-chevron-up-down')][1])");
-  await selectLocator.scrollIntoViewIfNeeded();
-  await selectLocator.waitFor({ state: "visible" });
-  await expect(selectLocator).toBeEnabled();
-  await selectLocator.click();
- 
-       
+        const selectLocator = this.page.locator("(//div[contains(@class,'field_title')]//preceding::i[contains(@class,'lms-chevron-up-down')][1])");
+        await selectLocator.scrollIntoViewIfNeeded();
+        await selectLocator.waitFor({ state: "visible" });
+        await expect(selectLocator).toBeEnabled();
+        await selectLocator.click();
+
+
 
     }
 
-      public async clickSelectLearner() {
-  await this.wait("maxWait");
+    public async clickSelectLearner() {
+        await this.wait("maxWait");
 
-  const selectUserLocator = this.page.getByRole('button', { name: 'Select' });
-  await selectUserLocator.scrollIntoViewIfNeeded();
-  await selectUserLocator.waitFor({ state: "visible" });
-  await expect(selectUserLocator).toBeEnabled();
-  await selectUserLocator.click();
-}
+        const selectUserLocator = this.page.getByRole('button', { name: 'Select' });
+        await selectUserLocator.scrollIntoViewIfNeeded();
+        await selectUserLocator.waitFor({ state: "visible" });
+        await expect(selectUserLocator).toBeEnabled();
+        await selectUserLocator.click();
+    }
 
 
-     public async clickSearchUserCheckbox(user:string) {
-        await this.waitSelector(this.selectors.searchUserCheckbox(user), "searchUserCheckbox" )
+    public async clickSearchUserCheckbox(user: string) {
+        await this.waitSelector(this.selectors.searchUserCheckbox(user), "searchUserCheckbox")
         await this.click(this.selectors.searchUserCheckbox(user), "searchUser", "chkbox")
     }
 
-    public async clickEnrollToTp()
-    
-    {  
+    public async clickEnrollToTp() {
         await this.wait("maxWait");
-         await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
+        await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
         await this.click(this.selectors.enrollDropdown, "Enroll Dropdown", "Button")
         await this.click(this.selectors.enrollLearnertoTPCourses, "Enroll Learner to TP Courses", "Link")
     }
 
-     public async selectEnroll()
-    
-    {  
+    public async selectEnroll() {
         await this.wait("maxWait");
-         await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
+        await this.waitSelector(this.selectors.enrollDropdown, "Enroll Dropdown")
         await this.click(this.selectors.enrollDropdown, "Enroll Dropdown", "Button")
         await this.click(this.selectors.enroll, "Enroll", "Link")
-         await this.wait("maxWait");
-    }
-     public async searchUser(user:string) {
         await this.wait("maxWait");
-       await this.typeAndEnter("(//input[@placeholder='Search'])[1]", "User", user);
     }
-     public async searchTPCourse(user:string) {
+    public async searchUser(user: string) {
         await this.wait("maxWait");
-       await this.typeAndEnter("(//input[@placeholder='Search'])[2]", "User", user);
-       await this.page.locator("(//input[@placeholder='Search'])[2]").scrollIntoViewIfNeeded()
-       await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
+        await this.typeAndEnter("(//input[@placeholder='Search'])[1]", "User", user);
+    }
+    public async searchTPCourse(user: string) {
+        await this.wait("maxWait");
+        await this.typeAndEnter("(//input[@placeholder='Search'])[2]", "User", user);
+        await this.page.locator("(//input[@placeholder='Search'])[2]").scrollIntoViewIfNeeded()
+        await this.click("(//label[contains(@for,'selectedinstance')])[1]", "dropdown", "Button")
     }
 
-    
+
 
 
 
@@ -166,6 +164,13 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         await this.page.goto(AdminLogin.pageUrl);
         await this.adminLogin(role);
         await this.wait("minWait");
+        //temprorary code
+        await this.page.reload();
+        await this.wait("minWait");
+        // await this.click(this.selectors.adminmenuIcon, "Admin Menu", "Icon")
+        // await this.click(this.selectors.admin, "Admin Menu", "Icon")
+        // await this.wait("minWait");
+        ////////////////////////////////////////////
         let pageTitle = await this.getTitle();
         console.log("Page Title:", pageTitle);
         if (pageTitle.toLowerCase().includes("signin")) {
@@ -186,6 +191,8 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         await this.context.clearCookies();
         await this.page.goto(AdminLogin.pageUrl);
         await this.singleLogin(username);
+        await this.page.reload();
+        await this.wait("minWait");
         let pageTitle = await this.getTitle();
         console.log("Page Title:", pageTitle);
         if (pageTitle.toLowerCase().includes("signin")) {
@@ -280,7 +287,7 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
             // Get fresh count each time as elements are being removed
             let currentCount = await this.page.locator(this.selectors.deleteIcon).count();
             if (currentCount === 0) break; // No more delete icons to click
-            
+
             // Always click the first available delete icon since elements shift after deletion
             await this.click(`(${this.selectors.deleteIcon})[1]`, "Delete Icon", "Icon");
             await this.wait('minWait');
@@ -366,16 +373,16 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         await this.validateElementVisibility(this.selectors.metaLearningLink, "Learning");
         await this.mouseHover(this.selectors.metaLearningLink, "Learning");
         await this.click(this.selectors.metaLearningLink, "Learning", "Button");
-      //  await this.spinnerDisappear();
+        //  await this.spinnerDisappear();
     }
 
     public async metaGeneralLink() {
         await this.validateElementVisibility(this.selectors.metaGeneralLink, "Learning");
         await this.mouseHover(this.selectors.metaGeneralLink, "Learning");
         await this.click(this.selectors.metaGeneralLink, "Learning", "Button");
-       // await this.spinnerDisappear();
+        // await this.spinnerDisappear();
     }
-   public async enter(name: string, data: string) {
+    public async enter(name: string, data: string) {
         await this.wait("mediumWait")
         await this.type(`//input[@id="${name}"]`, name, data);
     }
@@ -445,11 +452,11 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
         await this.click(this.selectors.enrollMenu, "Enrollment", "Link")
     }
 
-     public async clickEnrollments() {
+    public async clickEnrollments() {
         await this.wait("minWait");
         await this.click(this.selectors.enrollments, "Enrollment", "Link")
     }
-     public async clickResultEnrollmentButton() {
+    public async clickResultEnrollmentButton() {
         await this.wait("minWait");
         await this.click(this.selectors.resultEnrollmentButton, "Result Enrollment", "Link")
     }
@@ -457,7 +464,7 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
     public async clickEnroll() {
 
         await this.click(this.selectors.enrollLink, "Enrollment", "Link")
-                await this.wait("minWait");
+        await this.wait("minWait");
     }
 
     public async clickAdminRole() {
@@ -465,76 +472,76 @@ verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
 
     }
 
-        ///Site Admin////
-        public async siteAdmin() {
-            await this.validateElementVisibility(this.selectors.siteAdminMenu, "Site Admin");
-            await this.click(this.selectors.siteAdminMenu, "Site Admin", "Button");
-        }
-        public async siteAdmin_learnerconfig() {
-            await this.validateElementVisibility(this.selectors.learnerConfigLink, "Learner Configuration");
-            await this.mouseHover(this.selectors.learnerConfigLink, "Learner Configuration");
-            await this.click(this.selectors.learnerConfigLink, "Learner Configuration", "Button");
-            await this.spinnerDisappear();
-        }
-        public async siteSettings() {
-            await this.validateElementVisibility(this.selectors.siteSettingsLink, "Site Settings");
-            await this.mouseHover(this.selectors.siteSettingsLink, "Site Settings");
-            await this.click(this.selectors.siteSettingsLink, "Site Settings", "Button");
-            await this.spinnerDisappear();
-        }
-        public async siteAdmin_Adminconfig() {
-            await this.wait("minWait");
-            await this.validateElementVisibility(this.selectors.adminConfigLink, "Admin Configuration");
-            await this.mouseHover(this.selectors.adminConfigLink, "Admin Configuration");
-            await this.click(this.selectors.adminConfigLink, "Admin Configuration", "Button");
-            await this.wait("minWait");
-            await this.spinnerDisappear();
-        }
-           public async admin_SiteConfigLink() {
-            await this.validateElementVisibility(this.selectors.adminSiteConfigLink, "Admin Configuration");
-            await this.mouseHover(this.selectors.adminSiteConfigLink, "Admin Configuration");
-            await this.click(this.selectors.adminSiteConfigLink, "Admin Configuration", "Button");
-            await this.spinnerDisappear();
-        }
+    ///Site Admin////
+    public async siteAdmin() {
+        await this.validateElementVisibility(this.selectors.siteAdminMenu, "Site Admin");
+        await this.click(this.selectors.siteAdminMenu, "Site Admin", "Button");
+    }
+    public async siteAdmin_learnerconfig() {
+        await this.validateElementVisibility(this.selectors.learnerConfigLink, "Learner Configuration");
+        await this.mouseHover(this.selectors.learnerConfigLink, "Learner Configuration");
+        await this.click(this.selectors.learnerConfigLink, "Learner Configuration", "Button");
+        await this.spinnerDisappear();
+    }
+    public async siteSettings() {
+        await this.validateElementVisibility(this.selectors.siteSettingsLink, "Site Settings");
+        await this.mouseHover(this.selectors.siteSettingsLink, "Site Settings");
+        await this.click(this.selectors.siteSettingsLink, "Site Settings", "Button");
+        await this.spinnerDisappear();
+    }
+    public async siteAdmin_Adminconfig() {
+        await this.wait("minWait");
+        await this.validateElementVisibility(this.selectors.adminConfigLink, "Admin Configuration");
+        await this.mouseHover(this.selectors.adminConfigLink, "Admin Configuration");
+        await this.click(this.selectors.adminConfigLink, "Admin Configuration", "Button");
+        await this.wait("minWait");
+        await this.spinnerDisappear();
+    }
+    public async admin_SiteConfigLink() {
+        await this.validateElementVisibility(this.selectors.adminSiteConfigLink, "Admin Configuration");
+        await this.mouseHover(this.selectors.adminSiteConfigLink, "Admin Configuration");
+        await this.click(this.selectors.adminSiteConfigLink, "Admin Configuration", "Button");
+        await this.spinnerDisappear();
+    }
 
-        async clearBrowserCache(url: string) {
-            const baseUrl = await this.getBaseUrl(url)
-            await this.page.context().clearCookies();
-            await this.page.context().clearPermissions();
-            await this.page.goto(`${baseUrl}clearcache`);
-            await this.wait('minWait');
-            await this.page.goto(`${baseUrl}clearallcache`);
-        }
+    async clearBrowserCache(url: string) {
+        const baseUrl = await this.getBaseUrl(url)
+        await this.page.context().clearCookies();
+        await this.page.context().clearPermissions();
+        await this.page.goto(`${baseUrl}clearcache`);
+        await this.wait('minWait');
+        await this.page.goto(`${baseUrl}clearallcache`);
+    }
 
-        //For Direct Content Launch
-        public async clickDirectContentLaunchLink() {
-            await this.validateElementVisibility(this.selectors.directContent, "DirectContentLaunch");
-            await this.click(this.selectors.directContent, "DirectContentLaunch", "Button");
-            await this.page.waitForLoadState('load');
-        }
+    //For Direct Content Launch
+    public async clickDirectContentLaunchLink() {
+        await this.validateElementVisibility(this.selectors.directContent, "DirectContentLaunch");
+        await this.click(this.selectors.directContent, "DirectContentLaunch", "Button");
+        await this.page.waitForLoadState('load');
+    }
 
-    async walletCardConfiguration(){
-       // await this.click(this.selectors.maintenance, "maintenance", "Button");
+    async walletCardConfiguration() {
+        // await this.click(this.selectors.maintenance, "maintenance", "Button");
         await this.validateElementVisibility(this.selectors.customerConfig, "config");
         await this.click(this.selectors.customerConfig, "config", "Button");
-         await this.validateElementVisibility(this.selectors.walletCard, "walletcard");
-         const walletCardValue = await this.page.locator(this.selectors.walletCard).inputValue();
-         if (walletCardValue === "true") {
+        await this.validateElementVisibility(this.selectors.walletCard, "walletcard");
+        const walletCardValue = await this.page.locator(this.selectors.walletCard).inputValue();
+        if (walletCardValue === "true") {
             console.log("Wallet card configuration is enabled");
-         }
-         else {
+        }
+        else {
             await this.wait("minWait");
             await this.type(this.selectors.walletCard, "config", "true");
             await this.click(this.selectors.submit, "submit", "button");
-         }
+        }
     }
-async checkRequestWalletCardDelivery(){
+    async checkRequestWalletCardDelivery() {
         await this.validateElementVisibility(this.selectors.checkRequestWalletCardDelivery, "Request Wallet Card Delivery Checkbox");
-        await this.click(this.selectors.checkRequestWalletCardDelivery,"Request Wallet Card Delivery", "Checkbox");
+        await this.click(this.selectors.checkRequestWalletCardDelivery, "Request Wallet Card Delivery", "Checkbox");
     }
 
-          async verifyRequestPhysicalWalletCardDeliveryCheckbox() {
-        const walletCardFromOneprofile=await this.page.locator(this.selectors.verifyCheckedWalletCardCheckbox).isVisible();
+    async verifyRequestPhysicalWalletCardDeliveryCheckbox() {
+        const walletCardFromOneprofile = await this.page.locator(this.selectors.verifyCheckedWalletCardCheckbox).isVisible();
         if (walletCardFromOneprofile) {
             console.log("Request for physical wallet card delivery is checked and disabled in one profile page");
         }
@@ -542,7 +549,7 @@ async checkRequestWalletCardDelivery(){
             throw new Error("Request for physical wallet card delivery is left unchecked in one profile page");
         }
     }
-    
+
 
 }
 

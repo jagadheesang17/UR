@@ -76,7 +76,33 @@ export class LearningPathPage extends AdminHomePage {
         // Choose Course Manually:-
         addCourseManually:`//span[text()='Add Courses Manually']`,
         // Save button :-
-        saveButton:`//button[text()='SAVE']`,
+        //saveButton:`//button[text()='SAVE']`,
+
+
+          //Attaching the different course to the recertification module:-
+        // Choose Course Manually:- 
+        addCourseManuallyRadioBtn: `//span[text()='Add Courses Manually']//preceding-sibling::i[contains(@class,'fa-circle')]`,
+        copyFromCertificationPath: `//span[text()='Copy from certification path']`,
+        copyFromCertificationPathRadioBtn: `//span[text()='Copy from certification path']//preceding-sibling::i[contains(@class,'fa-circle')]`,
+        // Save button (matches Save, SAVE, save, with optional spaces)
+        saveButton: `(//button[translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='save'])[1]`,
+
+
+           // Enroll Again popup selectors
+           enrollAgainPopupMessage: "//div[text()='The following courses can't be added to the learning path since it doesn't allow Enroll Again.']",
+           enrollAgainPopupCourseName: (courseName: string) => `//footer//following::div[text()='${courseName}']`,
+           enrollAgainPopupOKButton: "//footer//following::button[text()='OK']",
+           
+           // Recertification Enroll Again popup selectors
+           recertEnrollAgainPopupMessage: "//div[text()='The following courses cannot be added to the re-certification because they do not support the enroll again functionality.']",
+           versionEyeIcon: (title: string) => `//div[@title='${title}']//following::i[contains(@class,'fa-duotone pointer')]`,
+           transferEnrollmentsBtn: `//button[text()='Transfer Enrollments']`,
+           selectAllLearnersCheckbox: `//label[contains(@for,'selectalllearners')]`,
+           transferLearnersBtn: `//button[text()='Transfer Learners']`,
+           transferConfirmationMessage: `//span[text()='Transferring the learner to the new training will remove the enrollment of the existing training? Are you sure you want to transfer the selected learners?']`,
+           editIconTP:(title: string) => `(//div[text()='${title}']//following::div[contains(@aria-label,'Edit')])[1]`,
+        
+           
     };  
 	
     //Adding course manually to the recertification module:-
@@ -87,6 +113,7 @@ export class LearningPathPage extends AdminHomePage {
     }
 
     async clickCreateLearningPath() {
+        await this.wait("minWait")
         await this.validateElementVisibility(this.selectors.createLearningPathBtn, "Learning Path");
         await this.mouseHover(this.selectors.createLearningPathBtn,"Learning Path Button")
         await this.click(this.selectors.createLearningPathBtn, "Learning Path", "Button");
@@ -126,6 +153,16 @@ export class LearningPathPage extends AdminHomePage {
 
     async description(data: string) {
         await this.type(this.selectors.description, "Description", data)
+    }
+
+    async enterCode(code: string) {
+        const codeField = this.page.locator(this.selectors.codeInput).first();
+        if (await codeField.isVisible({ timeout: 5000 }).catch(() => false)) {
+            await codeField.scrollIntoViewIfNeeded();
+            await codeField.fill(code);
+        } else {
+            console.log("Code field not visible. Skipping code entry.");
+        }
     }
     async selectSpecificPortal(portal: string) {
         const text = await this.page.innerText(this.selectors.domainSelectedText);
@@ -275,6 +312,32 @@ export class LearningPathPage extends AdminHomePage {
         await this.click(this.selectors.recertificationAddCourse, "Add Course", "Button");
     }
 
+
+    async chooseRecertificationMethod(method: "Copy from certification path" | "Add Courses Manually" = "Copy from certification path") {
+        await this.wait("minWait");
+
+        console.log(`🔄 Choosing recertification method: ${method}`);
+
+        if (method === "Copy from certification path") {
+            // Check if already selected, if not click it
+            const isVisible = await this.page.locator(this.selectors.copyFromCertificationPath).isVisible();
+            if (isVisible) {
+                console.log(`✅ Copy from certification path is default, clicking Save`);
+                await this.wait("minWait");
+                await this.click(this.selectors.saveButton, "Save Button", "Button");
+            }
+        } else if (method === "Add Courses Manually") {
+            // Click Add Courses Manually radio button
+            await this.validateElementVisibility(this.selectors.addCourseManually, "Add Courses Manually");
+            await this.click(this.selectors.addCourseManuallyRadioBtn, "Add Courses Manually", "Radio Button");
+            await this.wait("minWait");
+            console.log(`✅ Selected Add Courses Manually`);
+            await this.click(this.selectors.saveButton, "Save Button", "Button");
+        }
+
+        console.log(`✅ Recertification method selected: ${method}`);
+    }
+
     async getCodeValue() {
         await this.validateElementVisibility(this.selectors.codeInput, "Code");
         await this.wait('mediumWait');
@@ -375,6 +438,76 @@ export class LearningPathPage extends AdminHomePage {
             await this.page.locator(this.selectors.moduleExpandIcon).last().click({ force: true })
             await this.wait("minWait")
         }
+
+
+
+
+        
+    async verifyEnrollAgainPopupMessage() {
+        await this.wait("minWait");
+        await this.validateElementVisibility(
+            this.selectors.enrollAgainPopupMessage,
+            "Enroll Again Popup Message"
+        );
+        console.log("✅ Verified enroll again popup message is visible");
+    }
+
+    async verifyEnrollAgainPopupCourseName(courseName: string) {
+        await this.wait("minWait");
+        const courseNameLocator = this.selectors.enrollAgainPopupCourseName(courseName);
+        await this.validateElementVisibility(
+            courseNameLocator,
+            `Course Name: ${courseName} in popup`
+        );
+        console.log(`✅ Verified course name '${courseName}' in popup`);
+    }
+
+    async clickEnrollAgainPopupOK() {
+        await this.wait("minWait");
+        await this.click(
+            this.selectors.enrollAgainPopupOKButton,
+            "OK Button",
+            "Button"
+        );
+        await this.wait("minWait");
+        console.log("✅ Clicked OK button on enroll again popup");
+    }
+
+    async verifyRecertEnrollAgainPopupMessage() {
+        await this.validateElementVisibility(
+            this.selectors.recertEnrollAgainPopupMessage,
+            "Recertification Enroll Again Popup Message"
+        );
+        console.log("✅ Verified recertification enroll again popup message is visible");
+    }
+
+    async verifyRecertEnrollAgainPopupCourseName(courseName: string) {
+        const courseNameLocator = this.selectors.enrollAgainPopupCourseName(courseName);
+        await this.validateElementVisibility(
+            courseNameLocator,
+            `Course Name: ${courseName} in recert popup`
+        );
+        console.log(`✅ Verified course name '${courseName}' in recertification popup`);
+    }
+
+    async clickRecertEnrollAgainPopupOK() {
+        await this.click(
+            this.selectors.enrollAgainPopupOKButton,
+            "OK Button",
+            "Button"
+        );
+        await this.wait("minWait");
+        console.log("✅ Clicked OK button on recertification enroll again popup");
+    }
+
+
+    async clickEditIconFromTPListing(lpName: string) {
+        await this.wait("minWait");
+        await this.click(this.selectors.editIconTP(lpName), `Edit Icon for ${lpName}`, "Icon");
+        await this.wait("minWait");
+        console.log(`✅ Clicked edit icon for Learning Path: ${lpName}`);
+    }
+
 
         
 }

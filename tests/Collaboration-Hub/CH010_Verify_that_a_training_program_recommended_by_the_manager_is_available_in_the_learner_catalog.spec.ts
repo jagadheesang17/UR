@@ -63,7 +63,7 @@ test.describe(`Verify able to recommend the TPcourses to users`, async () => {
         await createCourse.clickCompletionCertificate();
         await createCourse.clickCertificateCheckBox();
         await createCourse.clickAdd();
-          await createCourse.typeDescription(description);
+        await learningPath.description(description);
         await createCourse.clickCatalog();
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();

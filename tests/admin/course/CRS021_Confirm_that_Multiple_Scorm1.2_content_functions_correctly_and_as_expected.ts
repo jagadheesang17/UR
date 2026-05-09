@@ -35,7 +35,7 @@ test.describe(`Confirm that Multiple Scorm1.2 content functions correctly and as
     })
 
 
-    test(`Confirm that Multiple Scorm1.2 content functions correctly and as expected`, async ({ learnerHome, catalog, readContentHome }) => {
+    test(`Confirm that Multiple Scorm1.2 content functions correctly and as expected`, async ({ learnerHome, catalog, dashboard, readContentHome }) => {
         test.info().annotations.push(
             { type: `Author`, description: `Tamilvanan` },
             { type: `TestCase`, description: `Confirm that Multiple Scorm1.2 content functions correctly and as expected` },
@@ -52,10 +52,10 @@ test.describe(`Confirm that Multiple Scorm1.2 content functions correctly and as
         await catalog.verifyStatus(status)
         await readContentHome.readPassed_FailedScrom2004();
         await catalog.saveLearningStatus();
-        await catalog.clickMyLearning();
-        await catalog.clickCompletedButton();
-        await catalog.searchMyLearning(courseName);
-        await catalog.verifyCompletedCourse(courseName);
+        await learnerHome.clickDashboardLink();
+        await dashboard.selectDashboardItems("Learning History");
+        await dashboard.learningHistoryCourseSearch(courseName);
+        await dashboard.vaidatVisibleCourse_Program(courseName, "Completed");
 
     })
 

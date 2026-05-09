@@ -37,6 +37,11 @@ emailUsed:string="";
         passwordPolicyEditIcon: `//span[text()='Password Policy']/following::i[1]`,
         maxWrongAttempts: `//input[@id='max_wrong_attempts']`,
 
+             //Allow learners to enroll again (default)
+             allowLearnersEnrollAgainDefaultUnchecked: `//span[text()='Allow learners to enroll again (default)']//preceding-sibling::i[contains(@class,'fa-square icon')]`,
+             allowLearnersEnrollAgainDefaultChecked: `//span[text()='Allow learners to enroll again (default)']//preceding-sibling::i[contains(@class,'fa-square-check')]`,
+             
+
         //Max seat override
         businessRulesEditIcon: `//*[@class="col Business Rules"]/div/span/i`,
         maxSeatOverRideCheckbox: `(//label[contains(@for,'submod_admn_max_seat_override_input')]//i)[1]`,
@@ -208,6 +213,165 @@ emailUsed:string="";
             await this.click(this.selectors.adminMail,"button","radio")
             await this.validateElementVisibility(this.selectors.save, "save button")
             await this.click(this.selectors.save,"save","button")
+        }
+    }
+
+     //Allow learners to enroll again (default) - In Site Admin Business Rules
+     async verifyAllowLearnersEnrollAgainDefault(shouldBeUnchecked: boolean = true) {
+        await this.wait("mediumWait");
+        
+        try {
+            const uncheckedSelector = this.selectors.allowLearnersEnrollAgainDefaultUnchecked;
+            const checkedSelector = this.selectors.allowLearnersEnrollAgainDefaultChecked;
+            
+            const isUnchecked = await this.page.locator(uncheckedSelector).isVisible();
+            const isChecked = await this.page.locator(checkedSelector).isVisible();
+            
+            if (shouldBeUnchecked) {
+                if (isUnchecked) {
+                    console.log("✅ Verified - 'Allow learners to enroll again (default)' is UNCHECKED in Site Admin Business Rules");
+                    return true;
+                } else {
+                    console.log("❌ Expected 'Allow learners to enroll again (default)' to be UNCHECKED but it is CHECKED");
+                    return false;
+                }
+            } else {
+                if (isChecked) {
+                    console.log("✅ Verified - 'Allow learners to enroll again (default)' is CHECKED in Site Admin Business Rules");
+                    return true;
+                } else {
+                    console.log("❌ Expected 'Allow learners to enroll again (default)' to be CHECKED but it is UNCHECKED");
+                    return false;
+                }
+            }
+        } catch (error) {
+            console.log("❌ Error verifying 'Allow learners to enroll again (default)' checkbox:", error);
+            return false;
+        }
+    }
+
+    async uncheckAllowLearnersEnrollAgainDefault() {
+        await this.wait("mediumWait");
+        
+        try {
+            const checkedSelector = this.selectors.allowLearnersEnrollAgainDefaultChecked;
+            const uncheckedSelector = this.selectors.allowLearnersEnrollAgainDefaultUnchecked;
+            
+            const isChecked = await this.page.locator(checkedSelector).isVisible();
+            
+            if (isChecked) {
+                console.log("🔄 Unchecking 'Allow learners to enroll again (default)' checkbox...");
+                await this.click(checkedSelector, "Allow learners to enroll again (default)", "Checkbox");
+                await this.click(this.selectors.businessRulesSaveBtn, "Save", "Button");
+                await this.wait("mediumWait");
+                console.log("✅ 'Allow learners to enroll again (default)' has been unchecked");
+            } else {
+                console.log("✅ 'Allow learners to enroll again (default)' is already unchecked");
+            }
+        } catch (error) {
+            console.log("❌ Error unchecking 'Allow learners to enroll again (default)':", error);
+        }
+    }
+
+    async checkAllowLearnersEnrollAgainDefault() {
+        await this.wait("mediumWait");
+        
+        try {
+            const checkedSelector = this.selectors.allowLearnersEnrollAgainDefaultChecked;
+            const uncheckedSelector = this.selectors.allowLearnersEnrollAgainDefaultUnchecked;
+            
+            const isChecked = await this.page.locator(checkedSelector).isVisible();
+            
+            if (isChecked) {
+                console.log("✅ 'Allow learners to enroll again (default)' is already checked - skipping");
+            } else {
+                console.log("🔄 Checking 'Allow learners to enroll again (default)' checkbox...");
+                await this.click(uncheckedSelector, "Allow learners to enroll again (default)", "Checkbox");
+                await this.click(this.selectors.businessRulesSaveBtn, "Save", "Button");
+                await this.wait("mediumWait");
+                console.log("✅ 'Allow learners to enroll again (default)' has been checked");
+            }
+        } catch (error) {
+            console.log("❌ Error checking 'Allow learners to enroll again (default)':", error);
+        }
+    }
+
+    //Manager Approval - Site Settings
+    async verifyManagerApprovalState(shouldBeChecked: boolean = true) {
+        await this.wait("mediumWait");
+        
+        try {
+            const uncheckedSelector = this.selectors.managerApprovalUnchecked;
+            const checkedSelector = this.selectors.managerApprovalChecked;
+            
+            const isUnchecked = await this.page.locator(uncheckedSelector).isVisible();
+            const isChecked = await this.page.locator(checkedSelector).isVisible();
+            
+            if (shouldBeChecked) {
+                if (isChecked) {
+                    console.log("✅ Verified - 'Manager Approval' is CHECKED in Site Settings");
+                    return true;
+                } else {
+                    console.log("❌ Expected 'Manager Approval' to be CHECKED but it is UNCHECKED");
+                    return false;
+                }
+            } else {
+                if (isUnchecked) {
+                    console.log("✅ Verified - 'Manager Approval' is UNCHECKED in Site Settings");
+                    return true;
+                } else {
+                    console.log("❌ Expected 'Manager Approval' to be UNCHECKED but it is CHECKED");
+                    return false;
+                }
+            }
+        } catch (error) {
+            console.log("❌ Error verifying 'Manager Approval' checkbox:", error);
+            return false;
+        }
+    }
+
+    async uncheckManagerApproval() {
+        await this.wait("mediumWait");
+        
+        try {
+            const checkedSelector = this.selectors.managerApprovalChecked;
+            
+            const isChecked = await this.page.locator(checkedSelector).isVisible();
+            
+            if (isChecked) {
+                console.log("🔄 Unchecking 'Manager Approval' checkbox...");
+                await this.click(checkedSelector, "Manager Approval", "Checkbox");
+                await this.click(this.selectors.businessRulesSaveBtn, "Save", "Button");
+                await this.wait("mediumWait");
+                console.log("✅ 'Manager Approval' has been unchecked");
+            } else {
+                console.log("✅ 'Manager Approval' is already unchecked");
+            }
+        } catch (error) {
+            console.log("❌ Error unchecking 'Manager Approval':", error);
+        }
+    }
+
+    async checkManagerApproval() {
+        await this.wait("mediumWait");
+        
+        try {
+            const checkedSelector = this.selectors.managerApprovalChecked;
+            const uncheckedSelector = this.selectors.managerApprovalUnchecked;
+            
+            const isChecked = await this.page.locator(checkedSelector).isVisible();
+            
+            if (isChecked) {
+                console.log("✅ 'Manager Approval' is already checked - skipping");
+            } else {
+                console.log("🔄 Checking 'Manager Approval' checkbox...");
+                await this.click(uncheckedSelector, "Manager Approval", "Checkbox");
+                await this.click(this.selectors.businessRulesSaveBtn, "Save", "Button");
+                await this.wait("mediumWait");
+                console.log("✅ 'Manager Approval' has been checked");
+            }
+        } catch (error) {
+            console.log("❌ Error checking 'Manager Approval':", error);
         }
     }
  

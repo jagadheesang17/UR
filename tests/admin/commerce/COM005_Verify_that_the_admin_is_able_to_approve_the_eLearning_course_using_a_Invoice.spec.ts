@@ -81,7 +81,7 @@ test(`Login as a learner and verify payment method(Contract Number or Invoice)`,
 
     );
     await learnerHome.basicLogin(commerceLearner, "default");
-    //await learnerHome.termsAndConditionScroll();
+    //// await learnerHome.termsAndConditionScroll();
     await learnerHome.clickCatalog();
     await catalog.mostRecent();
     await catalog.searchCatalog(courseName);

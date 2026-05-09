@@ -44,22 +44,23 @@ switch (environmentSetup) {
         break;
     case "qaProduction":
         URLConstants = {
-            adminURL: "https://qaautomation.expertusoneqa.cloud/backdoor",
-            leanerURL: "https://qaautomation.expertusoneqa.cloud/learner/qaautomation/",
-            learnerportal: "https://qaautomation.expertusoneqa.cloud/learner/autoportal/",
-            learnerportal2: "https://qaautomation.expertusoneqa.cloud/learner/autoportal1/",
-            portal1: "qaautomation",
-            portal2: "autoportal",
-            portal3: "autoportal1",
-            LearnerGroup1: "AutoLG1(Do not Use)",
-            LearnerGroup2: "AutoLG2(Do not Use)",
+            adminURL: "https://urautotenant.expertusoneqa.cloud/backdoor",
+            leanerURL: "https://urautotenant.expertusoneqa.cloud/learner/urautotenant/",
+            learnerportal: "https://urautotenant.expertusoneqa.cloud/learner/urautotenant/",
+            learnerportal2: "https://urautotenant.expertusoneqa.cloud/learner/urautotenant/",
+            portal1: "urautotenant",
+            portal2: "portal1",
+            portal3: "portal2",
+            LearnerGroup1: "AutoLG1",
+            LearnerGroup2: "AutoLG2",
             creditCardNumber: "4111111111111111",
             cardExpiryDate: "10/27",
             cVV: "111",
-            USPS_Client_Id:"ScI6WsAHlUa6YC27zLRbQ0otldGLFdGG",
-            USPS_Client_Secret:"AG0WP7HYj4a00VXh",
-            USPS_API_URL:"https://api-cat.usps.com/",
-            EasyPost_API_Key:"EZTK507eedb9b0d14160837c7513d7462d84YnEE9NZqer80LS1xPq0irg"
+            USPS_Client_Id: "ScI6WsAHlUa6YC27zLRbQ0otldGLFdGG",
+            USPS_Client_Secret: "AG0WP7HYj4a00VXh",
+            USPS_API_URL: "https://api-cat.usps.com/",
+            EasyPost_API_Key:
+                "EZTK507eedb9b0d14160837c7513d7462d84YnEE9NZqer80LS1xPq0irg",
         }
         break;
         case "dev":

@@ -28,11 +28,11 @@ test.describe(`Book004_Verify_that_the_user_is_able_to_bookmark_the_LP_complete_
         await createCourse.getCourse();
         await createCourse.selectLanguage("English");
         await createCourse.typeDescription(description);
-        domain = await createCourse.selectPortal();
-        console.log(`${domain}`);
+        // domain = await createCourse.selectPortal();
+        // console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        //await createCourse.clickHere();
+       // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

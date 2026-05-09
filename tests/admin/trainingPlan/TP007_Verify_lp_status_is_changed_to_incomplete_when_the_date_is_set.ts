@@ -34,8 +34,8 @@ test.describe(`Verify_lp_status_is_changed_to_incomplete_when_the_date_is_set.sp
       //  domain = await createCourse.selectPortal();
       //  console.log(`${domain}`);
         await createCourse.contentLibrary(); //By default Youtube content will be attached
-        await createCourse.clickHere();
-        await createCourse.selectImage();
+        //await createCourse.clickHere();
+       // await createCourse.selectImage();
         await createCourse.clickCatalog();
         await createCourse.clickSave();
         await createCourse.clickProceed();

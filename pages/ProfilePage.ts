@@ -26,9 +26,9 @@ export class ProfilePage extends LearnerHomePage {
         preference: "//a[text()='preferences']",
         preferenceTimeZone: "//div[@id='wrapper-lnr_timezone']",
         TimeZoneSearch: "//label[text()='TimeZone']/following::input[1]",
-        oneProfile: "//a[text()='ONE-Profile']",
-        oneProfileClick: "(//a[text()='Click Here'])[1]",
-        oneProfilePage: "//h1[text()='Professional Training Profile Summary']",
+        //: "//a[text()='ONE-Profile']",
+        //Click: "(//a[text()='Click Here'])[1]",
+        //Page: "//h1[text()='Professional Training Profile Summary']",
         timezoneOptions: (option: string) => `(//span[contains(text(),'${option}')])[1]`,
         PreferenceLanguagesWrapper: "//label[text()='Language']/following::div[@id='wrapper-lnr_languages']",
         PreferenceLanguageInput: `//label[text()='Language']/following::input[1]`,
@@ -96,7 +96,7 @@ export class ProfilePage extends LearnerHomePage {
         JobTitle: "//select[@id='job_title']/option",
         Organization: "//select[@id='organization']/option",
         UserType: "//select[@id='user_type']/option",
-        oneProfileInfo: (data: string) => `(//div[contains(text(),'${data}')]//parent::div)[1]`,
+        //Info: (data: string) => `(//div[contains(text(),'${data}')]//parent::div)[1]`,
         editAwards: "(//h5[text()='Awards']/following-sibling::i[contains(@class, 'fa-pencil')])[1]",
         awardYear: "//input[@id='userawardyear-input']",
         awardName: "//input[@id='userawardname']",
@@ -153,8 +153,8 @@ export class ProfilePage extends LearnerHomePage {
 
         errorMessage:`//h6[text()='Please complete atleast one course to request for a wallet card']`,
         proceed:`//button[text()='Proceed']`,
-       verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
-       oneProfile: "//a[text()='ONE-Profile']",
+        verifyCheckedWalletCardCheckbox:`//i[@class='fad fa-square-check icon_16_2']`,
+         oneProfile: "//a[text()='ONE-Profile']",
 
 
     }
@@ -162,7 +162,7 @@ export class ProfilePage extends LearnerHomePage {
         super(page, context);
     }
     //for viewing the completion certificate
-    async clickViewCertificateInOneProfile(courseName: string, data: string) {
+    async clickViewCertificateIn(courseName: string, data: string) {
         await this.click(this.selectors.oneProfile, "one-profile", "button");
         await this.wait('minWait');
         const [newPage] = await Promise.all([
@@ -444,6 +444,7 @@ export class ProfilePage extends LearnerHomePage {
 
     async clickSave() {
         //await this.waitForl(this.selectors.clickSave)
+        await this.wait('minWait');
         await this.validateElementVisibility(this.selectors.saveButton, "save");
         await this.click(this.selectors.saveButton, "save", "button");
         await this.wait('mediumWait');
@@ -473,7 +474,7 @@ export class ProfilePage extends LearnerHomePage {
         await this.click(this.selectors.confirmUpload, "Upload", "button");
         await this.click(this.selectors.showToAllSkills, "showToAllSkills", "Checkbox");
     }
-    async oneProfile() {
+    async clickOneProfile() {
         await this.click(this.selectors.oneProfile, "one-profile", "button");
         await this.wait('minWait');
         const [newPage] = await Promise.all([
@@ -493,7 +494,7 @@ export class ProfilePage extends LearnerHomePage {
         }
 
         const verifyText = async (data: string) => {
-            const info = await newPage.locator(this.selectors.oneProfileInfo(data)).allTextContents();
+            const info = await newPage.locator(this.selectors.Info(data)).allTextContents();
             await newPage.waitForTimeout(2000);
             console.log(info);
         };
@@ -670,15 +671,15 @@ async proceedandVerifyTheCheckboxAfterCompletingTheCourse() {
     }
 
 async verifyRequestPhysicalWalletCardDeliveryCheckbox() {
-        const walletCardFromOneprofile=await this.page.locator(this.selectors.verifyCheckedWalletCardCheckbox).isVisible();
-        if (walletCardFromOneprofile) {
+        const walletCardFrom=await this.page.locator(this.selectors.verifyCheckedWalletCardCheckbox).isVisible();
+        if (walletCardFrom) {
             console.log("Request for physical wallet card delivery is checked and disabled in one profile page");
         }
         else {
             throw new Error("Request for physical wallet card delivery is left unchecked in one profile page");
         }
     }
-    async clickOneProfile() {
+    async oneProfile() {
           await this.wait('minWait');
           await this.click(this.selectors.oneProfile, "one-profile", "button");
     }

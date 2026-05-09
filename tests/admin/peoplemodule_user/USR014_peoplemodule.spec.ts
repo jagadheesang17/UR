@@ -8,7 +8,7 @@ import { profile } from "console";
 
 const username: any = ("people" + FakerData.getUserId());
 
-test.describe(`People Module Suites`, async () => {
+test.describe.serial(`People Module Suites`, async () => {
     test(`Verify that a user can be created and a profile picture uploaded`, async ({ adminHome, createUser }) => {
 
         test.info().annotations.push(
@@ -133,7 +133,8 @@ test.describe(`People Module Suites`, async () => {
         await createUser.clickActivateIcon();
         await createUser.clickImpersonationIcon();
         await createUser.fillImpersonateForm();
-        // await learnerHome.termsAndConditionScroll();
+        // // await learnerHome.termsAndConditionScroll();
+       
         await createUser.clickendImpersonation();
 
     })
