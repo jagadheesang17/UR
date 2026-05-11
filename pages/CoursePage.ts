@@ -851,7 +851,7 @@ export class CoursePage extends AdminHomePage {
 
     async typeDescription(data: string) {
         // Wait for the description field to be visible before interacting with it
-        await this.page.waitForSelector(this.selectors.courseDescriptionInput, { state: 'visible', timeout: 30000 });
+        // await this.page.waitForSelector(this.selectors.courseDescriptionInput, { state: 'visible', timeout: 30000 });
         await this.type(this.selectors.courseDescriptionInput, "Description", data);
     }
 

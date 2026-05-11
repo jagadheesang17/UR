@@ -122,24 +122,18 @@ export class EnrollmentPage extends AdminHomePage {
     }
 
 
-    async selectBycourse(data: string) {
-        await this.wait("mediumWait")
-        await this.waitSelector(this.selectors.searchcourseOrUser, "Course Name")
-        await this.page.type(this.selectors.searchcourseOrUser, data, { delay: 100 });
-        await this.page.press(this.selectors.searchcourseOrUser, 'Enter');
+    async selectBycourse(data: string, courseType: string = "free") {
         await this.wait("minWait")
-        const courseRow = this.page.locator(`xpath=(//li[.//div[normalize-space(text())='${data}']])[1]`);
-        await courseRow.waitFor({ state: "visible" });
-        const courseSelectorLabel = courseRow.locator("xpath=.//label[contains(@class,'custom-control-label')]").first();
-        await courseSelectorLabel.waitFor({ state: "visible" });
-        await courseSelectorLabel.click({ force: true });
-        //div[text()='CRS Haptic Card Synthesize']
+        await this.type(this.selectors.searchcourseOrUser, "Course Name", data)
+        const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
+        const randomIndex = Math.floor(Math.random() * index) + 1;
+        await this.click(this.selectors.courseListOpt(randomIndex), "Course", "Options")
 
-        // const index = await this.page.locator("//div[contains(@id,'lms-scroll-results')]//li").count();
-        // const randomIndex = Math.floor(Math.random() * index) + 1;
-        // await this.click(this.selectors.courseListOpt(randomIndex), "Course", "Options")
-        // await this.click(this.selectors.selectCourse, "Select Course", "Radio button")
-
+        if (courseType === "paid") {
+            await this.click(this.selectors.selectPaidCourse(data), "Select Paid Course", "Radio button")
+        } else {
+            await this.click(this.selectors.selectCourse, "Select Course", "Radio button")
+        }
     }
     async clickSelectedLearner() {
         await this.click(this.selectors.selectedLearners, "Select Learners", "Button")

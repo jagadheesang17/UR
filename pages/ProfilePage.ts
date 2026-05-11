@@ -84,6 +84,7 @@ export class ProfilePage extends LearnerHomePage {
         education: "(//h5[text()='Education']/following-sibling::i)[1]",
         addEducation: "//span[text()='Add']/preceding-sibling::i",
         verifyChanges: `//span[text()='Your changes have been saved']`,
+        verifyNoManagerMsg: `//span[text()='You do not have a direct manager assigned. Please contact your admin']`,
         Language: "//select[@id='lnr_languages']/option",
         Currency: " //select[@id='lnr_currency']/option",
         Country: " //select[@id='lnr_country']/option",
@@ -622,7 +623,22 @@ export class ProfilePage extends LearnerHomePage {
     }
 
     async verifySavedChanges() {
-        await this.verification(this.selectors.verifyChanges, "Saved")
+
+        const successMsg = this.page.locator(this.selectors.verifyChanges);
+        const errorMsg = this.page.locator(this.selectors.verifyNoManagerMsg);
+        await Promise.race([
+            successMsg.waitFor({ state: "visible", timeout: 10000 }),
+            errorMsg.waitFor({ state: "visible", timeout: 10000 })
+        ]);
+        if (await successMsg.isVisible()) {
+            console.log("✅ Changes saved successfully");
+        } 
+        else if (await errorMsg.isVisible()) {
+            throw new Error(" You do not have a direct manager assigned. Please contact your admin");
+        } 
+        else {
+            throw new Error("Neither success nor error message appeared");
+        }
     }
 
 

@@ -593,8 +593,6 @@ export class CatalogPage extends LearnerHomePage {
     async saveLearningStatusBookmark() {
         await this.click(this.selectors.saveLearningStatus, "save", "button");
         //await this.validateElementVisibility(this.selectors.verificationEnrollment, "button");
-        await this.spinnerDisappear();
-
     }
 
 

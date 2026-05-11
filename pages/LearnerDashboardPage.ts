@@ -26,7 +26,7 @@ export class LearnerDashboardPage extends LearnerHomePage {
         //Bookmark :-
         bookmarkLink: `//div[text()='Bookmarks']`,
         bookmarkSearchIcon: `//input[@id='exp-searchbookmarkeditems-search-field'] `,
-        bookmarkVerification: (title: any) => `//div[@id='bookmarks']//h5[text()='${title}']`,
+        bookmarkVerification: (title: any) => `(//div[@id='bookmarks']//h5[text()='${title}'])[1]`,
         removeBookmark: (title: any) => `(//h5[text()='${title}']//following::i[@aria-label='bookmarked'])[1]`,
         removeBookmarkPopup: `//button[text()='Yes']`,
         boomarkPageLinks: (linkName: string) => `//a[text()='${linkName}']`, //Content|Certification|Learning Path

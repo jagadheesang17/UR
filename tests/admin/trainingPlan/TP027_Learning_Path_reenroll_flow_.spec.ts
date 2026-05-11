@@ -202,6 +202,7 @@ test.describe(`Learning_Path_reenroll_flow_with_survey_and_assessment_in_TPlevel
         // await createCourse.addSpecificAssesment("PreAssmt instrument untie under");
         await createCourse.setAssessmentAttempt();
         await createCourse.clickDetailButton();
+        await createCourse.typeDescription(" Updated description "+description);
         await createCourse.clickUpdate();
         await createCourse.verifySuccessMessage();
         await adminHome.menuButton()
